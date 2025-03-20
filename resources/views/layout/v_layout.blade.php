@@ -140,5 +140,6 @@
 
     <script src={{ asset('bootstrap/js/bootstrap.js') }}></script>
     <script src={{asset('bootsrap/js/bootstrap.min.js')}}></script>
+    <script type="module" src="js/script.js"></script>
 </body>
 </html>
