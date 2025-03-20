@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c61ff82cbf0142a401a48a8161e1595a",
+    "content-hash": "5c486032dfc9be9c70e92241924d2eeb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5458,6 +5458,43 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wulfheart/phpunit-shim",
+            "version": "10.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wulfheart/phpunit-shim.git",
+                "reference": "3200ec5fe0079f59184b185bf028ee5d378bd67b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wulfheart/phpunit-shim/zipball/3200ec5fe0079f59184b185bf028ee5d378bd67b",
+                "reference": "3200ec5fe0079f59184b185bf028ee5d378bd67b",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/phpunit.phar"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "A shim for phpunit to allow for easy installation via composer",
+            "homepage": "https://phpunit.de/",
+            "support": {
+                "issues": "https://github.com/Wulfheart/phpunit-shim/issues",
+                "source": "https://github.com/Wulfheart/phpunit-shim/tree/10.2.5"
+            },
+            "time": "2023-07-17T08:19:04+00:00"
         }
     ],
     "packages-dev": [
