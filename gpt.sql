@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2025 at 08:23 AM
+-- Generation Time: Mar 21, 2025 at 09:59 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -44,13 +44,10 @@ CREATE TABLE `certificates` (
 --
 
 INSERT INTO `certificates` (`certificate_id`, `template_id`, `recipient_id`, `issued_by`, `issue_date`, `status`, `verification_code`, `created_at`, `updated_at`) VALUES
-(2, 1, 2, 3, '2025-03-21', '', 'ABC123XYZ', '2025-03-21 04:51:26', '2025-03-21 04:51:26'),
-(4, 1, 2, 3, '2025-03-21', '', 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-21 04:56:35', '2025-03-21 04:56:35'),
-(5, 1, 2, 3, '2025-03-21', '', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-21 04:58:24'),
-(6, 1, 2, 3, '2025-03-21', '', '389d002d-0611-11f0-9df2-089798c81e69', '2025-03-21 04:59:08', '2025-03-21 04:59:08'),
-(7, 1, 2, 3, '2025-03-21', '', '5f5767f5-0611-11f0-9df2-089798c81e69', '2025-03-21 05:00:13', '2025-03-21 05:00:13'),
-(8, 1, 2, 3, '2025-03-21', '', '8cc073d5-0611-11f0-9df2-089798c81e69', '2025-03-21 05:01:29', '2025-03-21 05:01:29'),
-(9, 1, 2, 3, '2025-03-21', '', 'a68c9ed3-0611-11f0-9df2-089798c81e69', '2025-03-21 05:02:12', '2025-03-21 05:02:12');
+(2, 1, 1, 5, '2025-03-21', 'draft', 'ABC123XYZ', '2025-03-21 04:51:26', '2025-03-21 08:56:27'),
+(4, 1, 1, 4, '2025-03-21', 'published', 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-21 04:56:35', '2025-03-21 08:57:06'),
+(5, 1, 1, 4, '2025-03-21', 'draft', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-21 08:56:48'),
+(6, 1, 1, 5, '2025-03-21', 'draft', '389d002d-0611-11f0-9df2-089798c81e69', '2025-03-21 04:59:08', '2025-03-21 08:57:24');
 
 -- --------------------------------------------------------
 
@@ -185,14 +182,14 @@ CREATE TABLE `templates` (
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `layout_config` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`layout_config`))
+  `layout_storage` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `templates`
 --
 
-INSERT INTO `templates` (`id`, `name`, `file_path`, `created_by`, `created_at`, `updated_at`, `layout_config`) VALUES
+INSERT INTO `templates` (`id`, `name`, `file_path`, `created_by`, `created_at`, `updated_at`, `layout_storage`) VALUES
 (1, 'Certificate Template 1', '/storage/templates/template1.pdf', 1, '2025-03-21 04:51:27', '2025-03-21 04:51:27', NULL),
 (2, 'Certificate Template 2', '/storage/templates/template2.pdf', 1, '2025-03-21 05:02:12', '2025-03-21 05:03:28', NULL);
 
@@ -237,13 +234,6 @@ CREATE TABLE `verifications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `verifications`
---
-
-INSERT INTO `verifications` (`id`, `certificate_id`, `verified_at`, `verified_by`, `created_at`, `updated_at`) VALUES
-(5, 9, '2025-03-21 05:21:33', 'Verifier User', '2025-03-21 05:21:33', '2025-03-21 05:21:33');
 
 --
 -- Indexes for dumped tables
@@ -321,7 +311,7 @@ ALTER TABLE `verifications`
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80691318;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -357,7 +347,7 @@ ALTER TABLE `templates`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `verifications`
