@@ -8,3 +8,4 @@ class VerificationController extends Controller
 {
     //
 }
+?>

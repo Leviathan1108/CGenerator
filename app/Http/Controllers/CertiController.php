@@ -11,3 +11,4 @@ class CertiController extends Controller
         return view('certi');
     }
 }
+?>

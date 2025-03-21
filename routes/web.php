@@ -8,33 +8,36 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+// Menangani autentikasi default Laravel
 Auth::routes();
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/certificate', [CertiController::class, 'index']);
-Route::get('/settings', [SettingsController::class, 'index']);
-Route::get('/templates', [TemplatesController::class, 'index']);
-Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth'); 
-Auth::routes();
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'processRegister']);
+// Halaman utama
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Halaman yang membutuhkan autentikasi
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/certificate', [CertiController::class, 'index'])->name('certificate');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/templates', [TemplatesController::class, 'index'])->name('templates');
+});
 
+// Rute Login & Register
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'processLogin']);
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'processRegister']);
+});
+
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+?>

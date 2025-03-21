@@ -11,3 +11,4 @@ class TemplatesController extends Controller
         return view('templates');
     }
 }
+?>
