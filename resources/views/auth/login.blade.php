@@ -101,7 +101,7 @@
                 </div>
                 <button type="submit" class="btn btn-warning w-100">LOG IN</button>
             </form>
-            <p class="mt-3 text-center">Don't have an account? <a href="#">Register</a></p>
+            <p class="mt-3 text-center">Don't have an account? <a href="/rgyhjugnegister">Register</a></p>
         </div>
     </div>
 </body>
