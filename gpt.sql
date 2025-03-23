@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2025 at 09:59 AM
+-- Generation Time: Mar 23, 2025 at 10:50 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -44,10 +44,8 @@ CREATE TABLE `certificates` (
 --
 
 INSERT INTO `certificates` (`certificate_id`, `template_id`, `recipient_id`, `issued_by`, `issue_date`, `status`, `verification_code`, `created_at`, `updated_at`) VALUES
-(2, 1, 1, 5, '2025-03-21', 'draft', 'ABC123XYZ', '2025-03-21 04:51:26', '2025-03-21 08:56:27'),
 (4, 1, 1, 4, '2025-03-21', 'published', 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-21 04:56:35', '2025-03-21 08:57:06'),
-(5, 1, 1, 4, '2025-03-21', 'draft', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-21 08:56:48'),
-(6, 1, 1, 5, '2025-03-21', 'draft', '389d002d-0611-11f0-9df2-089798c81e69', '2025-03-21 04:59:08', '2025-03-21 08:57:24');
+(5, 2, 2, 4, '2025-03-21', 'draft', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-23 16:17:03');
 
 -- --------------------------------------------------------
 
@@ -167,7 +165,8 @@ CREATE TABLE `recipients` (
 --
 
 INSERT INTO `recipients` (`recipient_id`, `name`, `email`, `created_at`, `updated_at`) VALUES
-(1, 'John Doe', 'johndoe@example.com', '2025-03-21 04:51:27', '2025-03-21 04:51:27');
+(1, 'John Doe', 'johndoe@example.com', '2025-03-21 04:51:27', '2025-03-21 04:51:27'),
+(2, 'Dwi', 'dwiyours@gmail.com', '2025-03-23 04:32:30', '2025-03-23 04:32:30');
 
 -- --------------------------------------------------------
 
@@ -228,12 +227,20 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 
 CREATE TABLE `verifications` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `certificate_id` bigint(20) UNSIGNED NOT NULL,
+  `verification_code` varchar(50) NOT NULL,
   `verified_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `verified_by` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `verifications`
+--
+
+INSERT INTO `verifications` (`id`, `verification_code`, `verified_at`, `verified_by`, `created_at`, `updated_at`) VALUES
+(1, 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-23 15:57:29', 'perusahaan', '2025-03-23 15:57:29', '2025-03-23 15:57:29'),
+(1, 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-23 15:57:29', 'perusahaan', '2025-03-23 15:57:29', '2025-03-23 15:57:29');
 
 --
 -- Indexes for dumped tables
@@ -300,8 +307,7 @@ ALTER TABLE `users`
 -- Indexes for table `verifications`
 --
 ALTER TABLE `verifications`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `certificate_id` (`certificate_id`);
+  ADD KEY `fk_verifications_certificate` (`verification_code`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -311,7 +317,7 @@ ALTER TABLE `verifications`
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80691318;
+  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80691319;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -335,7 +341,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `recipients`
 --
 ALTER TABLE `recipients`
-  MODIFY `recipient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `recipient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `templates`
@@ -348,12 +354,6 @@ ALTER TABLE `templates`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `verifications`
---
-ALTER TABLE `verifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -377,7 +377,7 @@ ALTER TABLE `templates`
 -- Constraints for table `verifications`
 --
 ALTER TABLE `verifications`
-  ADD CONSTRAINT `verifications_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificates` (`certificate_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_verifications_certificate` FOREIGN KEY (`verification_code`) REFERENCES `certificates` (`verification_code`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
