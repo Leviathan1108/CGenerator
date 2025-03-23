@@ -15,7 +15,7 @@ class CreateVerificationsTable extends Migration
     {
         Schema::create('verifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('certificate_id')->constrained('certificates')->onDelete('cascade');
+            $table->foreignId('verification_code')->constrained('certificates')->onDelete('cascade');
             $table->timestamp('verified_at')->default(now());
             $table->string('verified_by');
             $table->timestamps();
