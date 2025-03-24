@@ -29,15 +29,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/templates', [TemplatesController::class, 'index'])->name('templates');
 });
 
-// Rute Login & Register
+// Rute Login
 Route::middleware(['auth'])->group(function () {Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-
+//Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
+    return view('auth.register');
+    
+//Reset Password
+Auth::routes(['verify' => true]);
 });
+
+
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

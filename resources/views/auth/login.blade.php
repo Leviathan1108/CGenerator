@@ -97,11 +97,11 @@
                     <div>
                         <input type="checkbox" name="remember"> Remember me
                     </div>
-                    <a href="#">Forgot password?</a>
+                    <a href="{{ route('password.request') }}">Forgot Your Password?</a>
                 </div>
                 <button type="submit" class="btn btn-warning w-100">LOG IN</button>
             </form>
-            <p class="mt-3 text-center">Don't have an account? <a href="/">Register</a></p>
+            <p class="mt-3 text-center">Don't have an account? click here<a href="/register">Register</a></p>
         </div>
     </div>
 </body>
