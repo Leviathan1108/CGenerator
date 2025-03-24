@@ -16,10 +16,11 @@ Auth::routes();
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+// dashboard bukan halaman tersembunyi
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
 // Halaman yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     Route::get('/certificates', [CertiController::class, 'index'])->name('certificates');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::resource('templates', TemplateController::class);
@@ -27,17 +28,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/recipients', [RecipientController::class, 'index']);
 });
 
-// Rute Login & Register
-Route::middleware(['auth'])->group(function () {Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// ini kemungkinan tidak diikutkan karna tidak terlalu berguna
+// // Rute Login & Register
+// Route::middleware(['auth'])->group(function (){
+//     Route::get('/login', [AuthController::class,'login'])->name('login');
+//     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+//     Route::post('/register', [AuthController::class, 'processRegister']);
+//     return view('auth.register');
+// });
 
-
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'processRegister']);
-    return view('auth.register');
-});
-
-// Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-?>
+// // Logout
+// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

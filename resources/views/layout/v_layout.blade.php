@@ -19,18 +19,11 @@
     <style>
         .body {
             background-color: #f8f9fa;
-
         }
 
         .sidebar {
-            color: white;
-            height: 100vh;
-            width: 15%;
+            height: 790px;
             font-family: 'Montserrat', sans-serif;
-        }
-
-        .sidebar .nav-link {
-            color: white;
         }
 
         .sidebar .nav-link:hover {
@@ -38,62 +31,10 @@
             border-radius: 10px;
         }
 
-        .sidebar span {
-            font-weight: bold;
-        }
-
-        .header {
-            background-color: #FBB041;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card {
-            margin: 20px;
-            background-color: #FBB041;
-        }
-
-        .progress {
-            height: 20px;
-        }
-
         .nav {
             background-color: #232E66;
             width: 85%;
-            height: 945px;
-        }
-
-        .rounded-10 {
-            border-radius: 10px;
-        }
-
-        .content {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn-group {
-            width: 100%;
-        }
-
-        .login {
-            text-decoration: none;
-            color: rgb(0, 0, 0);
-            font-size: 25px;
-            margin-top: 5px;
-        }
-
-        #btn {
-            width: 50px;
-            height: 50px;
-            background-color: rgb(255, 255, 255);
-            border-radius: 50%;
-
-        }
-
-        .nav-link {
-            font-size: 15px;
+            height: 790px;
         }
 
         .checkbox-container {
@@ -144,167 +85,82 @@
             background-color: rgb(0, 0, 0);
             transform: translate(-50%, -50%) scale(1);
         }
-
-        .recent-certificates {
-            background-color: rgb(219, 217, 217);
-            border-radius: 20px;
-            width: 500px;
-            height: 700px;
-            padding: 20px;
-            /* Menambahkan padding untuk memberikan jarak di dalam kotak */
-            box-sizing: border-box;
-            /* Memastikan padding tidak menambah ukuran total */
-        }
-
-        #recent {
-            background-color: #232E66;
-            border-radius: 50px;
-            font-size: 20px;
-            color: #f8f9fa;
-            width: fit-content;
-            /* Mengatur lebar agar sesuai dengan konten */
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            /* Mengatur padding kiri dan kanan */
-            margin-bottom: 20px;
-            /* Memberikan jarak bawah untuk memisahkan dari daftar */
-        }
-
-        .recent-certificates ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .recent-certificates ul li {
-            background-color: rgb(199, 199, 199);
-            font-weight: bold;
-            border-radius: 10px;
-            border-color: #f0f0f0;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .recent-certificates ul li span {
-            background-color: rgb(165, 163, 163);
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-
-        .recent-certificates,
-        .popular-templates {
-            border-radius: 20px;
-            width: 45%;
-            /* Mengatur lebar elemen */
-            padding: 20px;
-            box-sizing: border-box;
-            /* Memastikan padding tidak menambah ukuran total */
-            margin: 0 30px;
-        }
-
-        .popular-templates {
-            background-color: rgb(219, 217, 217);
-        }
-
-        .popular-templates div {
-            background-color: rgb(199, 199, 199);
-            border-radius: 10px;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .popular-templates span {
-            background-color: rgb(165, 163, 163);
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-
-        #popular {
-            background-color: #232E66;
-            border-radius: 50px;
-            font-size: 20px;
-            color: #f8f9fa;
-            width: fit-content;
-            /* Mengatur lebar agar sesuai dengan konten */
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            /* Mengatur padding kiri dan kanan */
-            margin-bottom: 20px;
-            /* Memberikan jarak bawah untuk memisahkan dari daftar */
-        }
     </style>
 </head>
 
 <body>
     <div class="d-flex">
         <!-- sidebar -->
-        <nav class="sidebar text-dark bg-light">
-            <h1 class="text-center mt-3">
+        <nav class="sidebar text-dark text-light">
+            <h1 class="text-center mt-3 fw-bold">
                 <span>Certificate</span>
                 <span>Generator</span>
             </h1>
             <div class="text-center mt-3">
                 <div class="rounded-circle"
-                    style="width: 60px; height: 60px; display: inline-block; background-color: #FBB041;"></div>
-                    <div class="mt-2">{{ Auth::user()->name ?? 'Guest' }} <br> {{ Auth::user()->role ?? 'User' }}</div>
+                    style="width: 80px; height: 80px; display: inline-block; background-color: #FBB041; font-family: 'Montderrat', sans-serif;">
+                </div>
+                <div class="mt-2">{{ Auth::user()->name ?? 'Guest' }} <br> {{ Auth::user()->role ?? 'User' }}</div>
             </div>
-            <ul class="nav rounded-10 flex-column d-flex mx-auto">
+            <ul class="nav rounded-4 flex-column d-flex mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Dashboard</a>
+                    <a class="nav-link fs-6 text-light" href="/">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/certi">Create New Certificate</a>
+                    <a class="nav-link fs-6 text-light" href="/certi">Create New Certificate</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/templates">Templates</a>
+                    <a class="nav-link fs-6 text-light" href="/templates">Templates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/certificates">Certificates</a>
+                    <a class="nav-link fs-6 text-light" href="/certificates">Certificates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/verifications">Verifications</a>
+                    <a class="nav-link fs-6 text-light" href="/verifications">Verifications</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/recipients">Recipients</a>
+                    <a class="nav-link fs-6 text-light" href="/recipients">Recipients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/settings">Settings</a>
+                    <a class="nav-link fs-6 text-light" href="/settings">Settings</a>
                 </li>
             </ul>
         </nav>
 
-        <div class="main-content flex-grow-1 p-4">
-            <div class="header gap-2">
-                <h2> Welcome back, {{ Auth::user()->name ?? 'Guest' }} </h2>
+        <div class="main-content flex-grow-1 p-4 col-md-10">
+            <div class="header gap-2 p-3 d-flex space-between align-items-center"
+                style="background-color: #FBB041; font-family: 'Montserrat', sans-serif;">
+                <h2 class="fs-5"> Welcome back, {{ Auth::user()->name ?? 'Guest' }} </h2>
                 <input type="text" class="form-control" placeholder="Search...">
                 <div class="d-flex flex-row gap-2">
                     <!-- <button class="btn btn-outline-light">🔔</button> -->
-                    <button class="btn btn-light" id="btn">👤</button>
-                    <a class="login" href="{{ route('login') }}">Login</a>
+                    <button class="btn btn-light bg-light rounded-circle mx-0 px-3 py-0">👤</button>
+                    <!-- mengecek apakah user sudah login -->
+                    @guest
+                    <a class="login text-decoration-none text-dark fs-4 mx-auto mx-0 my-2"
+                        href="{{ route('login') }}">Login</a>
+                    @endguest
+                    <!-- untuk menampilkan tombol login jika user sudah login -->
+                    @auth
+                        <a class="dropdown-item text-decoration-none text-dark fs-4 mx-auto mx-0 my-2" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                 document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    @endauth
                 </div>
             </div>
-
-            <div class="content">
-                <div class="my-4">
+            <div class="content" style="font-family: 'Poppins', sans-serif;">
+                <div class="my-3">
                     <div class="alert alert-warning text-center">
                         You have 5 pending certificates to publish
                     </div>
 
-                    <div class="row text-center">
+                    <div class="row text-center g-4">
                         <div class="col">
-                            <div class="card">
+                            <div class="card" style="background-color: #FBB041;">
                                 <div class="card-body">
                                     <h5 class="card-title">Total Certificates</h5>
                                     <h1>84</h1>
@@ -312,7 +168,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card">
+                            <div class="card" style="background-color: #FBB041;">
                                 <div class="card-body">
                                     <h5 class="card-title">Certificates Sent</h5>
                                     <h1>65</h1>
@@ -320,7 +176,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card">
+                            <div class="card" style="background-color: #FBB041;">
                                 <div class="card-body">
                                     <h5 class="card-title">Templates</h5>
                                     <h1>12</h1>
@@ -328,7 +184,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card">
+                            <div class="card" style="background-color: #FBB041;">
                                 <div class="card-body">
                                     <h5 class="card-title">Verifications</h5>
                                     <h1>43</h1>
@@ -346,75 +202,107 @@
                     </div> -->
 
                     <!-- input -->
-                    <div class="input mt-4 flex-row d-flex mx-auto gap-4">
-                        <div class="checkbox-container" style="margin-right: 50px; margin-left: 25px;">
-                            <input type="checkbox" name="verify" id="verify">
+                    <div class="input mt-3 flex-row d-flex gap-4 mt-3 justify-content-between">
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="verify" id="verify" class="me-2">
                             <label for="verify">Verify Certificate</label>
                         </div>
-                        <div class="checkbox-container" style="margin-right: 70px;">
-                            <input type="checkbox" name="edit" id="edit">
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="edit" id="edit" class="me-2">
                             <label for="edit">Edit Certificate</label>
                         </div>
                         <div class="checkbox-container">
-                            <input type="checkbox" name="view" id="view">
+                            <input type="checkbox" name="view" id="view" class="me-2">
                             <label for="view">View Certificate</label>
                         </div>
-                        <div class="checkbox-container" style="margin-left: 55px;">
-                            <input type="checkbox" name="user" id="user">
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="user" id="user" class="me-2">
                             <label for="user">User Management</label>
                         </div>
                     </div>
 
                 </div>
+                <div>
+                    <div class="row flex-row d-flex justify-content-between me-0">
+                        <div class="recent-certificates border rounded-4 p-4 mx-3 w-50 ms-2"
+                            style="background-color: rgb(219, 217, 217);">
+                            <h2 class="text-white rounded-pill fs-5 d-inline-flex align-items-center justify-content-center px-4 py-2 mb-3"
+                                style="background-color: #232E66;">Recent Certificates</h2>
+                            <ul class="list-unstyled m-0 p-0">
+                                <li class="fw-bold rounded p-3 mb-2 d-flex justify-content-between align-items-center"
+                                    style="background-color: rgb(199, 199, 199);">Training Completion <span
+                                        class="badge bg-secondary rounded-pill px-3 py-2">Published</span>
+                                </li>
+                                <label class="text-muted">150 certificates - 12 March 2025</label>
+                                <hr>
 
-                <div class="row d-flex space-between">
-                    <div class="recent-certificates">
-                        <h2 id="recent">Recent Certificates</h2>
-                        <ul>
-                            <li>Training Completion <span>Published</span></li>
-                            <label>150 certificate 12 maret 2025</label>
-                            <hr>
-                            <li>Webinar Attendance <span>Published</span></li>
-                            <label>150 certificate 12 maret 2025</label>
-                            <hr>
-                            <li>Achievement Awards <span>Published</span></li>
-                            <label>150 certificate 12 maret 2025</label>
-                            <hr>
-                            <li>Workshop Participation <span>Published</span></li>
-                            <label>150 certificate 12 maret 2025</label>
-                        </ul>
+                                <li class="fw-bold rounded p-3 mb-2 d-flex justify-content-between align-items-center"
+                                    style="background-color: rgb(199, 199, 199);">Webinar Attendance <span
+                                        class="badge bg-secondary rounded-pill px-3 py-2">Published</span>
+                                </li>
+                                <label class="text-muted">150 certificates - 12 March 2025</label>
+                                <hr>
+
+                                <li class="fw-bold rounded p-3 mb-2 d-flex justify-content-between align-items-center"
+                                    style="background-color: rgb(199, 199, 199);">Achievement Awards <span
+                                        class="badge bg-secondary rounded-pill px-3 py-2">Published</span>
+                                </li>
+                                <label class="text-muted">150 certificates - 12 March 2025</label>
+                                <hr>
+
+                                <li class="fw-bold rounded p-3 mb-2 d-flex justify-content-between align-items-center"
+                                    style="background-color: rgb(199, 199, 199);">Workshop Participation <span
+                                        class="badge bg-secondary rounded-pill px-3 py-2">Published</span>
+                                </li>
+                                <label class="text-muted">150 certificates - 12 March 2025</label>
+                            </ul>
+                        </div>
+
+                        <div class="popular-templates col-md-5 col-12 border rounded-4 p-4"
+                            style="background-color: rgb(219, 217, 217);">
+                            <h2 class="text-white rounded-pill fs-5 d-inline-flex align-items-center justify-content-center px-4 py-2 mb-3"
+                                style="background-color: #232E66;">Popular Template</h2>
+                            <div
+                                class="column rounded-3 px-2 py-3 mb-1 d-flex justify-content-between align-items-center">
+                                <div class="card w-100" style="max-width: 400px; height: 150px;">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <h6 class="card-title">Certificate Of Completion</h6>
+                                        <div class="row">
+                                            <span class="col text-start">Basic Completion</span>
+                                            <span class="col text-center">Used 225</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="column rounded-3 px-2 py-3 mb-1 d-flex justify-content-between align-items-center">
+                                <div class="card w-100" style="max-width:  400px; height: 150px;">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <h6 class="card-title">Certificate of Achievement</h6>
+                                        <div class="row">
+                                            <span class="col text-start">Basic Completion</span>
+                                            <span class="col text-center">Used 225</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="column rounded-3 px-2 py-3 mb-1 d-flex justify-content-between align-items-center">
+                                <div class="card w-100" style="max-width:  400px; height: 150px;">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <h6 class="card-title">Certificate of Achievement</h6>
+                                        <div class="row">
+                                            <span class="col text-start">Basic Completion</span>
+                                            <span class="col text-center">Used 225</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="popular-templates">
-                        <h2 id="popular">Popular Template</h2>
-                        <div class="column">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="card-title">Certificate Of Completion</h6>
-                                    <span>Used 225</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="card-title">Certificate of Achievement</h6>
-                                    <span>Used 225</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="card-title">Participation Certificate</h6>
-                                    <span>Used 225</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <h4 class="mt-4">Certificate Preview</h4>
+                    <!-- <h4 class="mt-4">Certificate Preview</h4>
                 <div class="card" style="border: 1px solid #ffcc00;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Certificate of Completion</h5>
@@ -423,9 +311,9 @@
                         <p>Web Development Course</p>
                     </div>
                 </div> -->
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- Tempat untuk konten halaman -->
     <div class="container mt-4">
