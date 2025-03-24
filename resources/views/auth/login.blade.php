@@ -5,7 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Certificate Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="subtitle">Certificate Generator</div>
+            <div class="logo">CG</div>
+            <div class="welcome-text">WELCOME TO <br>CERTIFICATE GENERATOR</div>
+            <p class="definisi">Create, manage, and verify certificates</p>
+        </div>
+        <div class="login-right">
+            <h3 class="mb-3">Log in</h3>
+            <p>Enter your credentials to access your account</p>
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label">Username or Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text">&#128100;</span>
+                        <input type="text" name="email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">&#128274;</span>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <input type="checkbox" name="remember"> Remember me
+                    </div>
+                    <a href="{{ route('password.request') }}">Forgot Your Password?</a>
+                </div>
+                <button type="submit" class="btn btn-warning w-100">LOG IN</button>
+            </form>
+            <p class="mt-3 text-center">Don't have an account? click here<a href="/register">Register</a></p>
+        </div>
+    </div>
+</body>
+<style>
         body {
             height: 100vh;
             display: flex;
@@ -65,44 +105,4 @@
             padding: 40px;
         }
     </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-left">
-            <div class="subtitle">Certificate Generator</div>
-            <div class="logo">CG</div>
-            <div class="welcome-text">WELCOME TO <br>CERTIFICATE GENERATOR</div>
-            <p class="definisi">Create, manage, and verify certificates</p>
-        </div>
-        <div class="login-right">
-            <h3 class="mb-3">Log in</h3>
-            <p>Enter your credentials to access your account</p>
-            <form action="{{ route('login') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label class="form-label">Username or Email</label>
-                    <div class="input-group">
-                        <span class="input-group-text">&#128100;</span>
-                        <input type="text" name="email" class="form-control" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">&#128274;</span>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                        <input type="checkbox" name="remember"> Remember me
-                    </div>
-                    <a href="{{ route('password.request') }}">Forgot Your Password?</a>
-                </div>
-                <button type="submit" class="btn btn-warning w-100">LOG IN</button>
-            </form>
-            <p class="mt-3 text-center">Don't have an account? click here<a href="/register">Register</a></p>
-        </div>
-    </div>
-</body>
 </html>

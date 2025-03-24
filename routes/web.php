@@ -2,49 +2,42 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CertiController;
-use App\Http\Controllers\TemplatesController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\RecipientController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 // Menangani autentikasi default Laravel
 Auth::routes();
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+// dashboard bukan halaman tersembunyi
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
 // Halaman yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-    Route::get('/certificate', [CertiController::class, 'index'])->name('certificate');
+    Route::get('/certificates', [CertiController::class, 'index'])->name('certificates');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-    Route::get('/templates', [TemplatesController::class, 'index'])->name('templates');
+    Route::resource('templates', TemplateController::class);
+    Route::get('/verifications', [VerificationController::class, 'index']);
+    Route::get('/recipients', [RecipientController::class, 'index']);
 });
 
-// Rute Login
-Route::middleware(['auth'])->group(function () {Route::get('/login', function () {
+// Rute Login & Register
+Route::middleware(['guest'])->group(function () {Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-//Register
+
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
-    return view('auth.register');
-    
-//Reset Password
-Auth::routes(['verify' => true]);
 });
 
-
-
-// Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// // Logout
+// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 ?>
