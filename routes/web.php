@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Rute Login & Register
-Route::middleware(['guest'])->group(function () {Route::get('/login', function () {
+Route::middleware(['auth'])->group(function () {Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
