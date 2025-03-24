@@ -258,23 +258,26 @@
             <div class="text-center mt-3">
                 <div class="rounded-circle"
                     style="width: 60px; height: 60px; display: inline-block; background-color: #FBB041;"></div>
-                <div class="mt-2">John Doe <br> Administrator</div>
+                    <div class="mt-2">{{ Auth::user()->name ?? 'Guest' }} <br> {{ Auth::user()->role ?? 'User' }}</div>
             </div>
             <ul class="nav rounded-10 flex-column d-flex mx-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/certificate">Create New Certificate</a>
+                    <a class="nav-link" href="/certi">Create New Certificate</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/templates">Templates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/certi">Certificates</a>
+                    <a class="nav-link" href="/certificates">Certificates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/verification">Verification</a>
+                    <a class="nav-link" href="/verifications">Verifications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/recipients">Recipients</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/settings">Settings</a>
@@ -284,7 +287,7 @@
 
         <div class="main-content flex-grow-1 p-4">
             <div class="header gap-2">
-                <h2>Welcome back, John Doe!</h2>
+                <h2> Welcome back, {{ Auth::user()->name ?? 'Guest' }} </h2>
                 <input type="text" class="form-control" placeholder="Search...">
                 <div class="d-flex flex-row gap-2">
                     <!-- <button class="btn btn-outline-light">🔔</button> -->
