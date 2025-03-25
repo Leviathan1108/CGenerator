@@ -78,7 +78,7 @@
 
         .checkbox-container input[type="checkbox"]:checked {
             background-color: #FBB041;
-            border-color: #f8f9fa;
+            border-color: #232E66;
         }
 
         .checkbox-container input[type="checkbox"]:checked::before {
@@ -110,7 +110,7 @@
 
     <div class="d-flex">
         <!-- sidebar -->
-        <nav class="sidebar text-dark text-light">
+        <nav class="sidebar text-dark">
             <h1 class="text-center mt-3 fw-bold">
                 <span>Certificate</span>
                 <span>Generator</span>
@@ -162,7 +162,7 @@
                     <!-- untuk menampilkan tombol login jika user sudah login -->
                     @auth
                         <a class="dropdown-item text-decoration-none text-dark fs-4 mx-auto mx-0 my-2" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();">
+                            document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
