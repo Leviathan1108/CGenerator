@@ -87,8 +87,27 @@
         }
     </style>
 </head>
-
 <body>
+    <!-- Menambahkan Allert-Success -->
+    @if(session('success'))
+    <div id="success-alert" class="alert alert-success text-center">
+        {{ session('success') }}
+    </div>
+        <!--  Script, Membuat agar Allert Hilang dalam 3 detik -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                let alertBox = document.getElementById('success-alert');
+                if (alertBox) {
+                    alertBox.style.transition = "opacity 0.5s ease-out";
+                    alertBox.style.opacity = "0";
+                    setTimeout(() => alertBox.remove(), 500);
+                }
+            }, 3000);
+        });
+    </script>
+        @endif
+
     <div class="d-flex">
         <!-- sidebar -->
         <nav class="sidebar text-dark text-light">
