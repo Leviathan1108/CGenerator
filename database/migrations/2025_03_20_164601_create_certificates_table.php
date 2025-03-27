@@ -12,18 +12,18 @@ class CreateCertificatesTable extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::create('certificates', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('template_id')->constrained('templates')->onDelete('cascade');
-        $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade');
-        $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
-        $table->date('issue_date')->default(now());
-        $table->enum('status', ['pending', 'sent', 'verified'])->default('pending');
-        $table->string('verification_code')->unique();
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('certificates', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('template_id')->constrained('templates')->onDelete('cascade');
+            $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade');
+            $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->date('issue_date')->default(now());
+            $table->enum('status', ['draft', 'published', 'revoked'])->default('draft');
+            $table->string('verification_code')->unique();
+            $table->timestamps();
+        });
+    }
 
 
     /**

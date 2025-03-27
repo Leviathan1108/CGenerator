@@ -8,5 +8,9 @@ class Recipient extends Model
 {
     use HasFactory;
     protected $table = 'recipients'; // Nama tabel
-    protected $guarded = []; // Jika ingin mass assignment
+    protected $primaryKey = 'recipient_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+    
+    protected $fillable = ['name', 'email'];
 }

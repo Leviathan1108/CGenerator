@@ -20,14 +20,18 @@
 
     <form action="{{ route('templates.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        
+        <!-- Nama Template -->
         <label for="name">Nama Template:</label>
         <input type="text" name="name" id="name" required><br>
 
+        <!-- Upload File Template -->
         <label for="file">File Template:</label>
         <input type="file" name="file" id="file" required><br>
 
+        <!-- Layout Storage (Textarea) -->
         <label for="layout_storage">Layout Storage:</label>
-        <input type="text" name="layout_storage" id="layout_storage" required><br>
+        <textarea name="layout_storage" id="layout_storage" rows="4">{{ old('layout_storage') }}</textarea><br>
 
         <button type="submit">Simpan</button>
     </form>

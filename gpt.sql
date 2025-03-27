@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2025 at 10:50 PM
+-- Generation Time: Mar 27, 2025 at 09:45 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -44,8 +44,10 @@ CREATE TABLE `certificates` (
 --
 
 INSERT INTO `certificates` (`certificate_id`, `template_id`, `recipient_id`, `issued_by`, `issue_date`, `status`, `verification_code`, `created_at`, `updated_at`) VALUES
-(4, 1, 1, 4, '2025-03-21', 'published', 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-21 04:56:35', '2025-03-21 08:57:06'),
-(5, 2, 2, 4, '2025-03-21', 'draft', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-23 16:17:03');
+(4, 1, 1, NULL, '2025-03-21', 'published', 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-21 04:56:35', '2025-03-21 08:57:06'),
+(5, 2, 2, NULL, '2025-03-21', 'draft', '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-21 04:58:24', '2025-03-23 16:17:03'),
+(80691319, 3, 2, 9, '2025-03-26', 'draft', 'JVDXCBCDVI', '2025-03-25 23:58:01', '2025-03-25 23:58:01'),
+(80691321, 3, 1, 7, '2025-03-27', 'published', '4FSUMO9GPP', '2025-03-27 01:36:14', '2025-03-27 01:36:25');
 
 -- --------------------------------------------------------
 
@@ -166,7 +168,11 @@ CREATE TABLE `recipients` (
 
 INSERT INTO `recipients` (`recipient_id`, `name`, `email`, `created_at`, `updated_at`) VALUES
 (1, 'John Doe', 'johndoe@example.com', '2025-03-21 04:51:27', '2025-03-21 04:51:27'),
-(2, 'Dwi', 'dwiyours@gmail.com', '2025-03-23 04:32:30', '2025-03-23 04:32:30');
+(2, 'Dwi', 'dwiyours@gmail.com', '2025-03-23 04:32:30', '2025-03-23 04:32:30'),
+(4, 'Afifah Nur', 'nur@gmail.com', '2025-03-26 07:57:19', '2025-03-26 07:57:19'),
+(5, 'Syarifah N', 'syarifah@gmail.com', '2025-03-26 21:25:16', '2025-03-26 23:48:50'),
+(6, 'Nanda', 'nanda@example.com', '2025-03-26 23:49:23', '2025-03-26 23:53:03'),
+(8, 'Azzah', 'azzah@example.com', '2025-03-26 23:58:45', '2025-03-26 23:58:56');
 
 -- --------------------------------------------------------
 
@@ -190,7 +196,8 @@ CREATE TABLE `templates` (
 
 INSERT INTO `templates` (`id`, `name`, `file_path`, `created_by`, `created_at`, `updated_at`, `layout_storage`) VALUES
 (1, 'Certificate Template 1', '/storage/templates/template1.pdf', 1, '2025-03-21 04:51:27', '2025-03-21 04:51:27', NULL),
-(2, 'Certificate Template 2', '/storage/templates/template2.pdf', 1, '2025-03-21 05:02:12', '2025-03-21 05:03:28', NULL);
+(2, 'Certificate Template 2', 'templates/7JOlqCGXSKXd8lcI7dXdlXgRl4ge4SiMyyYZCfU8.png', 1, '2025-03-21 05:02:12', '2025-03-24 03:12:53', 'f'),
+(3, 'Test 1', 'templates/jXU28EsY9b5ctMHGE2vQgulWfsneR0fX4yZsXBWn.png', 7, '2025-03-24 03:08:18', '2025-03-25 22:24:20', 'p');
 
 -- --------------------------------------------------------
 
@@ -215,9 +222,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin', 'admin@example.com', '2025-03-20 10:02:12', '$2y$10$C.OUcReLSndQMN8ETEoWuOu62E/b1Tp1povDnNa6J7kjyaCUsuCne', '2DVaJ4RoEy', '2025-03-20 10:02:12', '2025-03-20 10:02:12'),
-(2, 'Tika', 'tika@example.com', '2025-03-21 05:11:59', '12345', '12345', '2025-03-21 04:46:08', '2025-03-21 05:12:24'),
-(4, 'Sari', 'sari@example.com', '2025-03-21 05:02:12', 'hashed-password', 'a69a2b93-0611-11f0-9df2-089798c81e69', '2025-03-21 05:02:12', '2025-03-21 05:02:12'),
-(5, 'polkam', 'polkam@example.com', '2025-03-21 05:12:39', '0987', '0987', '2025-03-21 05:12:39', '2025-03-21 05:12:39');
+(7, 'ws', 'ws@gmail.com', NULL, '$2y$10$5UNbYhEd9Cp7HMYTYtLvg.keaUfFQ4bxdEleVD1EeSMwVbfxDAply', NULL, '2025-03-24 00:01:46', '2025-03-24 00:01:46'),
+(8, 'Athikah Dwi Hapsari', 'you1@gmail.com', NULL, '$2y$10$fOf2lIJtBl/HGjJFKYImjureXZn3A87VmBIQ7fJ3xLrpMsnlqxpr.', NULL, '2025-03-24 02:05:39', '2025-03-24 02:05:39'),
+(9, 'Afifah Nur', 'nur@gmail.com', NULL, '$2y$10$Jei0QtYYBHMgUxmXtx1fWeiUqcxdF7DrKkjMx7JdrGU8IbRhggnTS', NULL, '2025-03-24 15:07:07', '2025-03-24 15:07:07');
 
 -- --------------------------------------------------------
 
@@ -239,8 +246,10 @@ CREATE TABLE `verifications` (
 --
 
 INSERT INTO `verifications` (`id`, `verification_code`, `verified_at`, `verified_by`, `created_at`, `updated_at`) VALUES
-(1, 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-23 15:57:29', 'perusahaan', '2025-03-23 15:57:29', '2025-03-23 15:57:29'),
-(1, 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-23 15:57:29', 'perusahaan', '2025-03-23 15:57:29', '2025-03-23 15:57:29');
+(7, 'dd833dad-0610-11f0-9df2-089798c81e69', '2025-03-26 07:04:31', 'i', '2025-03-26 07:04:03', '2025-03-26 07:04:03'),
+(8, 'JVDXCBCDVI', '2025-03-26 20:05:27', 'Perusahaan', '2025-03-26 20:05:27', '2025-03-26 20:05:27'),
+(9, '1ebfa4d1-0611-11f0-9df2-089798c81e69', '2025-03-26 20:06:23', 'Pribadi', '2025-03-26 20:06:23', '2025-03-26 20:06:23'),
+(10, '4FSUMO9GPP', '2025-03-27 01:37:09', 'Test', '2025-03-27 01:37:09', '2025-03-27 01:37:09');
 
 --
 -- Indexes for dumped tables
@@ -307,6 +316,7 @@ ALTER TABLE `users`
 -- Indexes for table `verifications`
 --
 ALTER TABLE `verifications`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_verifications_certificate` (`verification_code`);
 
 --
@@ -317,7 +327,7 @@ ALTER TABLE `verifications`
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80691319;
+  MODIFY `certificate_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80691322;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -341,19 +351,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `recipients`
 --
 ALTER TABLE `recipients`
-  MODIFY `recipient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `recipient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `templates`
 --
 ALTER TABLE `templates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `verifications`
+--
+ALTER TABLE `verifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
