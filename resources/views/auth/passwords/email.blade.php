@@ -19,7 +19,7 @@
                 {{ session('status') }}
             </div>
             @endif
-            <h3 class="mb-3 text-center fw-bold" style="color: blue;">{{ 'Reset Password' }}</h3>
+            <h3 class="mb-3 text-center fw-bold" style="color: blue;">Reset Password</h3>
             <p class="text-start">Enter your email address and we'll send you <br> a link to reset your password.</p>
 
             <form action="{{ route('password.email') }}" method="POST">
