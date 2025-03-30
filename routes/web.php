@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CertiController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\AuthController;
@@ -21,11 +21,12 @@ Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard'
 
 // Halaman yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
-    Route::get('/certificates', [CertiController::class, 'index'])->name('certificates');
+    Route::resource('certificates', CertificateController::class);
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::resource('templates', TemplateController::class);
-    Route::get('/verifications', [VerificationController::class, 'index']);
-    Route::get('/recipients', [RecipientController::class, 'index']);
+    Route::resource('verifications', VerificationController::class);
+    Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
+    Route::resource('recipients', RecipientController::class);    
 });
 
 // Rute Login & Register

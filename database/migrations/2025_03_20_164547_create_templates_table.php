@@ -11,16 +11,16 @@ class CreateTemplatesTable extends Migration
      *
      * @return void
      */
-public function up()
-{
-    Schema::create('templates', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('file_path');
-        $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::create('templates', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('file_path');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

@@ -80,7 +80,6 @@
             <p class="mt-3 text-center">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
         </div>
     </div>
-    
     <!-- JavaScript untuk menghilangkan alert setelah 3 detik -->
     <script>
         setTimeout(function () {
