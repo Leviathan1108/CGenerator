@@ -115,7 +115,7 @@
         font-size: 30px;
         font-weight: bold;
         border-radius: 10px;
-        color: #232e66;
+        color: #000;
         margin-bottom: 10px;
     }
 

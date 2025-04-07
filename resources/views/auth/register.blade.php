@@ -75,7 +75,7 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-warning w-100">Register</button>
+                <button type="submit" class="btn btn-warning w-100 fw-bold">Register</button>
             </form>
             <p class="mt-3 text-center">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
         </div>
@@ -148,7 +148,7 @@
             font-size: 30px;
             font-weight: bold;
             border-radius: 10px;
-            color: #232e66;
+            color: #000;
             margin-bottom: 10px;
         }
 

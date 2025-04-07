@@ -7,7 +7,7 @@
                 style="padding: 20px; width: 40%; background-color: #232e66;">
                 <div class="fw-bold fs-4 mb-3">Certificate Generator</div>
                 <div class="d-flex align-items-center justify-content-center fs-3 fw-bold rounded-2 mb-3"
-                    style="color: #232e66; width: 80px; height: 80px; background-color: #fbb041;">CG</div>
+                    style="color: #000; width: 80px; height: 80px; background-color: #fbb041;">CG</div>
                 <div class="fw-bold text-center">WELCOME TO <br> CERTIFICATE GENERATOR</div>
                 <p class="text-warning fs-9">Create, manage, and verify certificates</p>
             </div>
