@@ -32,14 +32,16 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('subscriptions', SubscriptionController::class); 
 });
 
-// ini kemungkinan tidak diikutkan karna tidak terlalu berguna
-// // Rute Login & Register
-// Route::middleware(['auth'])->group(function (){
-//     Route::get('/login', [AuthController::class,'login'])->name('login');
-//     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-//     Route::post('/register', [AuthController::class, 'processRegister']);
-//     return view('auth.register');
-// });
+// Rute Login & Register
+Route::middleware(['guest'])->group(function () {Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'processRegister']);
+});
 
 // // Logout
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+?>

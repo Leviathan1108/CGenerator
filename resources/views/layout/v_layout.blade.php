@@ -11,11 +11,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         .body {
             background-color: #f8f9fa;
@@ -78,7 +78,7 @@
 
         .checkbox-container input[type="checkbox"]:checked {
             background-color: #FBB041;
-            border-color: #f8f9fa;
+            border-color: #232E66;
         }
 
         .checkbox-container input[type="checkbox"]:checked::before {
@@ -89,9 +89,29 @@
 </head>
 
 <body>
+    <!-- Menambahkan Allert-Success -->
+    @if(session('success'))
+        <div id="success-alert" class="alert alert-success text-center">
+            {{ session('success') }}
+        </div>
+        <!--  Script, Membuat agar Allert Hilang dalam 3 detik -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                setTimeout(function () {
+                    let alertBox = document.getElementById('success-alert');
+                    if (alertBox) {
+                        alertBox.style.transition = "opacity 0.5s ease-out";
+                        alertBox.style.opacity = "0";
+                        setTimeout(() => alertBox.remove(), 500);
+                    }
+                }, 3000);
+            });
+        </script>
+    @endif
+
     <div class="d-flex">
         <!-- sidebar -->
-        <nav class="sidebar text-dark text-light">
+        <nav class="sidebar text-dark">
             <h1 class="text-center mt-3 fw-bold">
                 <span>Certificate</span>
                 <span>Generator</span>
@@ -141,13 +161,14 @@
                     <button class="btn btn-light bg-light rounded-circle mx-0 px-3 py-0">👤</button>
                     <!-- mengecek apakah user sudah login -->
                     @guest
-                    <a class="login text-decoration-none text-dark fs-4 mx-auto mx-0 my-2"
-                        href="{{ route('login') }}">Login</a>
+                        <a class="login text-decoration-none text-dark fs-4 mx-auto mx-0 my-2"
+                            href="{{ route('login') }}">Login</a>
                     @endguest
                     <!-- untuk menampilkan tombol login jika user sudah login -->
                     @auth
-                        <a class="dropdown-item text-decoration-none text-dark fs-4 mx-auto mx-0 my-2" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();">
+                        <a class="dropdown-item text-decoration-none text-dark fs-4 mx-auto mx-0 my-2"
+                            href="{{ route('logout') }}" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
