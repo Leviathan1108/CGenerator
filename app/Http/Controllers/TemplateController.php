@@ -71,7 +71,7 @@ class TemplateController extends Controller
     public function edit($id)
 {
     $template = Template::findOrFail($id);
-    return view('templates.edit', compact('template'));
+    return view('layout.nc', compact('template')); 
 }
 
 }

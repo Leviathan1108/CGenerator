@@ -17,8 +17,11 @@ public function up()
         $table->id();
         $table->string('name');
         $table->string('file_path');
-        $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+        $table->unsignedBigInteger('created_by');
+        $table->json('layout_storage')->nullable();
         $table->timestamps();
+    
+        $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
     });
 }
 
