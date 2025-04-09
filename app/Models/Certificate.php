@@ -24,13 +24,26 @@ class Certificate extends Model
     public static function boot()
     {
         parent::boot();
-
-        // Auto generate UID dan Verification Code saat create
+    
         static::creating(function ($certificate) {
-            $certificate->uid = Str::uuid();
-            $certificate->verification_code = strtoupper(Str::random(10));
+            // Buat verification_code dari UUID
+            $certificate->verification_code = strtoupper(Str::uuid()->toString());
+    
+            // Format UID seperti CERT-2025-04-0012 (CERT-YYYY-MM-XXXX)
+            $datePart = now()->format('Y-m');
+            
+            // Ambil urutan sertifikat bulan ini
+            $count = Certificate::whereYear('created_at', now()->year)
+                                ->whereMonth('created_at', now()->month)
+                                ->count() + 1;
+    
+            // Format nomor jadi 4 digit dengan leading zero
+            $serial = str_pad($count, 4, '0', STR_PAD_LEFT);
+    
+            $certificate->uid = "CERT-{$datePart}-{$serial}";
         });
     }
+    
 
     public function template()
     {

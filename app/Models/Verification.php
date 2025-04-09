@@ -10,13 +10,13 @@ class Verification extends Model
     use HasFactory;
 
     protected $table = 'certificate_verifications'; // Sesuai dengan nama tabel baru
+    public $timestamps = false;
+    
     protected $fillable = [
-        'certificate_id',
         'verification_code',
         'verified_at',
-        'verified_by',
     ];
-
+    
     public function certificate()
     {
         return $this->belongsTo(Certificate::class, 'certificate_id', 'id');

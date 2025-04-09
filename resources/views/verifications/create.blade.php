@@ -27,6 +27,6 @@
     </form>
 
     <br>
-    <a href="{{ url('/verifications') }}">Kembali ke Daftar Verifikasi</a>
+    <a href="{{ url('/certificates') }}">Kembali ke Daftar Certificate</a>
 </body>
 </html>

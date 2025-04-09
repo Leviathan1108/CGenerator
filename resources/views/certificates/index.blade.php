@@ -21,8 +21,8 @@
         @foreach ($certificates as $certificate)
         <tr>
             <td>{{ $certificate->id }}</td>
-            <td>{{ $certificate->template->name }}</td>
-            <td>{{ $certificate->recipient->name }}</td>
+            <td>{{ $certificate->template->name ?? 'N/A' }}</td>
+            <td>{{ $certificate->recipient->name ?? 'N/A' }}</td>            
             <td>{{ $certificate->uid }}</td>
             <td>{{ $certificate->verification_code }}</td>
             <td>{{ $certificate->issued_date }}</td>

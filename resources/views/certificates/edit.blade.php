@@ -29,11 +29,7 @@
             @endforeach
         </select>
 
-        <label>UID:</label>
-        <input type="text" name="uid" value="{{ $certificate->uid }}" readonly>
 
-        <label>Verification Code:</label>
-        <input type="text" name="verification_code" value="{{ $certificate->verification_code }}" readonly>
 
         <label>Issue Date:</label>
         <input type="date" name="issued_date" value="{{ \Carbon\Carbon::parse($certificate->issued_date)->format('Y-m-d') }}" required>

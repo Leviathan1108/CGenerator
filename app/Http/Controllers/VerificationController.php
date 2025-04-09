@@ -23,18 +23,16 @@ class VerificationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'certificate_id' => 'required|exists:certificates,id',
             'verification_code' => 'required|unique:certificate_verifications,verification_code',
-            'verified_by' => 'required|string|max:255',
         ]);
-
+    
         Verification::create([
-            'certificate_id' => $request->certificate_id,
             'verification_code' => $request->verification_code,
             'verified_at' => now(),
-            'verified_by' => $request->verified_by,
+            // Kalau tidak mau simpan verified_by, maka jangan masukkan field ini
         ]);
-
+    
         return redirect('/verifications')->with('success', 'Verifikasi berhasil ditambahkan!');
     }
+    
 }
