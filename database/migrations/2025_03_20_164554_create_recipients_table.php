@@ -6,29 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateRecipientsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    
     public function up()
     {
         Schema::create('recipients', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // Primary key "id"
+            $table->foreignId('certificate_id')->constrained('certificates')->onDelete('cascade'); // Foreign key
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamps();
+            $table->timestamps(); // Menambahkan created_at & updated_at
         });
     }
 
-
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('recipients');

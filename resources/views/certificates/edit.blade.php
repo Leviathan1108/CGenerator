@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Edit Sertifikat</h1>
-    <form action="{{ route('certificates.update', $certificate->certificate_id) }}" method="POST">
+    <form action="{{ route('certificates.update', $certificate->id) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -23,24 +23,20 @@
         <label>Recipient:</label>
         <select name="recipient_id" required>
             @foreach ($recipients as $recipient)
-                <option value="{{ $recipient->recipient_id }}" {{ $recipient->recipient_id == $certificate->recipient_id ? 'selected' : '' }}>
+                <option value="{{ $recipient->id }}" {{ $recipient->id == $certificate->recipient_id ? 'selected' : '' }}>
                     {{ $recipient->name }}
                 </option>
             @endforeach
         </select>
 
-        <label>Issued By:</label>
-        <select name="issued_by">
-            <option value="">Pilih</option>
-            @foreach ($users as $user)
-                <option value="{{ $user->id }}" {{ $user->id == $certificate->issued_by ? 'selected' : '' }}>
-                    {{ $user->name }}
-                </option>
-            @endforeach
-        </select>
+        <label>UID:</label>
+        <input type="text" name="uid" value="{{ $certificate->uid }}" readonly>
+
+        <label>Verification Code:</label>
+        <input type="text" name="verification_code" value="{{ $certificate->verification_code }}" readonly>
 
         <label>Issue Date:</label>
-        <input type="date" name="issue_date" value="{{ \Carbon\Carbon::parse($certificate->issue_date)->format('Y-m-d') }}" required>
+        <input type="date" name="issued_date" value="{{ \Carbon\Carbon::parse($certificate->issued_date)->format('Y-m-d') }}" required>
 
         <label>Status:</label>
         <select name="status" required>

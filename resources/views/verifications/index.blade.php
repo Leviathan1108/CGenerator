@@ -17,7 +17,6 @@
             <th>Penerima</th>
             <th>Diterbitkan Oleh</th>
             <th>Verified At</th>
-            <th>Verified By</th>
             <th>Aksi</th>
         </tr>
         @foreach ($verifications as $verification)
@@ -28,7 +27,6 @@
             <td>{{ $verification->certificate->recipient->name ?? '-' }}</td>
             <td>{{ $verification->certificate->issuer->name ?? '-' }}</td>
             <td>{{ $verification->verified_at }}</td>
-            <td>{{ $verification->verified_by }}</td>
             <td><a href="{{ url('/check-certificate/' . $verification->verification_code) }}">Cek Sertifikat</a></td>
         </tr>
         @endforeach

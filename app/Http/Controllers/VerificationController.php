@@ -16,17 +16,20 @@ class VerificationController extends Controller
 
     public function create()
     {
-        return view('verifications.create');
+        $certificates = Certificate::all(); // Ambil semua sertifikat untuk dropdown
+        return view('verifications.create', compact('certificates'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'verification_code' => 'required|exists:certificates,verification_code',
+            'certificate_id' => 'required|exists:certificates,id',
+            'verification_code' => 'required|unique:certificate_verifications,verification_code',
             'verified_by' => 'required|string|max:255',
         ]);
 
         Verification::create([
+            'certificate_id' => $request->certificate_id,
             'verification_code' => $request->verification_code,
             'verified_at' => now(),
             'verified_by' => $request->verified_by,

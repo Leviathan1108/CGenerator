@@ -9,6 +9,8 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\RecipientController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SubscriptionController;
+
 
 // Menangani autentikasi default Laravel
 Auth::routes();
@@ -26,7 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('templates', TemplateController::class);
     Route::resource('verifications', VerificationController::class);
     Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
-    Route::resource('recipients', RecipientController::class);    
+    Route::resource('recipients', RecipientController::class);   
+    Route::resource('subscriptions', SubscriptionController::class); 
 });
 
 // ini kemungkinan tidak diikutkan karna tidak terlalu berguna

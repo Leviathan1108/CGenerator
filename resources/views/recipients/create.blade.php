@@ -9,6 +9,16 @@
     <h1>Tambah Penerima</h1>
     <form action="{{ route('recipients.store') }}" method="POST">
         @csrf
+        
+        <label for="certificate_id">Sertifikat:</label>
+        <select name="certificate_id" required>
+            <option value="">-- Pilih Sertifikat --</option>
+            @foreach ($certificates as $certificate)
+                <option value="{{ $certificate->id }}">Sertifikat #{{ $certificate->id }}</option>
+            @endforeach
+        </select>
+        
+
         <label for="name">Nama:</label>
         <input type="text" name="name" required><br>
         

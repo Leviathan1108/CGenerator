@@ -18,12 +18,9 @@
 
     <form action="{{ url('/verifications') }}" method="POST">
         @csrf
+
         <label for="verification_code">Verification Code:</label>
         <input type="text" name="verification_code" required>
-        <br>
-
-        <label for="verified_by">Verified By:</label>
-        <input type="text" name="verified_by" required>
         <br>
 
         <button type="submit">Simpan</button>

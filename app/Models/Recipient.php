@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipient extends Model
 {
-    use HasFactory;
-    protected $table = 'recipients'; // Nama tabel
-    protected $primaryKey = 'recipient_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-    
-    protected $fillable = ['name', 'email'];
+    protected $fillable = ['certificate_id', 'name', 'email'];
+
+    // Pastikan ada relasi ke Certificate
+    public function certificate()
+    {
+        return $this->belongsTo(Certificate::class, 'certificate_id');
+    }
 }
+

@@ -17,7 +17,6 @@ class CreateVerificationsTable extends Migration
             $table->id();
             $table->foreignId('verification_code')->constrained('certificates')->onDelete('cascade');
             $table->timestamp('verified_at')->default(now());
-            $table->string('verified_by');
             $table->timestamps();
         });
     }

@@ -14,17 +14,16 @@ class CreateCertificatesTable extends Migration
     public function up()
     {
         Schema::create('certificates', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('template_id')->constrained('templates')->onDelete('cascade');
-            $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade');
-            $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->date('issue_date')->default(now());
-            $table->enum('status', ['draft', 'published', 'revoked'])->default('draft');
-            $table->string('verification_code')->unique();
-            $table->timestamps();
+            $table->id(); // Primary Key
+            $table->foreignId('template_id')->constrained('templates')->onDelete('cascade'); // Relasi ke templates
+            $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade'); // Relasi ke recipients
+            $table->string('uid', 100)->unique(); // UID unik
+            $table->string('verification_code', 100)->unique(); // Kode verifikasi unik
+            $table->timestamp('issued_date')->default(now()); // Tanggal penerbitan
+            $table->enum('status', ['draft', 'published', 'revoked'])->default('draft'); // Status
+            $table->timestamps(); // created_at & updated_at otomatis
         });
     }
-
 
     /**
      * Reverse the migrations.

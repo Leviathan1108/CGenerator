@@ -15,10 +15,10 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('file_path');
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
+            $table->string('name'); // Nama template
+            $table->text('template_data'); // Menyimpan file template
+            $table->timestamps(); // created_at & updated_at
         });
     }
 

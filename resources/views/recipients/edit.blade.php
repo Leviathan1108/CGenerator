@@ -7,9 +7,18 @@
 </head>
 <body>
     <h1>Edit Penerima</h1>
-    <form action="{{ route('recipients.update', $recipient->recipient_id) }}" method="POST">
+    <form action="{{ route('recipients.update', $recipient->id) }}" method="POST">
         @csrf
         @method('PUT')
+
+        <label for="certificate_id">Sertifikat:</label>
+        <select name="certificate_id" required>
+            @foreach ($certificates as $certificate)
+                <option value="{{ $certificate->id }}" {{ $certificate->id == $recipient->certificate_id ? 'selected' : '' }}>
+                    Sertifikat #{{ $certificate->id }}
+                </option>
+            @endforeach
+        </select>
 
         <label for="name">Nama:</label>
         <input type="text" name="name" value="{{ $recipient->name }}" required><br>
