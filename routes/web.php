@@ -41,6 +41,7 @@ Route::middleware(['guest'])->group(function () {Route::get('/login', function (
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
 });
+Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
 
 // // Logout
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

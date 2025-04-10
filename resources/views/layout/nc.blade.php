@@ -29,17 +29,23 @@
     canvas {
       border: 1px solid #ccc;
       max-width: 100%;
-    }
+    } 
+    .canvas-wrapper {
+    width: 100%;
+    overflow: auto;
+    max-height: 90vh;
+    background-color: #D9D9D9;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  #certificateCanvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
   </style>
 </head>
-<script>
-    window.templateData = {
-        image: "{{ asset('storage/' . $template->file_path) }}",
-        layout: {!! json_encode($template->layout_storage ? json_decode($template->layout_storage) : new stdClass()) !!}
-    };
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
 <body>
 <header> 
 <!-- Header from your previous navbar layout -->
@@ -83,20 +89,16 @@
   </div>
 
   <!-- Canvas Area (with gray block background) -->
-  <div class="canvas-wrapper p-4 mb-4 rounded" style="background-color: #D9D9D9;">
-    <h2>Generate Certificate</h2>
-    <div class="d-flex justify-content-center">
-    <canvas id="certificateCanvas" width="1200" height="850" data-template="{{ asset('storage/' . $template->file_path) }}"></canvas>
-  <script>
-  window.templateData = {
-    image: "{{ asset('storage/' . $template->file_path) }}",
-    layout: {!! $template->layout_storage ?? '{}' !!}
-  };
-</script>
-      <script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
+    <div class="canvas-wrapper p-4 mb-4 rounded" style="background-color: #D9D9D9;">
+      <div class="canvas-wrapper">
+        <h2>Generate Certificate</h2>
+          <div class="canvas-container-wrapper">
+            <canvas id="certificateCanvas"></canvas>
+          </div>
+        </div>
+        <button onclick="addText()">Tambah Teks</button>
     </div>
-    <button onclick="addText()">Tambah Teks</button>
-  </div>
+      
 
   <!-- Generate Button -->
   <form method="POST" action="{{ route('templates.update', $template->id) }}">
@@ -106,6 +108,14 @@
 </form>
 </div>
 </main>
+<script>
+  window.templateData = {
+    image: "{{ asset('storage/' . $template->file_path) }}",
+    layout: {!! json_encode($template->layout_storage ? json_decode($template->layout_storage) : new stdClass()) !!}
+  };
+</script>
+<script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+<script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
 <script>
   function updateProgress(step) {
     const progress = document.getElementById('progressBar');
@@ -117,6 +127,5 @@
   // Contoh: posisi di step 5
   updateProgress(5);
 </script>
-
 </body>
 </html>
