@@ -58,7 +58,8 @@ class RegisterController extends Controller
         ]);
 
          // Debugging: Cek apakah user langsung login atau tidak
-    dd(Auth::check()); // Harusnya FALSE jika tidak login otomatis
+         dd("Registrasi sukses, seharusnya redirect ke success_registration");
+         return redirect()->route('success.registration');
 
         // Redirect ke halaman login dengan alert sukses
         return redirect()->route('login')->with('success', 'Berhasil Menambahkan Akun, Silahkan Login');
