@@ -40,6 +40,10 @@ Route::middleware(['guest'])->group(function () {Route::get('/login', function (
 
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
+    Route::get('/registration-success', function () {
+        return view('auth.success_registration');
+    })->name('registration.success');
+    
 });
 Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
 

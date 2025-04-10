@@ -13,23 +13,24 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+
     public function processLogin(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    if (Auth::attempt($credentials)) {
-        return redirect()->route('dashboard'); // Redirect ke dashboard jika login berhasil
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('dashboard')->with('success', 'Login berhasil!');
+        }
+
+        return back()->with('error', 'Email atau password salah!');
     }
-
-    return back()->with('error', 'Email atau password salah!');
-}
 
     public function showRegister()
     {
-        return view('auth.register'); // Pastikan ini sesuai dengan lokasi file view
+        return view('auth.register');
     }
 
     public function processRegister(Request $request)
@@ -40,14 +41,19 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
-        return redirect('/')->with('success', 'Registration successful! You are now logged in.');
+        return redirect()->route('registration.success')->with('success', 'Registrasi berhasil!');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/login')->with('success', 'Logout berhasil!');
     }
 }
 ?>
-
