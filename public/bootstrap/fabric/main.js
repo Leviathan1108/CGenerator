@@ -10,23 +10,18 @@ canvas.setHeight(originalHeight);
 
 // Fungsi resize canvas agar fit ke wrapper
 function resizeCanvasToFit() {
-  const container = document.querySelector('.canvas-container-wrapper');
-  if (!container) return;
+  const wrapper = document.querySelector('.canvas-wrapper');
+  const scale = Math.min(
+    wrapper.clientWidth / originalWidth,
+    wrapper.clientHeight / originalHeight
+  );
 
-  const containerWidth = container.clientWidth;
-  const containerHeight = window.innerHeight * 0.8; // opsi: tinggi viewport 80%
+  canvas.setDimensions({
+    width: originalWidth * scale,
+    height: originalHeight * scale
+  });
 
-  const ratio = originalWidth / originalHeight;
-  let newWidth = containerWidth;
-  let newHeight = newWidth / ratio;
-
-  if (newHeight > containerHeight) {
-    newHeight = containerHeight;
-    newWidth = newHeight * ratio;
-  }
-
-  canvas.setDimensions({ width: newWidth, height: newHeight });
-  canvas.setZoom(newWidth / originalWidth);
+  canvas.setZoom(scale);
   canvas.renderAll();
 }
 

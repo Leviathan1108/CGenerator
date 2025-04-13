@@ -1,0 +1,6 @@
+#canvas-preview-wrapper img {
+  max-width: 100%;
+  height: auto;
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+}
