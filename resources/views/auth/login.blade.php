@@ -7,7 +7,6 @@
     <title>Login - Certificate Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
 </head>
 
 <body>
@@ -19,6 +18,9 @@
             <div class="fw-bold text-center">WELCOME TO <br> CERTIFICATE GENERATOR</div>
             <p class="text-warning fs-9">Create, manage, and verify certificates</p>
         </div>
+        
+        <!-- Spasi 5px tercapai dengan gap di .login-container -->
+        
         <!-- Bagian Kanan -->
         <div class="login-right">
             <!-- Menambahkan Allert-Danger -->
@@ -59,7 +61,6 @@
             <p class="mt-3 text-center">Don't have an account? <a href="/register">Register</a></p>
         </div>
     </div>
-    </div>
 </body>
 <script>
     function tombolPassword(button) {
@@ -86,11 +87,11 @@
 
     .login-container {
         display: flex;
-        max-width: 800px;
-        background: white;
+        max-width: 810px;
+        background: transparent;
         border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+        overflow: visible;
+        gap: 10px;
     }
 
     .login-left {
@@ -101,8 +102,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 20px;
+        padding: 24px;
         text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
 
     .logo {
@@ -122,6 +125,9 @@
     .login-right {
         width: 60%;
         padding: 40px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
 
     .login-subtitle {
@@ -134,8 +140,6 @@
         width: 100%;
         max-width: 400px;
         margin: 0 auto;
-        /* Agar alert tetap sejajar dengan form */
     }
 </style>
-
 </html>

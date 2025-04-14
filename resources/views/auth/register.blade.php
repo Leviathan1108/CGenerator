@@ -116,18 +116,17 @@
 
         .register-container {
             display: flex;
-            max-width: 700px;
+            max-width: 710px;
             width: 80%;
             min-height: 300px;
-            /* Tambah tinggi jika ingin lebih luas */
-            background: white;
+            background: transparent;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            overflow: visible;
+            gap: 10px;
         }
 
         .register-left {
-            width: 45%;
+            width: 55%;
             background: #232e66;
             color: white;
             display: flex;
@@ -136,6 +135,8 @@
             align-items: center;
             padding: 20px;
             text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
         .logo {
@@ -155,6 +156,9 @@
         .register-right {
             width: 60%;
             padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
         }
 
         .register-subtitle {
