@@ -19,6 +19,6 @@ class Verification extends Model
     
     public function certificate()
     {
-        return $this->belongsTo(Certificate::class);
+        return $this->belongsTo(Certificate::class, 'certificate_id', 'id');
     }
 }

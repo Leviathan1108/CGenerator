@@ -52,6 +52,6 @@ class Certificate extends Model
 
     public function recipient()
     {
-        return $this->belongsTo(Recipient::class);
+        return $this->belongsTo(Recipient::class, 'recipient_id', 'id');
     }    
 }

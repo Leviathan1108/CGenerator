@@ -15,9 +15,9 @@
             <!-- form atau content kiri -->
             <div style="width: 60%; padding: 40px; background-color: #f8f9fa;">
             @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
             @endif
             <h3 class="mb-3 text-center fw-bold" style="color: blue;">Reset Password</h3>
             <p class="text-start">Enter your email address and we'll send you <br> a link to reset your password.</p>
@@ -38,14 +38,14 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center align-items-center mb-3">
-                    <button type="submit" class="btn fw-bold" style="background-color: #fbb041; width: 200px;">
-                        {{ __('Send Reset Link') }}
-                    </button>
+                        <button type="submit" class="btn fw-bold" style="background-color: #fbb041; width: 200px;">
+                            {{ __('Send Reset Link') }}
+                        </button>
                 </div>
             </form>
             <div class="mt-3 text-center">
-                <p>Remember your password?<br><a href="/login" class="text-decoration-none fw-bold">Back to login </a>
-                </p>
+                <p>Remember your password?<br><a href="/login" class="text-decoration-none fw-bold">Back to login </a></p>
+            </div>
             </div>
         </div>
     </div>

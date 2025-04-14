@@ -1,13 +1,14 @@
-@extends ('layout.v_layout')
-
-@section('content')
-<div class="mt-0" style="background-color: rgb(219, 217, 217);">
-    <nav class="nav my-3" style="background-color: #232E66;">
-        <h1 class="text-light">Daftar Certificate</h1>
-    </nav>
-    <div class="container">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Sertifikat</title>
+</head>
+<body>
+    <h1>Daftar Sertifikat</h1>
     <table border="1">
-        <tr style="background-color: #232E66; color: white;">
+        <tr>
             <th>ID</th>
             <th>Template</th>
             <th>Penerima</th>
@@ -18,7 +19,7 @@
             <th>Aksi</th>
         </tr>
         @foreach ($certificates as $certificate)
-        <tr style="background-color: white;">
+        <tr>
             <td>{{ $certificate->id }}</td>
             <td>{{ $certificate->template->name ?? 'N/A' }}</td>
             <td>{{ $certificate->recipient->name ?? 'N/A' }}</td>            
@@ -40,6 +41,5 @@
         
     <a href="{{ route('certificates.create') }}">Tambah Sertifikat</a>
     
-    </div>
-    </div>
-@endsection
+</body>
+</html>
