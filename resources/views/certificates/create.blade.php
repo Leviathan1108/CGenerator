@@ -3,7 +3,7 @@
     <label>Template:</label>
     <select name="template_id" required>
         @foreach ($templates as $template)
-            <option value="{{ $template->id }}">{{ $template->id }}</option>
+            <option value="{{ $template->id }}">{{ $template->name }}</option>
         @endforeach
     </select>
 

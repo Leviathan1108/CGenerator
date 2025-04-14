@@ -10,7 +10,7 @@ class CreateRecipientsTable extends Migration
     {
         Schema::create('recipients', function (Blueprint $table) {
             $table->id(); // Primary key "id"
-            // $table->foreignId('certificate_id')->constrained('certificates')->onDelete('cascade'); // Foreign key
+            $table->foreignId('certificate_id')->constrained('certificates')->onDelete('cascade'); // Foreign key
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamps(); // Menambahkan created_at & updated_at

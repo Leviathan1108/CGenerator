@@ -110,7 +110,7 @@
 </main>
 <script>
   window.templateData = {
-    image: "{{ asset('storage/' . $template->template_data) }}",
+    image: "{{ asset('storage/' . $template->file_path) }}",
     layout: {!! json_encode($template->layout_storage ? json_decode($template->layout_storage) : new stdClass()) !!}
   };
 </script>
