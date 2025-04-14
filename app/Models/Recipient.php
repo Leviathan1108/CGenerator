@@ -11,7 +11,7 @@ class Recipient extends Model
     // Pastikan ada relasi ke Certificate
     public function certificate()
     {
-        return $this->belongsTo(Certificate::class, 'certificate_id');
+        return $this->hasMany(Certificate::class);
     }
 }
 
