@@ -1,35 +1,33 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Template</title>
-</head>
-<body>
-    <h1>Tambah Template</h1>
+@extends ('layout.v_layout')
 
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+@section('content')
+    <div class="mt-0" style="background-color: rgb(219, 217, 217); height: 100vh;">
+        <nav class="nav my-3" style="background-color: #232E66;">
+            <h1 class="text-light">Tambah Template</h1>
+        </nav>
 
-    <form action="{{ route('templatesuperadmin.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+        @if ($errors->any())
+            <div style="color: red;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <label for="name">Nama Template:</label>
-        <input type="text" name="name" id="name" required><br>
+        <form action="{{ route('templatesuperadmin.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-        <label for="file">File Template:</label>
-        <input type="file" name="file" id="file" required><br>
+            <label for="name">Nama Template:</label>
+            <input type="text" name="name" id="name" required><br>
 
-        <button type="submit">Simpan</button>
-    </form>
+            <label for="file">File Template:</label>
+            <input type="file" name="file" id="file" required><br>
 
-    <a href="{{ route('templatesuperadmin.index') }}">Kembali</a>
-</body>
-</html>
+            <button type="submit">Simpan</button>
+        </form>
+
+        <a href="{{ route('templatesuperadmin.index') }}">Kembali</a>
+    </div>
+@endsection

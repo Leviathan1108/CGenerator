@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('recipients', RecipientController::class);
     Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('templatesuperadmin', TemplateController::class);
+    Route::delete('/templatesuperadmin/{templatesuperadmin}', [TemplateController::class, 'destroy'])->name('templates.destroy');
     Route::resource('templateadmin', CertificateController::class);
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
@@ -40,9 +41,10 @@ Route::middleware(['auth'])->group(function () {
 // Rute untuk guest
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+        return view('auth.login');
+    })->name('login');
 
+    Route::post('/login', [AuthController::class, 'processLogin']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
     Route::get('/registration-success', function () {
@@ -59,8 +61,8 @@ Route::middleware(['guest'])->group(function () {
     })->name('code.enter');
     Route::post('/verify-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
 
-Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
-    
+    Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
+
     // Rute untuk merubah password baru setelah mendapatkan link reset
     Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
@@ -72,9 +74,12 @@ Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('t
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');  // Pastikan ada file success_reset.blade.php
     })->name('password.reset.success');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/dashboard', function () {
+        return view('home'); // Atau ganti sesuai nama file view yang tersedia
+    })->name('dashboard');
 
 
-    
 });
 ?>
