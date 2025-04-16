@@ -2,38 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Verification;
+use Illuminate\Http\Request; // ✅ Tambahkan baris ini
 use App\Models\Certificate;
 
 class VerificationController extends Controller
 {
     public function index()
     {
-        $verifications = Verification::with('certificate')->get();
-        return view('verifications.index', compact('verifications'));
+        return view('verifications.index');
     }
 
-    public function create()
-    {
-        $certificates = Certificate::all(); // Ambil semua sertifikat untuk dropdown
-        return view('verifications.create', compact('certificates'));
-    }
-
-    public function store(Request $request)
+    public function check(Request $request)
     {
         $request->validate([
-            'verification_code' => 'required|unique:certificate_verifications,verification_code',
+            'verification_code' => 'required|string'
         ]);
-    
-        Verification::create([
-            'verification_code' => $request->verification_code,
-            'verified_at' => now(),
-            // Kalau tidak mau simpan verified_by, maka jangan masukkan field ini
-        ]);
-    
-        return redirect('/verifications')->with('success', 'Verifikasi berhasil ditambahkan!');
+
+        return redirect()->route('verifications.show', ['code' => $request->verification_code]);
     }
-    
+
+    public function show($code)
+    {
+        $certificate = Certificate::where('verification_code', $code)->first();
+
+        if (!$certificate) {
+            return response()->view('verifications.not-found', [], 404);
+        }
+
+        return view('verifications.show', compact('certificate'));
+    }
 }
-?>

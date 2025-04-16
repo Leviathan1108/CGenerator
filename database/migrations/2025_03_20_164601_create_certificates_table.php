@@ -14,15 +14,20 @@ class CreateCertificatesTable extends Migration
     public function up()
     {
         Schema::create('certificates', function (Blueprint $table) {
-            $table->id(); // Primary Key
-            $table->foreignId('template_id')->constrained('templates')->onDelete('cascade'); // Relasi ke templates
-            $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade'); // Relasi ke recipients
-            $table->string('uid', 100)->unique(); // UID unik
-            $table->string('verification_code', 100)->unique(); // Kode verifikasi unik
-            $table->timestamp('issued_date')->default(now()); // Tanggal penerbitan
-            $table->enum('status', ['draft', 'published', 'revoked'])->default('draft'); // Status
-            $table->timestamps(); // created_at & updated_at otomatis
-        });
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('uid')->unique();
+            $table->string('verification_code')->unique();
+            $table->date('issued_date')->nullable();
+            $table->enum('status', ['draft', 'published', 'revoked']);
+            $table->enum('background_choice', ['custom', 'template']);
+            $table->unsignedBigInteger('selected_template_id')->nullable();
+            $table->string('event_name');
+            $table->string('logo_path')->nullable();
+            $table->timestamps();
+        
+            $table->foreign('selected_template_id')->references('id')->on('templates')->nullOnDelete();
+        });        
     }
 
     /**

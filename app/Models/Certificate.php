@@ -11,47 +11,51 @@ class Certificate extends Model
     use HasFactory;
 
     protected $fillable = [
-        'template_id',
-        'recipient_id',
+        'selected_template_id',
+        'user_id',
         'uid',
         'verification_code',
         'issued_date',
         'status',
+        'background_choice',
+        'event_name',
+        'logo_path',
     ];
 
     protected $dates = ['issued_date'];
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
-    
+
         static::creating(function ($certificate) {
-            // Buat verification_code dari UUID
-            $certificate->verification_code = strtoupper(Str::uuid()->toString());
-    
-            // Format UID seperti CERT-2025-04-0012 (CERT-YYYY-MM-XXXX)
-            $datePart = now()->format('Y-m');
-            
-            // Ambil urutan sertifikat bulan ini
-            $count = Certificate::whereYear('created_at', now()->year)
-                                ->whereMonth('created_at', now()->month)
-                                ->count() + 1;
-    
-            // Format nomor jadi 4 digit dengan leading zero
-            $serial = str_pad($count, 4, '0', STR_PAD_LEFT);
-    
-            $certificate->uid = "CERT-{$datePart}-{$serial}";
+            if (empty($certificate->verification_code)) {
+                $certificate->verification_code = strtoupper(Str::random(10));
+            }
+
+            if (empty($certificate->uid)) {
+                $datePart = now()->format('Y-m');
+                $count = Certificate::whereYear('created_at', now()->year)
+                                    ->whereMonth('created_at', now()->month)
+                                    ->count() + 1;
+                $serial = str_pad($count, 4, '0', STR_PAD_LEFT);
+                $certificate->uid = "CERT-{$datePart}-{$serial}";
+            }
         });
     }
-    
 
     public function template()
     {
         return $this->belongsTo(Template::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function recipient()
     {
-        return $this->belongsTo(Recipient::class, 'recipient_id', 'id');
-    }    
+        return $this->hasOne(Recipient::class);
+    }
 }

@@ -113,11 +113,32 @@ function addText() {
 }
 window.addText = addText;
 
+function captureRecipientName() {
+  const objects = canvas.getObjects();
+  let recipientName = '';
+
+  for (let obj of objects) {
+    if (obj.type === 'text' || obj.type === 'textbox') {
+      if (obj.text && obj.text.toLowerCase().includes('recipient')) {
+        recipientName = obj.text;
+        break;
+      }
+    }
+  }
+
+  document.getElementById('recipient_name').value = recipientName;
+}
+
 // Fungsi simpan layout ke input hidden
 function saveLayout() {
+  // Simpan layout JSON
   const layoutJSON = JSON.stringify(canvas.toJSON());
   document.getElementById('layout_storage').value = layoutJSON;
+
+  // Simpan recipient name dari canvas (jika ada)
+  captureRecipientName();
 }
+
 window.saveLayout = saveLayout;
 
 // Tombol download sebagai PNG

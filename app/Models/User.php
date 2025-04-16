@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'certificate_id',
     ];
 
     /**
@@ -41,4 +43,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'timestamp',
     ];
+
+    public function certificate()
+    {
+        return $this->belongsTo(Certificate::class, 'certificate_id');
+    }
+    
 }

@@ -8,7 +8,7 @@
 <body>
     <h1>Edit Template</h1>
 
-    <form action="{{ route('templates.update', $template->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('templatesuperadmin.update', $template->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -21,6 +21,6 @@
         <button type="submit">Update</button>
     </form>
 
-    <a href="{{ route('templates.index') }}">Kembali</a>
+    <a href="{{ route('templatesuperadmin.index') }}">Kembali</a>
 </body>
 </html>

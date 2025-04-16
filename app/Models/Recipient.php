@@ -14,4 +14,3 @@ class Recipient extends Model
         return $this->belongsTo(Certificate::class, 'certificate_id');
     }
 }
-

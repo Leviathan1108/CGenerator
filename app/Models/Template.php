@@ -10,7 +10,7 @@ class Template extends Model
     use HasFactory;
     
     protected $table = 'templates';
-    protected $fillable = ['user_id', 'name', 'template_data'];
+    protected $fillable = ['user_id', 'name', 'file_path'];
     
     public function user()
     {

@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Recipient;
+use App\Models\User;
 use App\Models\Certificate;
+use Illuminate\Support\Facades\Hash;
 
 class RecipientController extends Controller
 {
     public function index()
     {
-        $recipients = Recipient::with('certificate')->get(); // Ambil data dengan sertifikat
+        $recipients = User::where('role', 'recipient')->with('certificate')->get();
         return view('recipients.index', compact('recipients'));
     }
 
     public function create()
     {
-        $certificates = Certificate::all(); // Ambil semua sertifikat
+        $certificates = Certificate::all();
         return view('recipients.create', compact('certificates'));
     }
 
@@ -24,38 +25,48 @@ class RecipientController extends Controller
     {
         $request->validate([
             'certificate_id' => 'required|exists:certificates,id',
-            'name' => 'required',
-            'email' => 'required|email|unique:recipients,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
         ]);
 
-        Recipient::create($request->all());
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'certificate_id' => $request->certificate_id,
+            'role' => 'recipient',
+            'password' => Hash::make('default_password') // Ganti default password jika perlu
+        ]);
 
-        return redirect()->route('recipients.index')->with('success', 'Recipient created successfully.');
+        return redirect()->route('recipients.index')->with('success', 'Penerima berhasil ditambahkan.');
     }
 
-    public function edit(Recipient $recipient)
+    public function edit(User $recipient)
     {
         $certificates = Certificate::all();
         return view('recipients.edit', compact('recipient', 'certificates'));
     }
 
-    public function update(Request $request, Recipient $recipient)
+    public function update(Request $request, User $recipient)
     {
         $request->validate([
             'certificate_id' => 'required|exists:certificates,id',
-            'name' => 'required',
-            'email' => 'required|email|unique:recipients,email,' . $recipient->id . ',id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $recipient->id,
         ]);
 
-        $recipient->update($request->all());
+        $recipient->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'certificate_id' => $request->certificate_id,
+        ]);
 
-        return redirect()->route('recipients.index')->with('success', 'Recipient updated successfully.');
+        return redirect()->route('recipients.index')->with('success', 'Penerima berhasil diperbarui.');
     }
 
-    public function destroy(Recipient $recipient)
+    public function destroy(User $recipient)
     {
         $recipient->delete();
-        return redirect()->route('recipients.index')->with('success', 'Recipient deleted successfully.');
+        return redirect()->route('recipients.index')->with('success', 'Penerima berhasil dihapus.');
     }
 }
 ?>

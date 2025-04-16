@@ -8,7 +8,7 @@ use App\Models\Template;
 use Illuminate\Support\Str;
 use App\Models\User;
 
-class CertificateController extends Controller
+class TemplateAdminController extends Controller
 {
     public function index()
     {
@@ -130,4 +130,3 @@ class CertificateController extends Controller
         return $pdf->download("templateadmin-{$certificate->uid}.pdf");
     }    
 }
-?>

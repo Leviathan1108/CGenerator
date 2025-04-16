@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    <form action="{{ route('templates.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('templatesuperadmin.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <label for="name">Nama Template:</label>
@@ -30,6 +30,6 @@
         <button type="submit">Simpan</button>
     </form>
 
-    <a href="{{ route('templates.index') }}">Kembali</a>
+    <a href="{{ route('templatesuperadmin.index') }}">Kembali</a>
 </body>
 </html>

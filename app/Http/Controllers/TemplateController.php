@@ -12,13 +12,14 @@ class TemplateController extends Controller
     public function index()
     {
         $templates = Template::all();
-        return view('templates.index', compact('templates'));
+        return view('templatesuperadmin.index', compact('templates'));
     }
 
     // Tampilkan form tambah template
     public function create()
     {
-        return view('templates.create');
+        $templates = Template::all();
+        return view('templatesuperadmin.create', compact('templates'));
     }
 
     // Simpan template baru
@@ -32,45 +33,62 @@ class TemplateController extends Controller
         $filePath = $request->file('file')->store('templates', 'public');
 
         Template::create([
-            'user_id' => Auth::id(),
+            'user_id' => Auth::id(),// otomatis isi dari user yang login
             'name' => $request->name,
-            'template_data' => $filePath,
+            'file_path' => $filePath,
         ]);
 
-        return redirect()->route('templates.index')->with('success', 'Template berhasil ditambahkan!');
+        return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil ditambahkan!');
     }
 
     // Edit template
     public function edit($id)
     {
         $template = Template::findOrFail($id);
-        return view('layout.nc', compact('template'));
+        return view('templatesuperadmin.edit', compact('template'));
     }
 
     // Update template
-    public function update(Request $request, Template $template)
+    public function update(Request $request, Template $templatesuperadmin)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:2048',
         ]);
-
+    
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('templates', 'public');
-            $template->template_data = $filePath;
+            $templatesuperadmin->file_path = $filePath;
         }
-
-        $template->name = $request->name;
-        $template->save();
-
-        return redirect()->route('templates.index')->with('success', 'Template berhasil diperbarui!');
+    
+        $templatesuperadmin->name = $request->name;
+    
+        if (is_null($templatesuperadmin->user_id)) {
+            $templatesuperadmin->user_id = Auth::id();
+        }
+    
+        $templatesuperadmin->save();        
+    
+        return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil diperbarui!');
     }
+    
 
     // Hapus template
-    public function destroy(Template $template)
+    public function destroy(Template $templatesuperadmin)
     {
-        $template->delete();
-        return redirect()->route('templates.index')->with('success', 'Template berhasil dihapus');
+        $templatesuperadmin->delete();
+    
+        return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil dihapus!');
     }
+    
+    
+
+    // Tampilkan UI pilih template seperti di desain
+        public function select()
+    {
+        $templates = Template::all();
+        return view('templatesuperadmin.select', compact('templates'));
+    }
+
 }
 ?>

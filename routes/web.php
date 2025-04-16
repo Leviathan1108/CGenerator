@@ -27,10 +27,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('certificates', CertificateController::class);
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::resource('templates', TemplateController::class);
-    Route::resource('verifications', VerificationController::class);
     Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
     Route::resource('recipients', RecipientController::class);
     Route::resource('subscriptions', SubscriptionController::class);
+    Route::resource('templatesuperadmin', TemplateController::class);
+    Route::resource('templateadmin', CertificateController::class);
+    Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
+    Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
+    Route::get('/verifications/{code}', [VerificationController::class, 'show']);
 });
 
 // Rute untuk guest

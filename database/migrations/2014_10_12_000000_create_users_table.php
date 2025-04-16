@@ -20,6 +20,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->enum('role', ['superadmin', 'admin', 'recipient', 'guest'])->default('guest');
+            $table->foreignId('subscription_id')->nullable()->constrained('subscriptions');
+            $table->unsignedBigInteger('certificate_id')->nullable()->after('subscription_id');
+            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('set null');
             $table->timestamps();
         });
     }
