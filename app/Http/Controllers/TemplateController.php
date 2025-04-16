@@ -73,3 +73,4 @@ class TemplateController extends Controller
         return redirect()->route('templates.index')->with('success', 'Template berhasil dihapus');
     }
 }
+?>

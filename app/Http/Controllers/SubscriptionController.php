@@ -55,3 +55,4 @@ class SubscriptionController extends Controller
         return redirect()->route('subscriptions.index')->with('success', 'Subscription deleted successfully.');
     }
 }
+?>

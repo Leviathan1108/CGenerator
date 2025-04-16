@@ -65,3 +65,4 @@ class RegisterController extends Controller
         return redirect()->route('login')->with('success', 'Berhasil Menambahkan Akun, Silahkan Login');
     }
 }
+?>

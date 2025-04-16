@@ -14,12 +14,10 @@
         <!-- Bagian Kiri -->
         <div class="login-left">
             <div class="fw-bold fs-4 mb-3">Certificate Generator</div>
-            <div class="logo">CG</div>
+            <div class="logo mb-3">CG</div>
             <div class="fw-bold text-center">WELCOME TO <br> CERTIFICATE GENERATOR</div>
             <p class="text-warning fs-9">Create, manage, and verify certificates</p>
         </div>
-        
-        <!-- Spasi 5px tercapai dengan gap di .login-container -->
         
         <!-- Bagian Kanan -->
         <div class="login-right">
@@ -95,7 +93,7 @@
     }
 
     .login-left {
-        width: 40%;
+        width: 55%;
         background: #232e66;
         color: white;
         display: flex;
@@ -123,7 +121,7 @@
     }
 
     .login-right {
-        width: 60%;
+        width: 65%;
         padding: 40px;
         background: white;
         border-radius: 10px;

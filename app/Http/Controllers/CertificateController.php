@@ -73,3 +73,4 @@ class CertificateController extends Controller
         return redirect()->route('certificates.index')->with('success', 'Certificate berhasil dihapus!');
     }
 }
+?>

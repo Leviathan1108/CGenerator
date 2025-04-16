@@ -12,8 +12,8 @@
 <body>
     <div class="register-container">
         <div class="register-left">
-            <div class="fw-bold fs-4 mb-3">Certificate Generator</div>
-            <div class="logo">CG</div>
+            <div class="fw-bold fs-4 mb-4">Certificate Generator</div>
+            <div class="logo mb-4">CG</div>
             <div class="fw-bold text-center">WELCOME TO <br> CERTIFICATE GENERATOR</div>
             <p class="text-warning">Create, manage, and verify certificates</p>
         </div>
@@ -29,21 +29,21 @@
 
             <form action="{{ route('register') }}" method="POST">
                 @csrf
-                <div class="mb-3">
+                <div class="mb-1">
                     <label class="form-label">Full Name</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
                         <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                     <label class="form-label">Email</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                         <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                     <label class="form-label">Username</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
@@ -51,7 +51,7 @@
                             required>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                     <label class="form-label">Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
@@ -126,7 +126,7 @@
         }
 
         .register-left {
-            width: 55%;
+            width: 70%;
             background: #232e66;
             color: white;
             display: flex;
@@ -154,7 +154,7 @@
         }
 
         .register-right {
-            width: 60%;
+            width: 85%;
             padding: 40px;
             background: white;
             border-radius: 10px;

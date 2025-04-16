@@ -58,3 +58,4 @@ class RecipientController extends Controller
         return redirect()->route('recipients.index')->with('success', 'Recipient deleted successfully.');
     }
 }
+?>
