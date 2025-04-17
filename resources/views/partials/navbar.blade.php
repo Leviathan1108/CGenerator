@@ -50,16 +50,10 @@
             <a class="nav-link fs-6 text-light" href="/">Dashboard</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link fs-6 text-light" href="/certi">Create New Certificate</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/templatesuperadmin">Templates Superadmin</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link fs-6 text-light" href="/templateadmin">Templates Admin</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link fs-6 text-light" href="/certificates">Certificates</a>
+            <a class="nav-link fs-6 text-light" href="/templateadmin">Create New Certificate</a>
         </li>
         <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/verifications">Verifications</a>

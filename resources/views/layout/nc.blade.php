@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Certificate - Stepper</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{{ asset('js/stepper.js') }}"></script>
   <script defer>
     function showStep(step) {
       const steps = document.querySelectorAll('[id^="step-"]');
@@ -19,21 +20,99 @@
           item.classList.add('text-blue-600', 'border-blue-600');
         }
       });
+      if (step === 4) {
+        const selectedBackgroundURL = localStorage.getItem('selectedBackground');
+if (selectedBackgroundURL) {
+  const previewImg = document.getElementById('background-preview-step4');
+  if (previewImg) {
+    previewImg.src = selectedBackgroundURL;
+  }
+}
+  }  
     }
 
     function nextStep() {
-      const current = parseInt(document.getElementById('currentStep').value);
-      const next = Math.min(current + 1, 9);
-      document.getElementById('currentStep').value = next;
-      showStep(next);
+  const current = parseInt(document.getElementById('currentStep').value);
+  const backgroundChoice = document.getElementById('background_choice').value;
+  const selectedTemplateId = document.getElementById('selected_template_id').value;
+
+  // Validasi khusus step 2
+  if (current === 2 && backgroundChoice === 'template' && !selectedTemplateId) {
+    alert('Pilih template terlebih dahulu sebelum lanjut.');
+    return;
+  }
+
+  // Validasi step 3 (custom background)
+  if (current === 3 && backgroundChoice === 'custom') {
+    const customBg = localStorage.getItem('selectedBackground');
+    if (!customBg) {
+      alert('Silakan upload background terlebih dahulu.');
+      return;
+    }
+  }
+
+  const next = Math.min(current + 1, 9);
+  document.getElementById('currentStep').value = next;
+  showStep(next);
+}
+
+
+
+    function chooseBackground(choice) {
+      document.getElementById('background_choice').value = choice;
+      document.getElementById('step-1').classList.add('hidden');
+
+    const nextStep = choice === 'template' ? 2 : 3;
+      document.getElementById('currentStep').value = nextStep;
+      showStep(nextStep);
     }
 
-    function prevStep() {
-      const current = parseInt(document.getElementById('currentStep').value);
-      const prev = Math.max(current - 1, 1);
-      document.getElementById('currentStep').value = prev;
-      showStep(prev);
+    
+    function selectTemplate(templateId) {
+  document.getElementById('selected_template_id').value = templateId;
+
+  // Simpan URL background ke localStorage
+  const templateImg = event.currentTarget.querySelector('img');
+  if (templateImg) {
+    const imageUrl = templateImg.src;
+    localStorage.setItem('selectedBackground', imageUrl);
+  }
+
+  document.getElementById('step-2').classList.add('hidden');
+  document.getElementById('currentStep').value = 4;
+  showStep(4);
+}
+
+
+
+    function goToStep(stepNumber) {
+      document.getElementById('currentStep').value = stepNumber;
+      showStep(stepNumber);
     }
+
+
+    function prevStep() {
+  const current = parseInt(document.getElementById('currentStep').value);
+  const backgroundChoice = document.getElementById('background_choice').value;
+
+  let prev = current - 1;
+
+  // Logika khusus untuk kembali dari step 4 ke step sebelumnya yang benar
+  if (current === 4) {
+    prev = backgroundChoice === 'template' ? 2 : 3;
+  }
+
+  // Logika untuk kembali dari step 2 atau 3 ke step 1
+  if ((current === 2 && backgroundChoice === 'template') ||
+      (current === 3 && backgroundChoice === 'custom')) {
+    prev = 1;
+  }
+
+  document.getElementById('currentStep').value = Math.max(prev, 1);
+  showStep(Math.max(prev, 1));
+}
+
+
 
     document.addEventListener('DOMContentLoaded', () => {
       showStep(1);
@@ -83,44 +162,74 @@
           }
         });
       }
+
+      const customBgInput = document.querySelector('input[name="custom_background"]');
+if (customBgInput) {
+  customBgInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        // Simpan base64 background ke localStorage
+        localStorage.setItem('selectedBackground', event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
     });
 
     async function generateSertifikat() {
-      const nama = document.getElementById('input-nama').value;
-      const acara = document.getElementById('input-acara').value;
-      const logoFile = document.getElementById('logo-upload').files[0];
-      const selectedTemplateId = document.getElementById('template-select').value;
-      const backgroundChoice = document.getElementById('background_choice').value || 'template';
+  const nama = document.getElementById('input-nama').value;
+  const acara = document.getElementById('input-acara').value;
+  const logoFile = document.getElementById('logo-upload').files[0];
+  const selectedTemplateId = document.getElementById('selected_template_id').value;
+  const backgroundChoice = document.getElementById('background_choice').value || 'template';
 
-      const formData = new FormData();
-      formData.append('participant_name', nama);
-      formData.append('event_name', acara);
-      formData.append('background_choice', backgroundChoice);
-      formData.append('logo', logoFile);
-      formData.append('selected_template_id', selectedTemplateId);
-      formData.append('status', 'draft');
+  // ✅ Validasi sebelum submit
+  if (backgroundChoice === 'template' && !selectedTemplateId) {
+    alert('Kamu memilih menggunakan template, tapi belum memilih template.');
+    return;
+  }
 
-      try {
-        const res = await fetch('/admin/certificates/store', {
-          method: 'POST',
-          headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-          },
-          body: formData
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          alert('Berhasil disimpan');
-          showStep(7);
-        } else {
-          alert('Gagal simpan');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Error saat simpan sertifikat');
-      }
+  if (backgroundChoice === 'custom') {
+    const customBg = localStorage.getItem('selectedBackground');
+    if (!customBg) {
+      alert('Kamu memilih upload background sendiri, tapi belum upload gambar.');
+      return;
     }
+  }
+
+  const formData = new FormData();
+  formData.append('participant_name', nama);
+  formData.append('event_name', acara);
+  formData.append('background_choice', backgroundChoice);
+  formData.append('logo', logoFile);
+  formData.append('selected_template_id', selectedTemplateId);
+  formData.append('status', 'draft');
+
+  try {
+    const res = await fetch('/admin/certificates/store', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: formData
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert('Berhasil disimpan');
+      showStep(7);
+    } else {
+      alert('Gagal simpan');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error saat simpan sertifikat');
+  }
+}
+
   </script>
 </head>
 
@@ -142,8 +251,8 @@
     <!-- Stepper -->
     <div class="flex justify-between text-center text-xs font-semibold text-gray-600 mb-8">
       <div class="flex-1 stepper-item border-b-4 pb-1">1<br><span>Select Background</span></div>
-      <div class="flex-1 stepper-item border-b-4 pb-1">2<br><span>Upload/Select</span></div>
-      <div class="flex-1 stepper-item border-b-4 pb-1">3<br><span>Preview</span></div>
+      <div class="flex-1 stepper-item border-b-4 pb-1">2<br><span>Select Template</span></div>
+      <div class="flex-1 stepper-item border-b-4 pb-1">3<br><span>Upload Background (Custom)</span></div>
       <div class="flex-1 stepper-item border-b-4 pb-1">4<br><span>Input Data</span></div>
       <div class="flex-1 stepper-item border-b-4 pb-1">5<br><span>Upload Logo</span></div>
       <div class="flex-1 stepper-item border-b-4 pb-1">6<br><span>Generate</span></div>
@@ -152,50 +261,89 @@
       <div class="flex-1 stepper-item border-b-4 pb-1">9<br><span>Publish</span></div>
     </div>
 
-    <!-- STEP 1 -->
-    <section id="step-1">
-      <label class="block font-semibold text-gray-700 mb-1">Pilihan Background</label>
-      <select name="background_choice" class="w-full border-gray-300 rounded-lg" required>
-        <option value="custom">Custom</option>
-        <option value="template">Template</option>
-      </select>
-      <input type="hidden" id="background_choice" name="background_choice" value="template">
-    </section>
-
-    <!-- STEP 2 -->
-    <section id="step-2" class="hidden">
-      <label class="block font-semibold text-gray-700 mb-1">Pilih Template</label>
-      <select id="template-select" name="selected_template_id" class="w-full border-gray-300 rounded-lg">
-        <option value="">-- Pilih Template --</option>
-        @foreach ($templates as $template)
-          <option value="{{ $template->id }}" data-preview="{{ asset('storage/' . $template->file_path) }}">{{ $template->name }}</option>
-        @endforeach
-      </select>
-    </section>
-
-    <!-- STEP 3 -->
-    <section id="step-3" class="hidden">
-      <p class="text-lg font-semibold mb-4">Preview Sertifikat</p>
-      <div class="w-full h-64 bg-gray-100 rounded-lg border border-dashed border-gray-300 flex items-center justify-center">
-        <img id="certificate-preview" src="" alt="Preview Sertifikat" class="max-h-full max-w-full object-contain" />
+<form id="certificateForm" class="space-y-8">
+    <!-- Step 1: Pilih Background -->
+    <section id="step-1" class="transition-all duration-500 ease-in-out space-y-4">
+      <h2 class="text-xl font-semibold mb-4">Pilih Background</h2>
+      <input type="hidden" name="background_choice" id="background_choice">
+      <div class="grid grid-cols-2 gap-6">
+          <!-- Kiri: Upload Background Sendiri -->
+          <div onclick="chooseBackground('custom')" class="cursor-pointer border p-4 rounded-lg hover:shadow-lg">
+              <h3 class="text-lg font-medium mb-2">Background Sendiri</h3>
+              <p class="text-gray-600 text-sm">Upload background dari komputermu</p>
+          </div>
+  
+          <!-- Kanan: Gunakan Template -->
+          <div onclick="chooseBackground('template')" class="cursor-pointer border p-4 rounded-lg hover:shadow-lg">
+              <h3 class="text-lg font-medium mb-2">Gunakan Template</h3>
+              <p class="text-gray-600 text-sm">Pilih dari template yang tersedia</p>
+          </div>
       </div>
-    </section>
+  </section>
+  
+
+    <!-- Step 2: Pilih Template -->
+    <section id="step-2" class="transition-all duration-500 ease-in-out space-y-4">
+      <h2 class="text-xl font-semibold mb-4">Pilih Template</h2>
+      <input type="hidden" name="selected_template_id" id="selected_template_id">
+  
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          @foreach ($templates as $template)
+              <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg cursor-pointer" onclick="selectTemplate({{ $template->id }})">
+                  <img src="{{ asset('storage/' . $template->file_path) }}" alt="Template {{ $template->id }}" class="w-full h-40 object-cover">
+              </div>
+          @endforeach
+      </div>
+  </section>
+  
+    <!-- STEP 3 -->
+    <section id="step-3" class="hidden space-y-4 mt-6">
+      <h2 class="text-xl font-semibold">Upload Background</h2>
+      <input type="file" name="custom_background" accept="image/*" class="block w-full border border-gray-300 rounded p-2">
+      <button type="button" onclick="goToStep(4)" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Lanjut</button>
+  </section>
+  
 
     <!-- STEP 4 -->
-    <section id="step-4" class="hidden space-y-4">
-      <label class="block font-semibold text-gray-700 mb-1">Nama Event</label>
-      <input type="text" id="input-acara" name="event_name" class="w-full border-gray-300 rounded-lg" required>
-
-      <label class="block font-semibold text-gray-700 mb-1">Nama Peserta</label>
-      <input type="text" id="input-nama" name="participant_name" class="w-full border-gray-300 rounded-lg" required>
-
-      <label class="block font-semibold text-gray-700 mb-1">Status Sertifikat</label>
-      <select name="status" class="w-full border-gray-300 rounded-lg" required>
-        <option value="draft">Draft</option>
-        <option value="published">Published</option>
-        <option value="revoked">Revoked</option>
-      </select>
+    <section id="step-4" class="hidden mt-6">
+      <h2 class="text-xl font-semibold mb-4">Isi Data Sertifikat</h2>
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- KIRI: Preview Background -->
+        <div class="w-full border rounded shadow-sm p-4 bg-gray-100 flex items-center justify-center">
+          <img id="background-preview-step4" src="#" alt="Preview Background" class="max-w-full max-h-[300px] object-contain">
+        </div>
+    
+        <!-- KANAN: Form Data Sertifikat -->
+        <div class="space-y-4">
+          <div>
+            <label for="event_name" class="block font-medium">Nama Acara</label>
+            <input type="text" name="event_name" id="input-acara" class="w-full border p-2 rounded" />          </div>
+    
+          <div>
+            <label for="participant_name" class="block font-medium">Nama Peserta</label>
+            <input type="text" name="participant_name" id="input-nama" class="w-full border p-2 rounded" />
+          </div>
+    
+          <div>
+            <label for="status" class="block font-medium">Status</label>
+            <select name="status" id="status" class="w-full border p-2 rounded">
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="revoked">Revoked</option>
+            </select>
+          </div>
+    
+          <div>
+            <label for="logo" class="block font-medium">Upload Logo (Opsional)</label>
+            <input type="file" name="logo" id="logo" accept="image/*" class="w-full border p-2 rounded" />
+          </div>
+    
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan Sertifikat</button>
+        </div>
+      </div>
     </section>
+      
 
     <!-- STEP 5 -->
     <section id="step-5" class="hidden">
