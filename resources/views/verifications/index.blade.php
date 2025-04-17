@@ -11,7 +11,7 @@
                 @csrf
 
                 <input type="text" name="verification_code" placeholder="Enter certificate ID or scan QR code"
-                    class="form-control text-center mb-4" style="width: 495px; height: 45px;" required>
+                class="form-control text-center mb-4 mx-auto d-block" style="width: 495px; height: 45px;" required>
 
                 <!-- QR Scanner Placeholder -->
                 <div id="qr-reader" class="mb-3"></div>

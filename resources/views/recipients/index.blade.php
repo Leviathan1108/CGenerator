@@ -47,3 +47,4 @@
     </div>
     </div>
 @endsection
+<script src="https://unpkg.com/html5-qrcode"></script>
