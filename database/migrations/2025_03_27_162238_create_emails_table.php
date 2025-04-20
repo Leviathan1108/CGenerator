@@ -14,14 +14,17 @@ class CreateEmailsTable extends Migration
     public function up()
     {
         Schema::create('emails', function (Blueprint $table) {
-            $table->id(); // Primary Key (Auto Increment)
-            $table->foreignId('certificate_id')->constrained('certificates')->onDelete('cascade'); // Foreign Key ke Certificates
-            $table->foreignId('recipient_id')->constrained('recipients')->onDelete('cascade'); // Foreign Key ke Recipients
-            $table->enum('status', ['pending', 'sent', 'failed'])->default('pending'); // Status email
-            $table->text('error_message')->nullable(); // Pesan error jika gagal
-            $table->integer('retry_count')->default(0); // Jumlah percobaan ulang
-            $table->timestamp('sent_at')->useCurrent(); // Waktu pengiriman
-            $table->timestamps(); // created_at & updated_at
+            $table->id(); // int(11) auto increment
+            $table->unsignedBigInteger('certificate_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->enum('status', ['pending', 'sent', 'failed'])->default('pending');
+            $table->text('error_message')->nullable();
+            $table->integer('retry_count')->default(0);
+            $table->timestamp('sent_at')->useCurrent();
+
+            // Foreign key 
+            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

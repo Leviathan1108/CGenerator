@@ -14,19 +14,22 @@ class CreateCertificatesTable extends Migration
     public function up()
     {
         Schema::create('certificates', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('uid')->unique();
-            $table->string('verification_code')->unique();
-            $table->date('issued_date')->nullable();
-            $table->enum('status', ['draft', 'published', 'revoked']);
-            $table->enum('background_choice', ['custom', 'template']);
+            $table->id(); // sama dengan int(11) NOT NULL auto increment
             $table->unsignedBigInteger('selected_template_id')->nullable();
-            $table->string('event_name');
-            $table->string('logo_path')->nullable();
-            $table->timestamps();
-        
-            $table->foreign('selected_template_id')->references('id')->on('templates')->nullOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('uid', 100);
+            $table->string('verification_code', 100);
+            $table->timestamp('issued_date')->useCurrent();
+            $table->enum('status', ['draft', 'published', 'revoked'])->default('draft');
+            $table->enum('background_choice', ['custom', 'template'])->nullable();
+            $table->string('event_name', 255)->nullable();
+            $table->string('logo_path', 255)->nullable();
+
+            $table->timestamps(); // ini set created_at dan updated_at secara otomatis
+
+            // Foreign key ada relasi
+            $table->foreign('selected_template_id')->references('id')->on('templates')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });        
     }
 

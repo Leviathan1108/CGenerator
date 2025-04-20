@@ -14,11 +14,16 @@ class CreateTemplatesTable extends Migration
     public function up()
     {
         Schema::create('templates', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
-            $table->string('name'); // Nama template
-            $table->text('template_data'); // Menyimpan file template
-            $table->timestamps(); // created_at & updated_at
+            $table->id(); // int(11) auto increment
+            $table->unsignedBigInteger('user_id');
+            $table->string('name', 255);
+            $table->string('file_path', 255)->nullable();
+            $table->longText('layout_storage')->nullable();
+
+            $table->timestamps(); // created_at & updated_at otomatis
+
+            // Foreign key opsional
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
