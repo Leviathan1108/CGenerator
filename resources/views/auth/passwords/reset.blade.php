@@ -9,7 +9,6 @@
 </head>
 <body>
   <div class="reset-container">
-
     <!-- KIRI -->
     <div class="reset-left">
       <div class="fw-bold fs-4 mb-3">Certificate Generator</div>
@@ -21,7 +20,7 @@
     <!-- KANAN -->
     <div class="reset-right">
       <h3 class="mb-3 reset-title">choose a new password</h3>
-      <p class="text-start text-muted mb-4">A strong password is a combination of letters.<br>The length of the password must be at least 6 characters.</p>
+      <p class="text-start text-muted mb-4">A strong password is a combination of letters.<br>The length of the password must be at least 8 characters.</p>
       
       <form action="{{ route('password.update') }}" method="POST">
         @csrf
@@ -40,12 +39,24 @@
 
         <div class="mb-3">
           <label class="form-label">Enter a new password</label>
-          <input type="password" name="password" class="form-control" required minlength="6">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" name="password" id="password" class="form-control" required minlength="6">
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this, 'password')">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Confirm the new password</label>
-          <input type="password" name="password_confirmation" class="form-control" required minlength="6">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required minlength="6">
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this, 'password_confirmation')">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
         </div>
 
         <div class="d-grid">
@@ -121,5 +132,20 @@
       margin: 0 auto 20px;
     }
   </style>
+
+  <script>
+    function togglePassword(button, inputId) {
+      const input = document.getElementById(inputId);
+      const icon = button.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("bi-eye", "bi-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.replace("bi-eye-slash", "bi-eye");
+      }
+    }
+  </script>
 </body>
 </html>

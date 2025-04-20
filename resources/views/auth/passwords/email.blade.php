@@ -48,8 +48,6 @@
         </button>
     </div>
 </form>
-
-
       <div class="text-center">
         <p class="mb-0">Remember your password?</p>
         <a href="{{ route('login') }}" class="fw-bold text-decoration-none text-primary">Back to Login</a>

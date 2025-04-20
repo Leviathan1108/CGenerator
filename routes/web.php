@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\RecipientController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\CodeController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityController;
@@ -36,13 +37,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 });
 
 // Rute untuk guest
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
+    return view('auth.login');
+})->name('login');
+Route::post('/login', [AuthController::class, 'processLogin']);
+
 
     Route::post('/login', [AuthController::class, 'processLogin']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -55,17 +60,11 @@ Route::middleware(['guest'])->group(function () {
     Route::get('password/reset', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-    // Rute untuk memasukkan kode verifikasi
-    Route::get('/verify-code', function () {
-        return view('auth.passwords.sendcode');
-    })->name('code.enter');
-    Route::post('/verify-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
-
     Route::get('/templates/{id}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
-
+    
     // Rute untuk merubah password baru setelah mendapatkan link reset
-    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
     // Rute untuk proses verifikasi kode keamanan
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
@@ -74,11 +73,7 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');  // Pastikan ada file success_reset.blade.php
     })->name('password.reset.success');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    Route::get('/dashboard', function () {
-        return view('home'); // Atau ganti sesuai nama file view yang tersedia
-    })->name('dashboard');
+    
 
 
 });
