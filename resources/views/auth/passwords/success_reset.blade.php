@@ -108,7 +108,8 @@
 
     .success-title {
       font-weight: bold;
-      color: #0279ce;
+      color: blue;
+      text-align: center;
     }
 
     .btn-custom {

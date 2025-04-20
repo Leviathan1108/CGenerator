@@ -20,7 +20,7 @@
     <!-- KANAN -->
     <div class="reset-right">
       <h3 class="mb-3 reset-title">choose a new password</h3>
-      <p class="text-start text-muted mb-4">A strong password is a combination of letters.<br>The length of the password must be at least 8 characters.</p>
+      <p class="text-start mb-4">A strong password is a combination of letters.<br>The length of the password must be at least 8 characters.</p>
       
       <form action="{{ route('password.update') }}" method="POST">
         @csrf
