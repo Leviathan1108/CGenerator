@@ -1,36 +1,6 @@
 @extends ('layout.v_layout')
 
 @section('content')
-    <!-- Modal -->
-    <div class="modal fade" id="modalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content text-light" style="background-color: #232E66;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Change Your Profile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Username</label>
-                            <input type="name" class="form-control" id="exampleFormControlInput1" placeholder="name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Add PhotoProfile</label>
-                            <input type="file" class="form-control" id="photoInput" name="photo" accept="image/*">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Save changes</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="my-3">
         <div class="alert alert-warning text-center">
             You have 5 pending certificates to publish

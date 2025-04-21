@@ -15,7 +15,6 @@ class CreateCertificatesTable extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('uid')->unique();
             $table->string('verification_code')->unique();
             $table->date('issued_date')->nullable();
@@ -25,7 +24,6 @@ class CreateCertificatesTable extends Migration
             $table->string('event_name');
             $table->string('logo_path')->nullable();
             $table->timestamps();
-        
             $table->foreign('selected_template_id')->references('id')->on('templates')->nullOnDelete();
         });        
     }

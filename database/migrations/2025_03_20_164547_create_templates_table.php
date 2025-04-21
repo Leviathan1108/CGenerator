@@ -17,7 +17,7 @@ class CreateTemplatesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
             $table->string('name'); // Nama template
-            $table->text('template_data'); // Menyimpan file template
+            $table->string('file_path')->nullable(); // hanya path, misalnya: "profiles/123.jpg"
             $table->timestamps(); // created_at & updated_at
         });
     }

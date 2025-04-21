@@ -45,7 +45,7 @@ class TemplateController extends Controller
     public function edit($id)
     {
         $template = Template::findOrFail($id);
-        return view('templatesuperadmin.edit', compact('template'));
+        return view('templatesuperadmin.index', compact('template'));
     }
 
     // Update template
@@ -77,7 +77,6 @@ class TemplateController extends Controller
     public function destroy(Template $templatesuperadmin)
     {
         $templatesuperadmin->delete();
-    
         return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil dihapus!');
     }
     

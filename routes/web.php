@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\SecurityController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\UserController;
 
 // Autentikasi Laravel bawaan
 //Auth::routes();
@@ -31,11 +32,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('recipients', RecipientController::class);
     Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('templatesuperadmin', TemplateController::class);
-    Route::delete('/templatesuperadmin/{templatesuperadmin}', [TemplateController::class, 'destroy'])->name('templates.destroy');
+    Route::put('templatesuperadmin/{id}', [TemplateController::class, 'update'])->name('templates.update');
+    Route::delete('/templatesuperadmin/{id}', [TemplateController::class, 'destroy'])->name('templates.destroy');
     Route::resource('templateadmin', CertificateController::class);
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
+    Route::get('/user/{id}/edit',[UserController::class, 'edit'])->name('users.edit');
+    Route::put('/user/{id}',[UserController::class, 'update'])->name('users.update');
 });
 
 // Rute untuk guest

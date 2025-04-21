@@ -85,12 +85,12 @@
                         <td>
                             <!-- button moadal edit -->
                             <button style="background-color: #FBB041; border-radius: 10px; border: none;" type="button"
-                                class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalEditTemplate">
+                                class="btn text-light" data-id="{{ $template->id }}" data-action="{{ route('templates.update', $template->id) }}" data-bs-toggle="modal" data-bs-target="#modalEditTemplate{{ $template->id }}">
                                 Edit
                                 <!-- <a href="{{ route('templates.edit', $template->id) }}" role="button" class="btn btn-danger">Edit</a> -->
                             </button>
                             <!-- Modal edit template superadmin-->
-                            <div class="modal fade" id="modalEditTemplate" data-bs-backdrop="static" data-bs-keyboard="false"
+                            <div class="modal fade" id="modalEditTemplate{{ $template->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content text-light" style="background-color: #232E66;">
@@ -100,7 +100,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('templatesuperadmin.update', $template->id) }}" method="POST"
+                                            <form action="{{ route('templates.update', $template->id) }}" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
@@ -123,13 +123,14 @@
                                 </div>
                             </div>
                             
+
                             <!-- button hapus template -->
                             <button style="background-color: #F13C20; border-radius: 10px; border: none;" type="button"
-                                class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalHapusTemplate">
+                                class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalHapusTemplate{{ $template->id }}">
                                 Delete
                             </button>
                             <!-- modal untuk delete -->
-                            <div class="modal fade" id="modalHapusTemplate" data-bs-backdrop="static" data-bs-keyboard="false"
+                            <div class="modal fade" id="modalHapusTemplate{{ $template->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content text-light" style="background-color: #232E66;">
