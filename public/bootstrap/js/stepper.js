@@ -1,77 +1,135 @@
 function showStep(step) {
-    const steps = document.querySelectorAll('[id^="step-"]');
-    steps.forEach(el => el.classList.add('hidden'));
-    document.getElementById(`step-${step}`).classList.remove('hidden');
+  const steps = document.querySelectorAll('[id^="step-"]');
+  steps.forEach(el => el.classList.add('hidden'));
+  document.getElementById(`step-${step}`).classList.remove('hidden');
 
-    const stepItems = document.querySelectorAll('.stepper-item');
-    stepItems.forEach((item, index) => {
-      item.classList.remove('text-blue-600', 'border-blue-600');
-      if (index + 1 === step) {
-        item.classList.add('text-blue-600', 'border-blue-600');
+  // Stepper UI styling
+  const stepItems = document.querySelectorAll('.stepper-item');
+  stepItems.forEach((item, index) => {
+    item.classList.remove('text-blue-600', 'border-blue-600');
+    if (index + 1 === step) {
+      item.classList.add('text-blue-600', 'border-blue-600');
+    }
+  });
+
+  // Special case: Step 2 needs to toggle its sections
+  if (step === 2) {
+    const choice = document.getElementById('background_choice').value;
+    document.getElementById('template-selection').classList.toggle('hidden', choice !== 'template');
+    document.getElementById('custom-upload').classList.toggle('hidden', choice !== 'custom');
+  }
+  
+
+  // Optional: handle Step 4 preview
+  if (step === 3) {
+    const selectedBackgroundURL = localStorage.getItem('selectedBackground');
+    if (selectedBackgroundURL) {
+      const previewImg = document.getElementById('background-preview-step4');
+      if (previewImg) {
+        previewImg.src = selectedBackgroundURL;
       }
-    });
-    if (step === 4) {
-      const selectedBackgroundURL = localStorage.getItem('selectedBackground');
-if (selectedBackgroundURL) {
-const previewImg = document.getElementById('background-preview-step4');
-if (previewImg) {
-  previewImg.src = selectedBackgroundURL;
+    }
+  }
 }
-}
-}  
+
+
+function nextStep() {
+  const current = parseInt(document.getElementById('currentStep').value);
+  const backgroundChoice = document.getElementById('background_choice').value;
+  const selectedTemplateId = document.getElementById('selected_template_id').value;
+
+  if (current === 2) {
+    if (backgroundChoice === 'template' && !selectedTemplateId) {
+      alert('Pilih template terlebih dahulu sebelum lanjut.');
+      return;
+    }
+
+    if (backgroundChoice === 'custom') {
+      const customBg = localStorage.getItem('selectedBackground');
+      if (!customBg) {
+        alert('Silakan upload background terlebih dahulu.');
+        return;
+      }
+    }
   }
 
-  function nextStep() {
-const current = parseInt(document.getElementById('currentStep').value);
-const backgroundChoice = document.getElementById('background_choice').value;
-const selectedTemplateId = document.getElementById('selected_template_id').value;
-
-// Validasi khusus step 2
-if (current === 2 && backgroundChoice === 'template' && !selectedTemplateId) {
-  alert('Pilih template terlebih dahulu sebelum lanjut.');
-  return;
+  const next = Math.min(current + 1, 7);
+  document.getElementById('currentStep').value = next;
+  showStep(next);
 }
 
-// Validasi step 3 (custom background)
-if (current === 3 && backgroundChoice === 'custom') {
-  const customBg = localStorage.getItem('selectedBackground');
+
+function chooseBackground(choice) {
+  document.getElementById('background_choice').value = choice;
+  document.getElementById('step-1').classList.add('hidden');
+  document.getElementById('step-2').classList.remove('hidden');
+  document.getElementById('currentStep').value = 2;
+
+  const templateCard = document.getElementById('template-card');
+  const customCard = document.getElementById('custom-bg-card');
+ 
+  
+  if (choice === 'template') {
+    templateCard.classList.add('ring-4', 'ring-blue-500');
+    customCard.classList.remove('ring-4', 'ring-blue-500');
+  } else {
+    customCard.classList.add('ring-4', 'ring-blue-500');
+    templateCard.classList.remove('ring-4', 'ring-blue-500');
+  }
+
+  // Tampilkan bagian sesuai pilihan
+  if (choice === 'template') {
+    document.getElementById('template-selection').classList.remove('hidden');
+    document.getElementById('custom-upload').classList.add('hidden');
+  } else if (choice === 'custom') {
+    document.getElementById('custom-upload').classList.remove('hidden');
+    document.getElementById('template-selection').classList.add('hidden');
+  }
+
+  showStep(2);
+}
+
+function validateCustomUpload() {
+  const customBg = localStorage.getItem("selectedBackground");
   if (!customBg) {
-    alert('Silakan upload background terlebih dahulu.');
+    alert("Silakan upload background terlebih dahulu.");
     return;
   }
+
+  document.getElementById("currentStep").value = 3;
+  showStep(3);
 }
 
-const next = Math.min(current + 1, 9);
-document.getElementById('currentStep').value = next;
-showStep(next);
-}
+    function selectBackgroundOption(option) {
+      localStorage.setItem("backgroundOption", option);
 
+      if (option === "template") {
+        // Otomatis lanjut ke step 3
+        document.getElementById("currentStep").value = 3;
+        showStep(3);
+      } else if (option === "custom") {
+        // Tampilkan upload custom background (step 2)
+        document.getElementById("currentStep").value = 2;
+        showStep(2);
+      }
+    }
 
+function selectTemplate(templateId) {
+  document.getElementById('selected_template_id').value = templateId;
 
-  function chooseBackground(choice) {
-    document.getElementById('background_choice').value = choice;
-    document.getElementById('step-1').classList.add('hidden');
-
-  const nextStep = choice === 'template' ? 2 : 3;
-    document.getElementById('currentStep').value = nextStep;
-    showStep(nextStep);
+  // Simpan ke localStorage
+  const templateImg = event.currentTarget.querySelector('img');
+  if (templateImg) {
+    const imageUrl = templateImg.src;
+    localStorage.setItem('selectedBackground', imageUrl);
   }
 
-  
-  function selectTemplate(templateId) {
-document.getElementById('selected_template_id').value = templateId;
-
-// Simpan URL background ke localStorage
-const templateImg = event.currentTarget.querySelector('img');
-if (templateImg) {
-  const imageUrl = templateImg.src;
-  localStorage.setItem('selectedBackground', imageUrl);
+  // Lanjut ke step 4
+  document.getElementById('currentStep').value = 3;
+  showStep(3);
 }
 
-document.getElementById('step-2').classList.add('hidden');
-document.getElementById('currentStep').value = 4;
-showStep(4);
-}
+
 
 
 
@@ -82,47 +140,28 @@ showStep(4);
 
 
   function prevStep() {
-const current = parseInt(document.getElementById('currentStep').value);
-const backgroundChoice = document.getElementById('background_choice').value;
-
-let prev = current - 1;
-
-// Logika khusus untuk kembali dari step 4 ke step sebelumnya yang benar
-if (current === 4) {
-  prev = backgroundChoice === 'template' ? 2 : 3;
-}
-
-// Logika untuk kembali dari step 2 atau 3 ke step 1
-if ((current === 2 && backgroundChoice === 'template') ||
-    (current === 3 && backgroundChoice === 'custom')) {
-  prev = 1;
-}
-
-document.getElementById('currentStep').value = Math.max(prev, 1);
-showStep(Math.max(prev, 1));
-}
+    const current = parseInt(document.getElementById('currentStep').value);
+    const backgroundChoice = document.getElementById('background_choice').value;
+  
+    let prev = current - 1;
+  
+    if (current === 3) {
+      prev = 2;
+    }
+  
+    if (current === 2) {
+      prev = 1;
+    }
+  
+    document.getElementById('currentStep').value = Math.max(prev, 1);
+    showStep(Math.max(prev, 1));
+  }
+  
 
 
 
   document.addEventListener('DOMContentLoaded', () => {
     showStep(1);
-
-    const chooseCustom = document.getElementById('choose-custom');
-    const chooseTemplate = document.getElementById('choose-template');
-
-    if (chooseCustom && chooseTemplate) {
-      chooseCustom.addEventListener('click', () => {
-        document.getElementById('background_choice').value = 'custom';
-        chooseCustom.classList.add('ring-4', 'ring-blue-500');
-        chooseTemplate.classList.remove('ring-4', 'ring-blue-500');
-      });
-
-      chooseTemplate.addEventListener('click', () => {
-        document.getElementById('background_choice').value = 'template';
-        chooseTemplate.classList.add('ring-4', 'ring-blue-500');
-        chooseCustom.classList.remove('ring-4', 'ring-blue-500');
-      });
-    }
 
     const templateSelect = document.getElementById('template-select');
     if (templateSelect) {
@@ -154,19 +193,19 @@ showStep(Math.max(prev, 1));
     }
 
     const customBgInput = document.querySelector('input[name="custom_background"]');
-if (customBgInput) {
-customBgInput.addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      // Simpan base64 background ke localStorage
-      localStorage.setItem('selectedBackground', event.target.result);
-    };
-    reader.readAsDataURL(file);
-  }
-});
-}
+    if (customBgInput) {
+      customBgInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            localStorage.setItem('selectedBackground', event.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+    
   });
 
   async function generateSertifikat() {
