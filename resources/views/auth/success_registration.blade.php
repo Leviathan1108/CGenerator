@@ -15,7 +15,7 @@
       <div class="fw-bold fs-4 mb-3">Certificate Generator</div>
       <div class="logo mb-3">CG</div>
       <div class="fw-bold text-center">WELCOME TO <br> CERTIFICATE GENERATOR</div>
-      <p class="text-warning fs-9">Create, manage, and verify certificates</p>
+      <p class="text-warning fs-6">Create, manage, and verify certificates</p>
     </div>
 
     <!-- RIGHT PANEL -->

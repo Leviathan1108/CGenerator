@@ -27,7 +27,7 @@
       @endif
 
       <h3 class="mb-3 reset-title">Reset Password</h3>
-      <p class="text-center">Enter your email address and we’ll send you a link to reset your password.</p>
+      <p class="text-start">Enter your email address and we’ll send you a link to reset your password.</p>
 
       <form method="POST" action="{{ route('password.email') }}">
     @csrf
@@ -48,8 +48,6 @@
         </button>
     </div>
 </form>
-
-
       <div class="text-center">
         <p class="mb-0">Remember your password?</p>
         <a href="{{ route('login') }}" class="fw-bold text-decoration-none text-primary">Back to Login</a>

@@ -14,11 +14,12 @@ class CreateSubscriptionsTable extends Migration
     public function up()
     {
         Schema::create('subscriptions', function (Blueprint $table) {
-            $table->id(); // Primary Key (Auto Increment)
-            $table->string('name', 50); // Nama Subscription
-            $table->decimal('price', 10, 2); // Harga Subscription
-            $table->integer('duration')->comment('Duration in days'); // Durasi dalam hari
-            $table->timestamps(); // created_at & updated_at
+            $table->id(); // int(11) auto increment
+            $table->string('name', 50);
+            $table->decimal('price', 10, 2);
+            $table->integer('duration')->comment('Duration in days');
+
+            $table->timestamps(); // otomatis buat created_at & updated_at
         });
     }
 
