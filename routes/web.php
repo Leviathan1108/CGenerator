@@ -44,15 +44,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// Rute untuk guest
-Route::middleware(['guest'])->group(function () {
-    Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-Route::post('/login', [AuthController::class, 'processLogin']);
+    // Rute Guest -> Log in
+    Route::middleware(['guest'])->group(function () {
+        Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 
-
-    Route::post('/login', [AuthController::class, 'processLogin']);
+    // Rute untuk Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
     Route::get('/registration-success', function () {
@@ -74,7 +73,7 @@ Route::post('/login', [AuthController::class, 'processLogin']);
 
     //Route ke Halaman success_reset
     Route::get('/reset/success', function () {
-        return view('auth.passwords.success_reset');  // Pastikan ada file success_reset.blade.php
+        return view('auth.passwords.success_reset');
     })->name('password.reset.success');
     
 

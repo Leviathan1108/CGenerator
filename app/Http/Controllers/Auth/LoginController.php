@@ -21,19 +21,24 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+    $request->validate([
+        'email' => 'required|string',
+        'password' => 'required|string',
+    ]);
 
-        // Cek apakah login berhasil
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('home')->with('success', 'Login berhasil!');
-        }
+    $loginType = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        // Jika gagal, kembalikan ke halaman login dengan pesan error
-        return redirect()->back()->with('error', 'Email atau password salah!');
+    $credentials = [
+        $loginType => $request->input('email'),
+        'password' => $request->input('password'),
+    ];
+
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        return redirect()->route('home')->with('success', 'Login berhasil!');
     }
+
+    return back()->with('error', 'Email/Username atau password salah!');
+    }
+
 }
 
