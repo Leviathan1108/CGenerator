@@ -10,7 +10,7 @@
             style="width: 1130px; background-color: #D9D9D9; border-radius: 16px;">
         <div class="btn-group">
             <button
-                class="btn btn-light bg-light border-0 shadow-none rounded-circle dropdown-toggle p-0 d-flex align-items-center justify-content-center"
+                class="btn btn-light bg-light border shadow-none rounded-circle dropdown-toggle p-0 d-flex align-items-center justify-content-center"
                 data-bs-toggle="dropdown" aria-expanded="false" style="height: 60px; width: 65px; overflow: hidden;">
                 <!-- unutuk menampilkan foto profile -->
                 @if(Auth::check() && Auth::user()->photo_profile)
@@ -22,7 +22,7 @@
                 @endif
             </button>
 
-            <h2 class="typing fs-5 m-0 ms-1">Welcome back, {{ Auth::user()->username ?? 'Guest' }}</h2>
+            <h2 class="typing fs-5 m-0 ms-2">Welcome back, {{ Auth::user()->username ?? 'Guest' }}</h2>
             <!-- mengecek apakah user sudah login -->
             <ul class="dropdown-menu" style="background-color: #FBB041; color: white;">
                 @guest
@@ -43,11 +43,11 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalchange{{ Auth::check() && Auth::user()->id }}" data-id="{{ Auth::user()->id }}" data-action="{{route('users.edit', Auth::user()->id) }}">
+                        <i class="bi bi-box-arrow-right me-1"></i>Edit Profile
+                    </button>
 
-                    <a href="{{route('users.edit', Auth::user()->id) }}"
-                        class="text-decoration-none text-light fs-6 mx-1 my-2">
-                        <i class="bi bi-box-arrow-right ms-2"></i> {{ __('Edit Profile') }}
-                    </a>
                 @endauth
             </ul>
         </div>

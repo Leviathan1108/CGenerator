@@ -81,7 +81,7 @@
             <!-- Kiri: Upload Background Sendiri -->
             <div class="row-md-6">
               <div id="custom-bg-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100">
+                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" onclick="chooseBackground('custom')">
                 <h3 class="text-lg fw-bold mb-2">Background Sendiri</h3>
                 <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
                   <p>Upload background dari komputermu</p>
@@ -93,7 +93,7 @@
             <!-- Gunakan Template -->
             <div class="row-md-6">
               <div id="template-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100">
+                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" onclick="chooseBackground('template')">
                 <h3 class="text-lg fw-bold mb-2">Gunakan Template</h3>
                 <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
                   <p>Pilih dari template yang tersedia</p>
@@ -116,7 +116,7 @@
         <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg cursor-pointer"
           onclick="selectTemplate({{ $template->id }})">
           <img src="{{ asset('storage/' . $template->file_path) }}" alt="Template {{ $template->id }}"
-          class="w-full h-40 object-cover">
+          class="w-full h-full object-cover">
         </div>
       @endforeach
           </div>
