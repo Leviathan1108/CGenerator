@@ -1,6 +1,52 @@
 @extends ('layout.v_layout')
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Oops!</strong> Ada masalah dengan inputanmu.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <!-- modalnya -->
+    <div class="modal fade" id="modalchange{{ Auth::check() && Auth::user()->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-light" style="background-color: #232E66;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit Your Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('users.update', Auth::check() && Auth::user()->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+
+                        <label for="username" class="form-table">Username</label>
+                        <input type="text" class="form-control" name="username" id="username"
+                            value="{{ Auth::check() ? Auth::user()->username : 'Guest' }}" required><br>
+
+                        <label for="photo_profile" class="form-table">Add Your PhotoProfile</label>
+                        @if (Auth::check() && Auth::user()->photo_profile)
+                            <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" class="rounded-circle border my-2"
+                            style="height: 10%; width: 10%; object-fit: cover;">
+                        @endif
+                        <input type="file" name="photo_profile" class="form-control">
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="button" class="btn" style="background-color: #F13C20;"
+                                data-bs-dismiss="modal">Discard</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="my-3">
         <div class="alert alert-warning text-center">
             You have 5 pending certificates to publish
