@@ -123,12 +123,18 @@
         </div>
 
         <div id="custom-upload" class="space-y-4 hidden">
-          <h2 class="text-xl font-semibold">Upload Background</h2>
-          <input type="file" name="custom_background" accept="image/*" id="customBg"
-            class="block w-full border border-gray-300 rounded p-2">
-          <button type="button" onclick="validateCustomUpload()"
-            class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Lanjut</button>
-        </div>
+  <h2 class="text-xl font-semibold">Upload Background</h2>
+
+  <div id="drop-area" class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center bg-white hover:border-blue-500 transition">
+    <p class="text-gray-600">Drag & drop file di sini atau klik untuk memilih file</p>
+    <input type="file" name="custom_background" accept="image/*" id="customBg" class="hidden">
+    <button type="button" onclick="document.getElementById('customBg').click()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">Pilih File</button>
+    <div id="file-preview" class="mt-4"></div>
+  </div>
+
+  <button type="button" onclick="validateCustomUpload()" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Lanjut</button>
+</div>
+
       </section>
 
       <!-- STEP 3 -->
