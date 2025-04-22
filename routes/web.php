@@ -45,6 +45,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
     Route::get('/user/{id}/edit',[UserController::class, 'edit'])->name('users.edit');
     Route::put('/user/{id}',[UserController::class, 'update'])->name('users.update');
+
+    Route::get('/registration-success', function () {
+        return view('auth.success_registration');
+    })->name('registration.success');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -58,9 +63,6 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
-    Route::get('/registration-success', function () {
-        return view('auth.success_registration');
-    })->name('registration.success');
 
     // Rute untuk meminta link reset password (Email)
     Route::get('password/reset', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -71,16 +73,13 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk merubah password baru setelah mendapatkan link reset
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-    // Rute untuk proses verifikasi kode keamanan
-    Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
-
-    //Route ke Halaman success_reset
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');
     })->name('password.reset.success');
     Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
 
+    // Rute untuk proses verifikasi kode keamanan
+    Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
 
 });
 ?>
