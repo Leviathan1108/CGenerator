@@ -78,9 +78,10 @@
           <input type="hidden" name="background_choice" id="background_choice">
           <div class="grid grid-cols-2 gap-6">
             <!-- Kiri: Upload Background Sendiri -->
+            <a href="/templateadmin/upload">
             <div class="row-md-6">
               <div id="custom-bg-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" onclick="chooseBackground('custom')">
+                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" >
                 <h3 class="text-lg fw-bold mb-2">Background Sendiri</h3>
                 <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
                   <p>Upload background dari komputermu</p>
@@ -88,17 +89,19 @@
                 </div>
               </div>
             </div>
-
+            </a>
             <!-- Gunakan Template -->
+            <a href="/templateadmin/template">
             <div class="row-md-6">
               <div id="template-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" onclick="chooseBackground('template')">
+                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" >
                 <h3 class="text-lg fw-bold mb-2">Gunakan Template</h3>
                 <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
                   <p>Pilih dari template yang tersedia</p>
                 </div>
               </div>
             </div>
+          </a>
           </div>
         </div>
       </section>
