@@ -9,9 +9,8 @@
   <link rel="stylesheet" href="{{ asset('bootstrap/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="{{ asset('bootstrap/js/stepper.js') }}"></script>
-  <script src="{{ asset('bootstrap/js/main.js') }}"></script>
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+  
 </head>
 
 <header>
@@ -186,6 +185,7 @@
 
       <!-- STEP 4 -->
       <section id="step-4" class="hidden">
+      <canvas id="certificateCanvas" width="1120" height="793"></canvas>
         <p class="text-lg font-semibold mb-4">Generate Sertifikat</p>
         <button type="button" onclick="generateSertifikat()" class="bg-[#232E66] text-white px-4 py-2 rounded">Generate
           Now</button>
@@ -217,6 +217,11 @@
       </div>
 
   </main>
-</body>
+  <script src="{{ asset('bootstrap/js/stepper.js') }}"></script>
+  <script src="{{ asset('bootstrap/js/main.js') }}"></script>
+  <script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
+  
+<script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
+</
 
 </html>

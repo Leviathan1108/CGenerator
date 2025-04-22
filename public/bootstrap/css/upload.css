@@ -1,0 +1,117 @@
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #16235e;
+  padding: 15px 30px;
+  gap: 20px;
+}
+
+.navbar-left,
+.navbar-right {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 5px 15px;
+  max-width: 100%;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.search-box input[type="text"] {
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  width: 100%;
+  background: transparent;
+}
+
+.search-box button {
+  width: 37px;
+  height: 37px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #16235e;
+  font-size: 16px;
+  padding-right: 8px;
+}
+
+.login-btn {
+  color: #232E66;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: 2px solid white;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: white;
+  color: #16235e;
+}
+
+/* PROGRESS BAR STYLING */
+.progress {
+  background-color: #dee2e6;
+  border-radius: 30px;
+  height: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.progress-bar {
+  background-color: #0d6efd;
+  height: 100%;
+  border-radius: 30px;
+  transition: width 0.4s ease;
+}
+
+/* Tambahan style fix */
+body {
+  background-color: #f8f9fa !important; /* ganti abu-abu gelap jadi background Bootstrap-ish */
+}
+
+.container {
+  padding: 2rem;
+}
+/* STEP LABELS STYLING */
+.step-labels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.step-labels span {
+  width: 12.5%;
+  text-align: center;
+  padding: 4px 0;
+  color: #495057;
+}

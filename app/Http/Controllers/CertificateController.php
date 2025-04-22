@@ -128,6 +128,14 @@ class CertificateController extends Controller
         $certificate = Certificate::with('template')->findOrFail($id);
         $pdf = \PDF::loadView('templateadmin.pdf', compact('certificate'));
         return $pdf->download("templateadmin-{$certificate->uid}.pdf");
-    }    
+    }
+    public function upload()
+    {
+        return view('layout.upload');
+    }
+    public function template()
+    {
+        return view('layout.template');
+    }          
 }
 ?>

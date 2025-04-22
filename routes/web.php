@@ -11,10 +11,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\CodeController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityController;
+use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\UserController;
+
 
 // Autentikasi Laravel bawaan
 //Auth::routes();
@@ -35,7 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('templatesuperadmin', TemplateController::class);
     Route::put('templatesuperadmin/{id}', [TemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templatesuperadmin/{id}', [TemplateController::class, 'destroy'])->name('templates.destroy');
-    Route::resource('templateadmin', CertificateController::class);
+    Route::get('templateadmin/upload', [CertificateController::class, 'upload'])->name('templateadmin.upload');
+    Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
+    Route::resource('templateadmin', CertificateController::class)->except(['show']);
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
@@ -75,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');
     })->name('password.reset.success');
-    
+    Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
 
 
 });
