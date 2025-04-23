@@ -135,7 +135,8 @@ class CertificateController extends Controller
     }
     public function template()
     {
-        return view('layout.template');
-    }          
+        $templates = Template::all();
+        return view('layout.template', compact('templates'));
+    }              
 }
 ?>
