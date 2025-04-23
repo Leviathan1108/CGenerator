@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <header>
@@ -24,9 +25,48 @@
         <input type="text" placeholder="Search here ..." />
       </div>
     </div>
-    <div class="navbar-right">
-      <button class="login-btn">Login</button>
-    </div>
+    <!-- Tombol profil -->
+    <button
+      class="btn btn-light bg-light border shadow-none rounded-circle p-0 d-flex align-items-center justify-content-center me-2"
+      data-bs-toggle="dropdown" aria-expanded="false" style="height: 60px; width: 60px; overflow: hidden;">
+      @if(Auth::check() && Auth::user()->photo_profile)
+      <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile"
+      class="rounded-circle w-100 h-100 rounded-circle" style="object-fit: cover; display: block;">
+    @else
+      <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+      style="height: 50px; width: 50px;">👤</div>
+    @endif
+    </button>
+
+    <!-- Dropdown Content -->
+    <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 250px; background-color: #FBB041;">
+      <!-- Bagian atas: foto profil besar dan username -->
+      <li class="text-center">
+        <div class="d-flex flex-column align-items-center">
+          <!-- unutuk menampilkan foto profile -->
+          @if(Auth::check() && Auth::user()->photo_profile)
+              <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile" class="rounded-circle"
+                    style="height: 50px; width: 50px; object-fit: cover;">
+          @else
+              <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                style="height: 50px; width: 50px;">👤</div>
+          @endif
+            <strong class="text-light"> {{ Auth::check() ? Auth::user()->username : 'Guest' }} </strong>
+            <a href="#" class="text-decoration-none text-white small">View Profile</a>
+        </div>
+      </li>
+
+      <li>
+        <hr class="dropdown-divider border-white">
+      </li>
+
+      <!-- Bagian bawah: ikon-only menu (dari kamu) -->
+      <li class="text-center">
+        <a class="dropdown-item" href="/home" title="Settings">
+          <i class="bi bi-house-fill text-dark fs-6"> {{ __('Home') }}</i>
+        </a>
+      </li>
+    </ul>
   </div>
 </header>
 
@@ -56,15 +96,15 @@
         <h2 class="text-xl font-semibold mb-4">Pilih Background</h2>
         <input type="hidden" name="background_choice" id="background_choice">
         <div class="grid grid-cols-2 gap-6"> -->
-          <!-- Kiri: Upload Background Sendiri -->
-          <!-- <div id="custom-bg-card" class="cursor-pointer border rounded p-4 hover:shadow-md"
+      <!-- Kiri: Upload Background Sendiri -->
+      <!-- <div id="custom-bg-card" class="cursor-pointer border rounded p-4 hover:shadow-md"
             onclick="chooseBackground('custom')">
             <h3 class="text-lg font-bold mb-2">Background Sendiri</h3>
             <p class="text-sm text-gray-600">Upload background dari komputermu</p>
           </div> -->
 
-          <!-- Gunakan Template -->
-          <!-- <div id="template-card" class="cursor-pointer border rounded p-4 hover:shadow-md"
+      <!-- Gunakan Template -->
+      <!-- <div id="template-card" class="cursor-pointer border rounded p-4 hover:shadow-md"
             onclick="chooseBackground('template')">
             <h3 class="text-lg font-bold mb-2">Gunakan Template</h3>
             <p class="text-sm text-gray-600">Pilih dari template yang tersedia</p>
@@ -79,29 +119,29 @@
           <div class="grid grid-cols-2 gap-6">
             <!-- Kiri: Upload Background Sendiri -->
             <a href="/templateadmin/upload">
-            <div class="row-md-6">
-              <div id="custom-bg-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" >
-                <h3 class="text-lg fw-bold mb-2">Background Sendiri</h3>
-                <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
-                  <p>Upload background dari komputermu</p>
-                  <i class="bi bi-upload d-flex justify-center align-items-end py-4" style="font-size: 64px;"></i>
+              <div class="row-md-6">
+                <div id="custom-bg-card"
+                  class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100">
+                  <h3 class="text-lg fw-bold mb-2">Background Sendiri</h3>
+                  <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
+                    <p>Upload background dari komputermu</p>
+                    <i class="bi bi-upload d-flex justify-center align-items-end py-4" style="font-size: 64px;"></i>
+                  </div>
                 </div>
               </div>
-            </div>
             </a>
             <!-- Gunakan Template -->
             <a href="/templateadmin/template">
-            <div class="row-md-6">
-              <div id="template-card"
-                class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100" >
-                <h3 class="text-lg fw-bold mb-2">Gunakan Template</h3>
-                <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
-                  <p>Pilih dari template yang tersedia</p>
+              <div class="row-md-6">
+                <div id="template-card"
+                  class="cursor-pointer border rounded p-4 hover:shadow-md bg-warning text-white rounded text-center h-100">
+                  <h3 class="text-lg fw-bold mb-2">Gunakan Template</h3>
+                  <div class="text-sm text-gray-600 bg-light mt-3 rounded" style="height: 150px;">
+                    <p>Pilih dari template yang tersedia</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </a>
+            </a>
           </div>
         </div>
       </section>
@@ -125,17 +165,20 @@
         </div>
 
         <div id="custom-upload" class="space-y-4 hidden">
-  <h2 class="text-xl font-semibold">Upload Background</h2>
+          <h2 class="text-xl font-semibold">Upload Background</h2>
 
-  <div id="drop-area" class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center bg-white hover:border-blue-500 transition">
-    <p class="text-gray-600">Drag & drop file di sini atau klik untuk memilih file</p>
-    <input type="file" name="custom_background" accept="image/*" id="customBg" class="hidden">
-    <button type="button" onclick="document.getElementById('customBg').click()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">Pilih File</button>
-    <div id="file-preview" class="mt-4"></div>
-  </div>
+          <div id="drop-area"
+            class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center bg-white hover:border-blue-500 transition">
+            <p class="text-gray-600">Drag & drop file di sini atau klik untuk memilih file</p>
+            <input type="file" name="custom_background" accept="image/*" id="customBg" class="hidden">
+            <button type="button" onclick="document.getElementById('customBg').click()"
+              class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">Pilih File</button>
+            <div id="file-preview" class="mt-4"></div>
+          </div>
 
-  <button type="button" onclick="validateCustomUpload()" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Lanjut</button>
-</div>
+          <button type="button" onclick="validateCustomUpload()"
+            class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Lanjut</button>
+        </div>
 
       </section>
 
@@ -188,7 +231,7 @@
 
       <!-- STEP 4 -->
       <section id="step-4" class="hidden">
-      <canvas id="certificateCanvas" width="1120" height="793"></canvas>
+        <canvas id="certificateCanvas" width="1120" height="793"></canvas>
         <p class="text-lg font-semibold mb-4">Generate Sertifikat</p>
         <button type="button" onclick="generateSertifikat()" class="bg-[#232E66] text-white px-4 py-2 rounded">Generate
           Now</button>
@@ -223,8 +266,8 @@
   <script src="{{ asset('bootstrap/js/stepper.js') }}"></script>
   <script src="{{ asset('bootstrap/js/main.js') }}"></script>
   <script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
-  
-<script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
-</
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="{{ asset('bootstrap/fabric/main.js') }}"></script>
 
 </html>
