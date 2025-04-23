@@ -81,14 +81,14 @@
   <section id="step-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="h5 fw-bold mb-0">Pilih Template</h2>
-         <a href="http://127.0.0.1:8000/templateadmin" class="btn btn-outline-danger">← Kembali</a>
+      <a href="http://127.0.0.1:8000/templateadmin" class="btn btn-outline-danger">← Kembali</a>
     </div>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
       @foreach ($templates as $template)
         <div class="col">
           <div id="template-{{ $template->id }}"
                class="card h-100 shadow-sm border cursor-pointer"
-               onclick="selectTemplate({{ $template->id }}, '{{ asset('storage/' . $template->file_path) }}')">
+               onclick="selectTemplate({{ $template->id }}, '{{ asset('storage/' . $template->file_path) }}', '{{ $template->name }}', '{{ $template->user->name ?? 'Tidak Diketahui' }}', '{{ $template->created_at->format('d-m-Y') }}')">
             <img src="{{ asset('storage/' . $template->file_path) }}"
                  class="card-img-top preview-img"
                  style="height: 150px; object-fit: cover;"
@@ -103,7 +103,7 @@
 <!-- STEP 2 -->
 <section id="step-2" class="hidden">
   <h2 class="h5 fw-bold mb-3">Preview Template</h2>
-  
+
   <div class="d-flex gap-4 align-items-start flex-wrap">
     <!-- Gambar di kiri -->
     <div class="border rounded p-4 bg-light text-center" style="flex: 1;">
@@ -113,12 +113,13 @@
     <!-- Info template di kanan -->
     <div id="template-info" style="flex: 1;">
       <h3>Template Info</h3>
-      <p><strong>Nama Template:</strong> {{ $template->name }}</p>
-      <p><strong>Created By:</strong> {{ $template->user->name ?? 'Tidak Diketahui' }}</p>
-      <p><strong>Tanggal Pembuatan:</strong> {{ $template->created_at->format('d-m-Y') }}</p>
+      <p><strong>Nama Template:</strong> <span id="template-name">-</span></p>
+      <p><strong>Created By:</strong> <span id="template-user">-</span></p>
+      <p><strong>Tanggal Pembuatan:</strong> <span id="template-date">-</span></p>
     </div>
   </div>
 </section>
+
 
 
 <!-- STEP 3: Input Data Sertifikat -->
@@ -218,14 +219,27 @@
     showStep(currentStep);
   }
 
-  function selectTemplate(id, imgSrc) {
-    document.querySelectorAll('[id^="template-"]').forEach(el => el.classList.remove("selected-template"));
-    const selected = document.getElementById(`template-${id}`);
-    if (selected) selected.classList.add("selected-template");
+  function selectTemplate(id, imgSrc, name, user, date) {
+  // Highlight
+  document.querySelectorAll('[id^="template-"]').forEach(el => el.classList.remove("selected-template"));
+  const selected = document.getElementById(`template-${id}`);
+  if (selected) selected.classList.add("selected-template");
 
-    const previewImg = document.getElementById("preview-image");
-    previewImg.src = imgSrc;
-  }
+  // Preview gambar
+  document.getElementById("preview-image").src = imgSrc;
+  document.getElementById("cert-preview-image").src = imgSrc;
+
+  // Tampilkan info template
+  document.getElementById("template-name").textContent = name;
+  document.getElementById("template-user").textContent = user;
+  document.getElementById("template-date").textContent = date;
+
+  // Lanjut ke Step 2
+  currentStep = 2;
+  showStep(currentStep);
+}
+
+
 
   function previewLogo(event) {
     const preview = document.getElementById("logo-preview-container");
