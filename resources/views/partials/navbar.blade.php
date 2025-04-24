@@ -79,7 +79,6 @@
         </div>
     </div>
 </header>
-
 <!-- sidebar -->
 <nav class="sidebar" style="font-family: 'Montserrat', sans-serif; background-color: #232E66; width: 294px;">
     <ul class="nav rounded-4 flex-column d-flex mx-auto mt-4">
@@ -101,9 +100,6 @@
         </li>
         <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/subscriptions">Subscriptions</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link fs-6 text-light" href="/settings">Settings</a>
         </li>
     </ul>
 </nav>
