@@ -29,6 +29,7 @@ body {
 .navbar-right {
   flex: 0 0 auto;
   white-space: nowrap;
+  padding: 0px 20px;
 }
 
 .navbar-center {

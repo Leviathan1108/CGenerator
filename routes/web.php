@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\TemplateController;
@@ -11,15 +12,11 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\CodeController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityController;
+use App\Http\Controllers\UserController;
 use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
-use App\Http\Controllers\UserController;
-
-
-// Autentikasi Laravel bawaan
-//Auth::routes();
 
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -37,7 +34,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('templatesuperadmin', TemplateController::class);
     Route::put('templatesuperadmin/{id}', [TemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templatesuperadmin/{id}', [TemplateController::class, 'destroy'])->name('templates.destroy');
+    
+    // Route halaman upload background
     Route::get('templateadmin/upload', [CertificateController::class, 'upload'])->name('templateadmin.upload');
+    Route::post('templateadmin/upload', [CertificateController::class, 'storeUpload'])->name('templateadmin.upload.store');
+    Route::delete('templateadmin/upload/{id}', [CertificateController::class, 'deleteTemporaryBackground'])->name('templateadmin.upload.delete');
+    // Route untuk input data setelah upload
+    Route::get('templateadmin/data-input', [CertificateController::class, 'dataInput'])->name('templateadmin.dataInput');
+    Route::post('templateadmin/store-data', [CertificateController::class, 'storeData'])->name('templateadmin.storeData');
+    
     Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
     Route::resource('templateadmin', CertificateController::class)->except(['show']);
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
@@ -48,9 +53,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-    // Rute Guest -> Log in
-    Route::middleware(['guest'])->group(function () {
-        Route::get('/login', function () {
+// Rute Guest -> Log in
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -79,8 +84,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');
     })->name('password.reset.success');
-    Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
-
-
 });
+
 ?>

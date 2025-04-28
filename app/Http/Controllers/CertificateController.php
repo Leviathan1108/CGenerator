@@ -7,7 +7,8 @@ use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Support\Str;
 use App\Models\User;
-
+use App\Models\CertificateBackground;
+use Illuminate\Support\Facades\Storage;
 class CertificateController extends Controller
 {
     public function index()
@@ -27,16 +28,18 @@ class CertificateController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'event_name' => 'required|string|max:255',
-            'background_choice' => 'required|in:custom,template',
-            'selected_template_id' => 'nullable|exists:templates,id',
-            'status' => 'required|in:draft,published,revoked',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
-            'participant_name' => 'required|string|max:255',
-            'selected_template_id' => $request->background_choice === 'template'
-            ? 'required|exists:templates,id'
-            : 'nullable',
-        ]);
+    'event_name' => 'required|string|max:255',
+    'background_choice' => 'required|in:custom,template',
+    'status' => 'required|in:draft,published,revoked',
+    'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+    'participant_name' => 'required|string|max:255',
+]);
+
+if ($request->background_choice === 'template') {
+    $request->validate([
+        'selected_template_id' => 'required|exists:templates,id',
+    ]);
+}
 
         $uid = Str::uuid();
         $verificationCode = strtoupper(Str::random(10));
@@ -129,10 +132,74 @@ class CertificateController extends Controller
         $pdf = \PDF::loadView('templateadmin.pdf', compact('certificate'));
         return $pdf->download("templateadmin-{$certificate->uid}.pdf");
     }
+    // Menampilkan halaman upload background
     public function upload()
     {
         return view('layout.upload');
     }
+
+    // Menyimpan file background yang di-upload ke database dan direktori sementara
+    public function storeUpload(Request $request)
+    {
+        $request->validate([
+            'background' => 'required|image|mimes:jpg,jpeg,png,svg|max:5120',
+        ]);
+
+        $file = $request->file('background');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/backgrounds'), $filename);
+
+        // Simpan URL gambar di session untuk digunakan pada halaman berikutnya
+        session(['background' => asset('uploads/backgrounds/' . $filename)]);
+
+        return redirect()->route('templateadmin.dataInput');
+    }
+     // Menampilkan halaman untuk input data setelah upload
+     public function dataInput()
+     {
+        $template = new Template(); // Atau null jika kamu ingin kosong
+        return view('layout.data_input', compact('template'));
+     }
+     // Menyimpan data input ke database
+    public function storeData(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'recipient' => 'required|string|max:255',
+            'date' => 'required|date',
+            'layout_storage' => 'nullable|json',
+        ]);
+    
+        $template = new Template();
+        $template->name = $request->input('name');
+        $template->recipient = $request->input('recipient');
+        $template->date = $request->input('date');
+        $template->background_image_url = session('background');
+        $template->layout_storage = $request->input('layout_storage'); // tambahkan ini
+        $template->save();
+        $path = $file->store('backgrounds', 'public');
+        session(['background' => Storage::url($path)]);
+    
+        session()->forget('background');
+    
+        return redirect()->route('layout.data_input')->with('success', 'Template saved successfully!');
+    
+    }
+
+    // Menghapus background sementara dari penyimpanan dan database
+    public function deleteTemporaryBackground($id)
+    {
+        $background = CertificateBackground::findOrFail($id);
+
+        // Menghapus file dari penyimpanan
+        Storage::delete($background->file_path);
+
+        // Menghapus data dari database
+        $background->delete();
+
+        return redirect()->route('templateadmin.upload')->with('success', 'Background deleted successfully.');
+    }
+
     public function template()
     {
         return view('layout.template');
