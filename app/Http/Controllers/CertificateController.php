@@ -202,7 +202,8 @@ if ($request->background_choice === 'template') {
 
     public function template()
     {
-        return view('layout.template');
-    }          
+        $templates = Template::all();
+        return view('layout.template', compact('templates'));
+    }              
 }
 ?>

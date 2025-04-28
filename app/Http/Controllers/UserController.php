@@ -12,14 +12,14 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('home', compact('user'));
+        return view('settings', compact('user'));
     }
 
     // Form edit profile
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('home', compact('user'));
+        return view('settings', compact('user'));
     }
 
     // Simpan perubahan profile
@@ -42,7 +42,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('home', $user->id)->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('settings', $user->id)->with('success', 'Profil berhasil diperbarui.');
     }
 
 }

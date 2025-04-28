@@ -20,11 +20,12 @@
 
     <!-- KANAN -->
     <div class="reset-right">
-      @if (session('status'))
-        <div class="alert alert-success text-center" role="alert">
-          {{ session('status') }}
-        </div>
-      @endif
+    @if (session('status'))
+      <div class="alert alert-success fade-in alert-dismissible fade show text-start rounded-pill shadow-lg" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ session('status') }}
+        <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
 
       <h3 class="mb-3 reset-title">Reset Password</h3>
       <p class="text-start">Enter your email address and we’ll send you a link to reset your password.</p>
@@ -114,10 +115,45 @@
     }
 
     .alert {
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+
+    .alert.show {
+      opacity: 1;
+    }
+
+    .alert.success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+      alert.classList.add('show');
+    }
+  });
+  document.querySelector('form').addEventListener('submit', function() {
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending... wait 30-45 seconds`;
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>
