@@ -17,6 +17,9 @@ use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\ContactController;
+
+
 
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -45,11 +48,30 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
     Route::resource('templateadmin', CertificateController::class)->except(['show']);
+    
+    Route::resource('templateadmin/contacts', ContactController::class)->only([
+        'index', 'store', 'update', 'destroy'
+    ])->names([
+        'index' => 'templateadmin.contacts',
+        'store' => 'templateadmin.contacts.store',
+        'update' => 'templateadmin.contacts.update',
+        'destroy' => 'templateadmin.contacts.destroy',
+    ]);
+    
+    Route::get('/templateadmin/preview', [CertificateController::class, 'preview'])->name('templateadmin.preview');
+
+
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
     Route::get('/user/{id}/edit',[UserController::class, 'edit'])->name('users.edit');
     Route::put('/user/{id}',[UserController::class, 'update'])->name('users.update');
+    Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
+
+    Route::get('/registration-success', function () {
+        return view('auth.success_registration');
+    })->name('registration.success');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -63,9 +85,6 @@ Route::middleware(['guest'])->group(function () {
     // Rute untuk Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
-    Route::get('/registration-success', function () {
-        return view('auth.success_registration');
-    })->name('registration.success');
 
     // Rute untuk meminta link reset password (Email)
     Route::get('password/reset', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -76,14 +95,14 @@ Route::middleware(['guest'])->group(function () {
     // Rute untuk merubah password baru setelah mendapatkan link reset
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+    Route::get('/reset/success', function () {
+        return view('auth.passwords.success_reset');
+    })->name('password.reset.success');
+    Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
 
     // Rute untuk proses verifikasi kode keamanan
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
 
-    //Route ke Halaman success_reset
-    Route::get('/reset/success', function () {
-        return view('auth.passwords.success_reset');
-    })->name('password.reset.success');
 });
 
 ?>

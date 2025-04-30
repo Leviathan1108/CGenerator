@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Certificate;
 use App\Models\Template;
@@ -112,18 +112,22 @@ if ($request->background_choice === 'template') {
 
     public function preview($id)
     {
-        $certificate = Certificate::with('template', 'user')->findOrFail($id);
+        // Retrieve the certificate by id with associated template and user
+    $certificate = Certificate::with('template', 'user')->findOrFail($id);
 
-        $data = [
-            'name' => $certificate->user->name,
-            'event' => $certificate->event_name,
-        ];
+    // Prepare the data to be passed to the view
+    $data = [
+        'name' => $certificate->user->name,
+        'event' => $certificate->event_name,
+    ];
 
-        return view('templateadmin.preview', [
-            'data' => $data,
-            'logo' => $certificate->template->logo_path ?? null,
-            'background' => $certificate->template->background_choice ?? null,
-        ]);
+    // Return the view and pass the necessary data
+    return view('templateadmin.preview', [
+        'data' => $data,
+        'logo' => $certificate->template->logo_path ?? null,
+        'background' => $certificate->template->background_choice ?? null, // Default background if available
+        'templateId' => $certificate->template->id, // If you need to pass the template ID to use for the background
+    ]);
     }
 
     public function download($id)
@@ -171,18 +175,21 @@ if ($request->background_choice === 'template') {
         ]);
     
         $template = new Template();
-        $template->name = $request->input('name');
-        $template->recipient = $request->input('recipient');
-        $template->date = $request->input('date');
-        $template->background_image_url = session('background');
-        $template->layout_storage = $request->input('layout_storage'); // tambahkan ini
-        $template->save();
-        $path = $file->store('backgrounds', 'public');
-        session(['background' => Storage::url($path)]);
+$template->user_id = Auth::id(); // ← WAJIB ditambah
+$template->name = $request->input('name');
+$template->recipient = $request->input('recipient');
+$template->date = $request->input('date');
+$template->background_image_url = session('background');
+$template->layout_storage = $request->input('layout_storage');
+$template->save();
+
+       // $path = $file->store('backgrounds', 'public');
+       // session(['background' => Storage::url($path)]);
     
         session()->forget('background');
     
-        return redirect()->route('layout.data_input')->with('success', 'Template saved successfully!');
+        return redirect()->route('templateadmin.dataInput')->with('success', 'Template saved successfully!');
+
     
     }
 

@@ -14,9 +14,12 @@ class AddFilePathToCertificateBackgroundsTable extends Migration
     public function up()
 {
     Schema::table('certificate_backgrounds', function (Blueprint $table) {
-        $table->string('file_path')->after('id');
+        if (!Schema::hasColumn('certificate_backgrounds', 'file_path')) {
+            $table->string('file_path')->after('id');
+        }
     });
 }
+
 
 public function down()
 {

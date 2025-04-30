@@ -128,5 +128,27 @@ class TemplateAdminController extends Controller
         $certificate = Certificate::with('template')->findOrFail($id);
         $pdf = \PDF::loadView('templateadmin.pdf', compact('certificate'));
         return $pdf->download("templateadmin-{$certificate->uid}.pdf");
-    }    
+    }   
+    public function storeTemplate(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'recipient' => 'required|string|max:255',
+        'date' => 'required|date',
+        'background_image_url' => 'required|url',
+        'layout_storage' => 'required|json',
+    ]);
+
+    Template::create([
+        'user_id' => auth()->id(), // atau $request->user_id jika anda input manual
+        'name' => $request->name,
+        'recipient' => $request->recipient,
+        'date' => $request->date,
+        'background_image_url' => $request->background_image_url,
+        'layout_storage' => $request->layout_storage,
+    ]);
+
+    return redirect()->back()->with('success', 'Template berhasil disimpan.');
+}
+ 
 }

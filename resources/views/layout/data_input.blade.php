@@ -93,7 +93,7 @@
 
       <div class="d-flex justify-content-between mt-4">
       <a href="{{ route('templateadmin.upload') }}" class="btn btn-secondary">Back</a>
-        <button type="submit" class="btn btn-primary">Next</button>
+        <a href="{{ route('templateadmin.contacts') }}" class="btn btn-primary">Next</a>
       </div>
     </form>
   </main>
