@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2025 at 07:58 AM
+-- Generation Time: Apr 30, 2025 at 06:54 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -28,45 +28,78 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `certificates` (
-  `id` int(11) NOT NULL,
-  `template_id` int(11) NOT NULL,
-  `recipient_id` int(11) DEFAULT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `selected_template_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `uid` varchar(100) NOT NULL,
   `verification_code` varchar(100) NOT NULL,
   `issued_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('draft','published','revoked') DEFAULT 'draft',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `certificates`
---
-
-INSERT INTO `certificates` (`id`, `template_id`, `recipient_id`, `uid`, `verification_code`, `issued_date`, `status`, `created_at`, `updated_at`) VALUES
-(4, 1, 2, 'CERT-2025-03-2200', '3ce1ce89-0b29-11f0-80d1-089798c81e69', '2025-03-27 16:33:39', 'published', '2025-03-27 16:33:39', '2025-03-27 17:16:05'),
-(8, 3, 2, 'CERT-2025-04-0003', '5AD23EC1-2F2D-42CE-B6C5-FB5C0730CD0C', '2025-04-08 17:00:00', 'published', '2025-04-08 21:40:11', '2025-04-08 21:51:51'),
-(9, 4, 2, 'CERT-2025-04-0002', '79DEE1E5-8461-4601-A85F-49D63CE43719', '2025-04-08 17:00:00', 'revoked', '2025-04-08 21:52:05', '2025-04-08 21:52:05');
+  `status` enum('draft','published','revoked') NOT NULL DEFAULT 'draft',
+  `background_choice` enum('custom','template') DEFAULT NULL,
+  `event_name` varchar(255) DEFAULT NULL,
+  `logo_path` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `certificate_verifications`
+-- Table structure for table `certificate_backgrounds`
 --
 
-CREATE TABLE `certificate_verifications` (
-  `id` int(11) NOT NULL,
-  `verification_code` varchar(100) NOT NULL,
-  `verified_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `certificate_backgrounds` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `certificate_verifications`
+-- Table structure for table `certificate_details`
 --
 
-INSERT INTO `certificate_verifications` (`id`, `verification_code`, `verified_at`) VALUES
-(1, '3ce1ce89-0b29-11f0-80d1-089798c81e69', '2025-03-27 16:56:26'),
-(3, '5AD23EC1-2F2D-42CE-B6C5-FB5C0730CD0C', '2025-04-08 22:39:35');
+CREATE TABLE `certificate_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `template_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `certificate_name` varchar(255) NOT NULL,
+  `certificate_title` varchar(255) NOT NULL,
+  `issue_date` date NOT NULL,
+  `recipient_name` varchar(255) DEFAULT NULL,
+  `logo_path` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact`
+--
+
+CREATE TABLE `contact` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contact`
+--
+
+INSERT INTO `contact` (`id`, `name`, `email`, `created_at`, `updated_at`) VALUES
+(5, 'luthfi fuad radityawan', 'lutfifuadradityawan@gmail.com', '2025-04-29 10:29:42', '2025-04-29 10:32:21'),
+(6, 'arif ariyanto', 'arifyanto@gmail.com', '2025-04-29 10:34:20', '2025-04-29 10:41:41'),
+(10, 'Ricci', 'riccigaol@gmail.com', '2025-04-29 19:18:01', '2025-04-29 19:18:01'),
+(11, 'Devan', 'devan@gmail.com', '2025-04-29 19:18:02', '2025-04-29 19:18:02'),
+(12, 'Riski', 'Risky@gmail.com', '2025-04-29 19:18:03', '2025-04-29 19:18:03'),
+(13, 'athikah', 'athikah@gmail.com', '2025-04-29 19:18:03', '2025-04-29 19:18:03'),
+(14, 'hanif', 'hanif@gmail.com', '2025-04-29 19:18:04', '2025-04-29 19:18:04'),
+(15, 'zikran', 'zikran@gmail.com', '2025-04-29 19:18:04', '2025-04-29 19:18:04');
 
 -- --------------------------------------------------------
 
@@ -75,21 +108,14 @@ INSERT INTO `certificate_verifications` (`id`, `verification_code`, `verified_at
 --
 
 CREATE TABLE `emails` (
-  `id` int(11) NOT NULL,
-  `certificate_id` int(11) NOT NULL,
-  `recipient_id` int(11) NOT NULL,
-  `status` enum('pending','sent','failed') DEFAULT 'pending',
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `certificate_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `status` enum('pending','sent','failed') NOT NULL DEFAULT 'pending',
   `error_message` text DEFAULT NULL,
-  `retry_count` int(11) DEFAULT 0,
+  `retry_count` int(11) NOT NULL DEFAULT 0,
   `sent_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `emails`
---
-
-INSERT INTO `emails` (`id`, `certificate_id`, `recipient_id`, `status`, `error_message`, `retry_count`, `sent_at`) VALUES
-(1, 4, 2, 'pending', 'ok', 0, '2025-03-27 16:34:57');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -124,10 +150,24 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_14_000001_create_personal_access_tokens_table', 1);
+(23, '2025_04_24_025210_create_certificate_backgrounds_table', 2),
+(48, '2014_04_27_155605_create_subscriptions_table', 3),
+(49, '2014_10_00_000000_create_users_table', 3),
+(50, '2014_10_12_100000_create_password_resets_table', 3),
+(51, '2019_08_19_000000_create_failed_jobs_table', 3),
+(52, '2019_12_14_000001_create_personal_access_tokens_table', 3),
+(53, '2025_03_20_164547_create_templates_table', 3),
+(54, '2025_03_20_164602_create_recipients_table', 3),
+(55, '2025_03_21_164601_create_certificates_table', 3),
+(56, '2025_03_27_162238_create_emails_table', 3),
+(57, '2025_04_21_190041_add_username_to_users_table', 3),
+(58, '2025_04_23_095720_create_certificate_details_table', 3),
+(59, '2025_04_24_035214_add_file_path_to_certificate_backgrounds_table', 4),
+(63, '2025_04_24_094722_add_title_to_templates_table', 5),
+(64, '2025_04_28_161040_create_contacts_table', 5),
+(65, '2025_04_28_162649_create_certificate_backgrounds_table', 5),
+(66, '2025_04_28_163854_create_contacts_table', 6),
+(67, '2025_04_28_164523_create_contact_table', 7);
 
 -- --------------------------------------------------------
 
@@ -166,21 +206,12 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 CREATE TABLE `recipients` (
-  `id` int(11) NOT NULL,
-  `certificate_id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `recipients`
---
-
-INSERT INTO `recipients` (`id`, `certificate_id`, `name`, `email`, `created_at`, `updated_at`) VALUES
-(2, 4, 'John Doe', 'johndoe@example.com', '2025-03-27 21:55:46', '2025-03-27 21:55:46'),
-(5, 9, 'Afifah Nur Z', 'nur@gmail.com', '2025-04-08 21:57:22', '2025-04-08 21:57:52');
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -189,22 +220,13 @@ INSERT INTO `recipients` (`id`, `certificate_id`, `name`, `email`, `created_at`,
 --
 
 CREATE TABLE `subscriptions` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `duration` int(11) NOT NULL COMMENT 'Duration in days',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `subscriptions`
---
-
-INSERT INTO `subscriptions` (`id`, `name`, `price`, `duration`, `created_at`, `updated_at`) VALUES
-(1, 'Paket Mingguan', '10000.50', 7, '2025-03-27 09:06:06', '2025-03-27 09:06:06'),
-(3, 'Paket Ramadhan', '15000.00', 10, '2025-03-27 09:07:34', '2025-03-27 09:07:34'),
-(4, 'Paket Coba-coba', '5000.00', 3, '2025-04-08 21:59:10', '2025-04-08 21:59:27');
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -213,25 +235,28 @@ INSERT INTO `subscriptions` (`id`, `name`, `price`, `duration`, `created_at`, `u
 --
 
 CREATE TABLE `templates` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `template_data` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `file_path` varchar(255) DEFAULT NULL,
+  `layout_storage` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `recipient` varchar(255) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `background_image_url` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `templates`
 --
 
-INSERT INTO `templates` (`id`, `user_id`, `name`, `template_data`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Test I', 'templates/RvFGS35kdgFcedTbAbCVxHPLjKYgK1LUUJYdkYgl.png', '2025-03-27 08:14:06', '2025-03-27 08:14:21'),
-(3, 1, 'Test 2', 'templates/sXgoXpvgA4eEAV2p0OCRntnjWWdveWyczo4qt1WD.png', '2025-03-27 08:15:23', '2025-03-27 08:15:23'),
-(4, 1, 'Certificate of Achievement', 'templates/VpaHJ5FWwYJK7Cw9Rkl1NDeHjA0KAoIE7u1JBU9D.jpg', '2025-03-27 16:30:39', '2025-04-08 22:08:17'),
-(5, 1, 'Test 3', 'templates/efZjk9bvS7nilDY7UkcZ0m75RRPlZcLbkAvdFhEg.png', '2025-03-27 09:58:39', '2025-03-27 09:59:05'),
-(6, 1, 'Demo', 'templates/hSmbShXJelPX664uOX4SS1nFrOL6pJuzPx1dtaF8.jpg', '2025-04-08 21:10:21', '2025-04-08 21:16:32'),
-(8, 1, 'Check', 'templates/yrCOsj71aGqTG3dWEVVcGr0Y1xAKuQyUt8r0uYHt.jpg', '2025-04-08 22:06:52', '2025-04-08 22:06:52');
+INSERT INTO `templates` (`id`, `user_id`, `name`, `file_path`, `layout_storage`, `created_at`, `updated_at`, `title`, `recipient`, `date`, `background_image_url`) VALUES
+(1, 1, 'Testing', NULL, NULL, '2025-04-29 09:00:00', '2025-04-29 09:00:00', NULL, 'testing', '2025-03-21', 'http://127.0.0.1:8001/uploads/backgrounds/1745941498_certificate.jpg'),
+(2, 1, 'Testing', NULL, NULL, '2025-04-29 09:00:46', '2025-04-29 09:00:46', NULL, 'testing', '2025-03-21', 'http://127.0.0.1:8001/uploads/backgrounds/1745941498_certificate.jpg'),
+(3, 1, 'Testing', NULL, NULL, '2025-04-29 09:03:13', '2025-04-29 09:03:13', NULL, 'testing', '2025-03-21', NULL),
+(4, 1, 'uji coba', NULL, NULL, '2025-04-29 09:19:44', '2025-04-29 09:19:44', NULL, 'testing', '2025-04-04', 'http://127.0.0.1:8001/uploads/backgrounds/1745942662_Biru Emas Minimalis Modern Sertifikat Lomba Muslim.jpg');
 
 -- --------------------------------------------------------
 
@@ -240,21 +265,27 @@ INSERT INTO `templates` (`id`, `user_id`, `name`, `template_data`, `created_at`,
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `subscription_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `remember_token` varchar(100) DEFAULT NULL,
+  `role` enum('superadmin','admin','recipient','guest') NOT NULL DEFAULT 'guest',
+  `photo_profile` varchar(255) DEFAULT NULL,
+  `subscription_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `certificate_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `subscription_id`, `created_at`, `updated_at`) VALUES
-(1, 'athikah', 'you@gmail.com', '$2y$10$yyr8j09SM.k6ElrB2VG/7.AH.5A8OoCvw32q4tIXfgBy.coLhEwDK', NULL, '2025-03-27 07:49:47', '2025-03-27 07:49:47');
+INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `password`, `remember_token`, `role`, `photo_profile`, `subscription_id`, `certificate_id`, `created_at`, `updated_at`) VALUES
+(1, 'LuthV', 'LuthV', 'lutfifuadradityawan@gmail.com', NULL, '$2y$10$D6gZyPfQSMAzmVrd9Lr.3.muL/zC1okPMDTSi0F.zDPJE3pxIWkQa', '184Ti2Z2cw7gZeAHVKoqtWX8CX57VeugR5gkw7T2gX4O62G9c4jXHYyyD6dE', 'guest', NULL, NULL, NULL, '2025-04-28 09:51:31', '2025-04-28 09:51:31');
 
 --
 -- Indexes for dumped tables
@@ -265,25 +296,34 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `subscription_id`, `crea
 --
 ALTER TABLE `certificates`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uid` (`uid`),
-  ADD UNIQUE KEY `verification_code` (`verification_code`),
-  ADD KEY `template_id` (`template_id`),
-  ADD KEY `fk_certificates_recipients` (`recipient_id`);
+  ADD KEY `certificates_selected_template_id_foreign` (`selected_template_id`),
+  ADD KEY `certificates_user_id_foreign` (`user_id`);
 
 --
--- Indexes for table `certificate_verifications`
+-- Indexes for table `certificate_backgrounds`
 --
-ALTER TABLE `certificate_verifications`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `verification_code` (`verification_code`);
+ALTER TABLE `certificate_backgrounds`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `certificate_details`
+--
+ALTER TABLE `certificate_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contact`
+--
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `emails`
 --
 ALTER TABLE `emails`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `certificate_id` (`certificate_id`),
-  ADD KEY `recipient_id` (`recipient_id`);
+  ADD KEY `emails_certificate_id_foreign` (`certificate_id`),
+  ADD KEY `emails_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -317,7 +357,7 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `recipients`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `certificate_id` (`certificate_id`);
+  ADD UNIQUE KEY `recipients_email_unique` (`email`);
 
 --
 -- Indexes for table `subscriptions`
@@ -330,15 +370,15 @@ ALTER TABLE `subscriptions`
 --
 ALTER TABLE `templates`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `templates_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `fk_subscription` (`subscription_id`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_subscription_id_foreign` (`subscription_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -348,19 +388,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `certificate_verifications`
+-- AUTO_INCREMENT for table `certificate_backgrounds`
 --
-ALTER TABLE `certificate_verifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `certificate_backgrounds`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `certificate_details`
+--
+ALTER TABLE `certificate_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `emails`
 --
 ALTER TABLE `emails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -372,7 +424,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -384,25 +436,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `recipients`
 --
 ALTER TABLE `recipients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `templates`
 --
 ALTER TABLE `templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -412,39 +464,27 @@ ALTER TABLE `users`
 -- Constraints for table `certificates`
 --
 ALTER TABLE `certificates`
-  ADD CONSTRAINT `certificates_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `templates` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_certificates_recipients` FOREIGN KEY (`recipient_id`) REFERENCES `recipients` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `certificate_verifications`
---
-ALTER TABLE `certificate_verifications`
-  ADD CONSTRAINT `certificate_verifications_ibfk_1` FOREIGN KEY (`verification_code`) REFERENCES `certificates` (`verification_code`) ON DELETE CASCADE;
+  ADD CONSTRAINT `certificates_selected_template_id_foreign` FOREIGN KEY (`selected_template_id`) REFERENCES `templates` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `certificates_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `emails`
 --
 ALTER TABLE `emails`
-  ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificates` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `emails_ibfk_2` FOREIGN KEY (`recipient_id`) REFERENCES `recipients` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `recipients`
---
-ALTER TABLE `recipients`
-  ADD CONSTRAINT `recipients_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificates` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `emails_certificate_id_foreign` FOREIGN KEY (`certificate_id`) REFERENCES `certificates` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `emails_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `templates`
 --
 ALTER TABLE `templates`
-  ADD CONSTRAINT `templates_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `templates_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `fk_subscription` FOREIGN KEY (`subscription_id`) REFERENCES `subscriptions` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `users_subscription_id_foreign` FOREIGN KEY (`subscription_id`) REFERENCES `subscriptions` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
