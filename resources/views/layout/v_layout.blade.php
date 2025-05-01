@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Generator Dashboard</title>
+    
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
     <link href={{ asset('bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <link href={{ asset('css/app.css') }} rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,7 +86,6 @@
         }
     </style>
 </head>
-
 <body style="background-color: #f8f9fa;">
     <!-- Menambahkan Allert-Success -->
     @if (session('success'))
@@ -108,7 +115,7 @@
     <!-- Tempat untuk konten halaman -->
 
     <script src={{ asset('bootstrap/js/bootstrap.js') }}></script>
-    <script src={{asset('bootsrap/js/bootstrap.min.js')}}></script>
+    <script src={{asset('bootstrap/js/bootstrap.min.js')}}></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>

@@ -68,10 +68,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/user/{id}',[UserController::class, 'update'])->name('users.update');
     Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
 
-    Route::get('/registration-success', function () {
-        return view('auth.success_registration');
-    })->name('registration.success');
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -86,6 +82,10 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister']);
 
+    Route::get('/registration-success', function () {
+        return view('auth.success_registration');
+    })->name('registration.success');
+
     // Rute untuk meminta link reset password (Email)
     Route::get('password/reset', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -98,6 +98,7 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/reset/success', function () {
         return view('auth.passwords.success_reset');
     })->name('password.reset.success');
+
     Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
 
     // Rute untuk proses verifikasi kode keamanan
