@@ -43,6 +43,33 @@
                                     <label for="file" class="form-table">File Template</label>
                                     <input type="file" class="form-control" name="file" id="file" required><br>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-table">Description</label>
+                                    <textarea  name="description" id="description" class="w-full border border-black rounded p-2" rows="4">{{ old('description') }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="type" class="form-table">Type</label>
+                                    <input list="certificate-types" name="type" class="form-control" placeholder="Select or type certificate type">
+                                    <datalist id="certificate-types">
+                                        <option value="Attendance Certificate">
+                                        <option value="Completion Certificate">
+                                        <option value="Award Certificate">
+                                        <option value="Competency Certificate">
+                                        <option value="Participation Certificate">
+                                        <option value="Academic Degree Certificate">
+                                        <option value="Training Certificate">
+                                        <option value="Membership Certificate">
+                                        <option value="Recognition Certificate">
+                                        <option value="Certificate of Authenticity">
+                                        <option value="Expertise Certificate">
+                                        <option value="Inspection Certificate">
+                                        <option value="Validation Certificate">
+                                        <option value="Registration Certificate">
+                                        <option value="Compliance Certificate">
+                                    </datalist>
+                                </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success">Save</button>
                                     <button type="button" class="btn" style="background-color: #F13C20;" data-bs-dismiss="modal">Discard</button>
@@ -62,9 +89,9 @@
                     <th>ID</th>
                     <th>Nama</th>
                     <th>File</th>
+                    <th>Date</th>
                     <th>Created By</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
+                    <th>Type</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -79,9 +106,9 @@
                                 <a href="{{ asset('storage/' . $template->file_path) }}" target="_blank">Lihat File</a>
                             @endif
                         </td>
+                        <td>{{ $template->date ? \Carbon\Carbon::parse($template->date)->format('d-m-Y') : '-' }}</td>
                         <td>{{ $template->user->name ?? 'Tidak Diketahui' }}</td>
-                        <td>{{ $template->created_at }}</td>
-                        <td>{{ $template->updated_at }}</td>
+                        <td>{{ $template->type ?? '-' }}</td>
                         <td>
                             <!-- button moadal edit -->
                             <button style="background-color: #FBB041; border-radius: 10px; border: none;" type="button"
@@ -112,6 +139,29 @@
                                                 <label for="file" class="form-table">File Template (Biarkan kosong jika tidak ingin
                                                     mengubah)</label>
                                                 <input type="file" name="file" id="file" class="form-control"><br>
+
+                                                <label for="description" class="form-table">Description</label>
+                                                <textarea  name="description" id="description" class="w-full border border-black rounded p-2" rows="4">{{ $template->description }}</textarea>
+
+                                                <label for="type" class="form-table">Type</label>
+                                                <input list="certificate-types" name="type" class="form-control" placeholder="Select or type certificate type">
+                                                <datalist id="certificate-types">
+                                                    <option value="Attendance Certificate">
+                                                    <option value="Completion Certificate">
+                                                    <option value="Award Certificate">
+                                                    <option value="Competency Certificate">
+                                                    <option value="Participation Certificate">
+                                                    <option value="Academic Degree Certificate">
+                                                    <option value="Training Certificate">
+                                                    <option value="Membership Certificate">
+                                                    <option value="Recognition Certificate">
+                                                    <option value="Certificate of Authenticity">
+                                                    <option value="Expertise Certificate">
+                                                    <option value="Inspection Certificate">
+                                                    <option value="Validation Certificate">
+                                                    <option value="Registration Certificate">
+                                                    <option value="Compliance Certificate">
+                                                </datalist>
 
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-success">Save</button>

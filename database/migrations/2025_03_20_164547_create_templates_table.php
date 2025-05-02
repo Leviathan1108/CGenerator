@@ -17,10 +17,12 @@ class CreateTemplatesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
             $table->string('name'); // Nama template
-            $table->string('recipient'); // Tambahkan kolom recipient di sini
+            // $table->string('recipient'); // Tambahkan kolom recipient di sini
             $table->string('file_path')->nullable(); // hanya path, misalnya: "profiles/123.jpg"
             $table->longText('layout_storage')->nullable();
             $table->date('date')->nullable();
+            $table->text('description')->nullable();
+            $table->text('type')->nullable();
             $table->text('background_image_url')->nullable();
             $table->timestamps(); // created_at & updated_at
             // Foreign key opsional

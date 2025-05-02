@@ -18,7 +18,11 @@
   <!-- Header from your previous navbar layout -->
   <div class="navbar">
     <div class="navbar-left">
-      <div class="logo" href="/">Certificate Generator</div>
+      <h1 class="ms-2 me-5 text-light fw-bold text-[40px]">
+        <span>Certificate</span>
+        <br>
+        <span>Generator</span>
+      </h1>
     </div>
     <div class="navbar-center">
       <div class="search-box">
@@ -45,14 +49,14 @@
         <div class="d-flex flex-column align-items-center">
           <!-- unutuk menampilkan foto profile -->
           @if(Auth::check() && Auth::user()->photo_profile)
-              <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile" class="rounded-circle"
-                    style="height: 50px; width: 50px; object-fit: cover;">
-          @else
-              <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
-                style="height: 50px; width: 50px;">👤</div>
-          @endif
-            <strong class="text-light"> {{ Auth::check() ? Auth::user()->username : 'Guest' }} </strong>
-            <a href="#" class="text-decoration-none text-white small">View Profile</a>
+        <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile" class="rounded-circle"
+        style="height: 50px; width: 50px; object-fit: cover;">
+      @else
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+        style="height: 50px; width: 50px;">👤</div>
+      @endif
+          <strong class="text-light"> {{ Auth::check() ? Auth::user()->username : 'Guest' }} </strong>
+          <a href="#" class="text-decoration-none text-white small">View Profile</a>
         </div>
       </li>
 

@@ -14,7 +14,10 @@ class Template extends Model
         'user_id',
         'name',
         'recipient',
+        'file_path',
         'date',
+        'description',
+        'type',
         'background_image_url',
         'layout_storage',
     ];

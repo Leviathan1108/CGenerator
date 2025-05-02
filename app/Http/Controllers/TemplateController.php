@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Template;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class TemplateController extends Controller
@@ -19,7 +20,7 @@ class TemplateController extends Controller
     public function create()
     {
         $templates = Template::all();
-        return view('templatesuperadmin.create', compact('templates'));
+        return view('templatesuperadmin.index', compact('templates'));
     }
 
     // Simpan template baru
@@ -27,6 +28,8 @@ class TemplateController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
             'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:2048',
         ]);
 
@@ -35,6 +38,9 @@ class TemplateController extends Controller
         Template::create([
             'user_id' => Auth::id(),// otomatis isi dari user yang login
             'name' => $request->name,
+            'date' => Carbon::now()->toDateString(), // otomatis isi tanggal hari ini (format: YYYY-MM-DD)
+            'description' => $request->description,
+            'type' => $request->type,
             'file_path' => $filePath,
         ]);
 
@@ -53,6 +59,8 @@ class TemplateController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
             'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:2048',
         ]);
     
@@ -62,6 +70,8 @@ class TemplateController extends Controller
         }
     
         $templatesuperadmin->name = $request->name;
+        $templatesuperadmin->description = $request->description;
+        $templatesuperadmin->type = $request->type;
     
         if (is_null($templatesuperadmin->user_id)) {
             $templatesuperadmin->user_id = Auth::id();
