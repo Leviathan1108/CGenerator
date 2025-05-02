@@ -142,8 +142,10 @@
     <!-- Step Progress Label -->
     <div class="d-flex justify-content-between small fw-medium mb-2">
       <span style="width: 12.5%;">1 Pilih Template</span>
-      <span style="width: 12.5%;">2 Preview</span>
+      <span style="width: 12.5%;">2 Information</span>
       <span style="width: 12.5%;">3 Input Data</span>
+      <span style="width: 12.5%;">4 Request Approval</span>
+      <span style="width: 12.5%;">5 Publis</span>
       <!-- Tambah step lagi? Tambah span di sini -->
     </div>
 
@@ -228,9 +230,6 @@
                 <span class="text-content">Nama Acara</span>
                 <div class="resize-handle"></div>
               </div>
-
-
-
             </div>
           </div>
         </div>
@@ -284,7 +283,7 @@
       if (current) current.classList.remove("hidden");
 
       // Update progress
-      const progress = Math.round(((step - 1) / (totalSteps - 1)) * 100);
+      const progress = Math.round(((step - 1) / (totalSteps - 0)) * 80);
       const progressBar = document.getElementById("progressBar");
       progressBar.style.width = progress + "%";
       progressBar.setAttribute("aria-valuenow", progress);
@@ -297,7 +296,7 @@
     function changeStep(direction) {
       currentStep += direction;
       if (currentStep < 1) currentStep = 1;
-      if (currentStep > totalSteps) currentStep = totalSteps;
+      if (currentStep > totalSteps) currentStep => totalSteps;
       showStep(currentStep);
     }
 
@@ -349,8 +348,6 @@
 
       initResizableText(); // Tambahkan ini
     }
-
-
 
 
     function previewLogo(event) {
