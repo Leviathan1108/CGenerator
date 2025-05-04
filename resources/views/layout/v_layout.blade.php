@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Generator Dashboard</title>
-    
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="MyWebSite" />
-    <link rel="manifest" href="/site.webmanifest" />
+        
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"/>
+<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+<link rel="manifest" href="{{ asset('site.webmanifest') }}">
+<meta name="apple-mobile-web-app-title" content="MyWebSite" />
     
     <link href={{ asset('bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <link href={{ asset('css/app.css') }} rel="stylesheet">

@@ -21,8 +21,8 @@
     <!-- RIGHT PANEL -->
     <div class="success-right">
     <div class="check-icon">✔️</div>
-      <h3 class="mb-3 success-title">Registration Successful!</h3>
-      <p>Your account has been created successfully. A confirmation email has been sent to your email address.</p>
+      <h3 class="mb-3 success-title ">Registration Successful!</h3>
+      <p>Your account has been created successfully. <br>A confirmation email has been sent to your email address.</p>
 
       <div class="d-grid gap-2 mt-4">
         <a href="/login" class="btn btn-custom">Log in to your account</a>

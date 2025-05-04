@@ -1,39 +1,30 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/registration-success';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
     /**
-     * Menampilkan halaman register
+     * Tampilkan halaman register
      */
     public function showRegistrationForm()
     {
-        return view('auth.register'); // Pastikan file register.blade.php ada di folder resources/views/auth
+        return view('auth.register');
     }
 
     /**
@@ -41,28 +32,23 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        // Validasi data input
+        // Validasi input
         $request->validate([
-            'name' => 'required|string|max:255',  // Menggunakan 'string', bukan 'varchar'
-            'email' => 'required|string|email|max:255|unique:users', 
-            'username' => 'required|string|max:255|unique:users', 
-            'password' => 'required|string|min:6|confirmed', 
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Simpan user ke database
-        User::create([
+        // Simpan user
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
-
-         // Debugging: Cek apakah user langsung login atau tidak
-         dd("Registrasi sukses, seharusnya redirect ke success_registration");
-         return redirect()->route('success.registration');
-
-        // Redirect ke halaman login dengan alert sukses
-        return redirect()->route('login')->with('success', 'Berhasil Menambahkan Akun, Silahkan Login');
+        event(new Registered($user));
+        Auth::login($user);
+        return redirect()->route('registration.success');
     }
 }
-?>
