@@ -81,9 +81,10 @@ Route::middleware(['guest'])->group(function () {
     Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-    Route::get('/reset/success', function () {
+
+    Route::get('/password-reset-success', function () {
         return view('auth.passwords.success_reset');
-    })->name('password.reset.success');
+    })->name('password.success');    
 
     Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
