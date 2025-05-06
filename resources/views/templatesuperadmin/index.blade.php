@@ -25,7 +25,7 @@
             <div class="modal fade" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content text-light" style="background-color: #232E66;">
+                    <div class="modal-content text-dark bg-light">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Add Template</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -120,7 +120,7 @@
                             <div class="modal fade" id="modalEditTemplate{{ $template->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <div class="modal-content text-light" style="background-color: #232E66;">
+                                    <div class="modal-content text-dark bg-light">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="staticBackdropLabel">Edit Your Template</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -183,7 +183,7 @@
                             <div class="modal fade" id="modalHapusTemplate{{ $template->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <div class="modal-content text-light" style="background-color: #232E66;">
+                                    <div class="modal-content text-dark bg-light">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="staticBackdropLabel">Delete Your Template</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -194,7 +194,7 @@
                                             @method('DELETE')
                                         <div class="modal-body text-center">
                                         <h3>Are You Sure To Delete?</h3>
-                                        <span class="text-warning fw-bold">TEMPLATE "{{ $template->name }}" BY "{{ $template->user->name }}"</span>
+                                        <span class="text-dark fw-bold">Template "{{ $template->name }}" By "{{ $template->user->name }}"</span>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-success">Yes</button>
                                             <button type="button" class="btn" style="background-color: #F13C20;" data-bs-dismiss="modal">No</button>

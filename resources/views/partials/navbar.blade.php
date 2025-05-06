@@ -101,5 +101,8 @@
         <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/subscriptions">Subscriptions</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link fs-6 text-light" href="/user">User Management</a>
+        </li>
     </ul>
 </nav>

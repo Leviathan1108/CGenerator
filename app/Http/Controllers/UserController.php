@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     // Tampilkan profile user
-    public function show($id)
+    public function show()
     {
-        $user = User::findOrFail($id);
-        return view('settings', compact('user'));
+        $user = User::all();
+        return view('user.index', compact('user'));
     }
 
     // Form edit profile

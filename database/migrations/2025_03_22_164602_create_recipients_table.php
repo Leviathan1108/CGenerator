@@ -13,6 +13,7 @@ class CreateRecipientsTable extends Migration
     $table->id();
     $table->string('name');
     $table->string('email')->unique();
+    $table->foreignId('certificate_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
     $table->timestamps();
         });
     }
