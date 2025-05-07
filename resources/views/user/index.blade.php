@@ -1,7 +1,7 @@
 @extends ('layout.v_layout')
 
 @section('content')
-    <div class="mt-0" style="background-color: rgb(219, 217, 217); height: 100vh;">
+    <div class="mt-0 flex-grow-0" style="background-color: rgb(219, 217, 217);">
         <nav class="nav my-3" style="background-color: #232E66;">
             <h1 class="text-light ms-2 fw-bold">User Management</h1>
         </nav>
@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="col-auto">
-                    <button class="btn btn-primary">Filter</button>
+                    <button class="btn text-light rounded-4" style="background-color: #1E3265;">Filter</button>
                 </div>
             </div>
         </div>
@@ -129,10 +129,9 @@
 
         <!-- Pagination -->
         <div class="text-center my-4">
-            <button class="btn me-2 text-light rounded-4" style="background-color: #232E66;">Prev</button>
-            <button class="btn text-light rounded-4" style="background-color: #232E66;">Next</button>
+            <button class="btn me-2 text-light rounded-4 mb-3" style="background-color: #232E66;">Prev</button>
+            <button class="btn text-light rounded-4 mb-3" style="background-color: #232E66;">Next</button>
         </div>
 
     </div>
 @endsection
-<script src="https://unpkg.com/html5-qrcode"></script>

@@ -87,7 +87,7 @@
             </div>
         </div>
         <!-- input -->
-        <div class="input mt-3 flex-row d-flex gap-4 mt-3 justify-content-between">
+        <!-- <div class="input mt-3 flex-row d-flex gap-4 mt-3 justify-content-between">
             <div class="checkbox-container">
                 <input type="checkbox" name="verify" id="verify" class="me-2">
                 <label for="verify">Verify Certificate</label>
@@ -104,7 +104,7 @@
                 <input type="checkbox" name="user" id="user" class="me-2">
                 <label for="user">User Management</label>
             </div>
-        </div>
+        </div> -->
 
     </div>
     <div>

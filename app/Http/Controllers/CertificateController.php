@@ -18,6 +18,12 @@ class CertificateController extends Controller
         return view('templateadmin.index', compact('templates'));        
     }
 
+    public function show()
+    {
+        $certificate = Certificate::all();
+        return view('certificates.view', compact('certificate'));
+    }
+
     public function create()
     {
         $templates = Template::all();
