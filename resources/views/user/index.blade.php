@@ -1,7 +1,7 @@
 @extends ('layout.v_layout')
 
 @section('content')
-    <div class="mt-0 flex-grow-0" style="background-color: rgb(219, 217, 217);">
+    <div class="mt-0 flex-grow-0" style="background-color: rgb(219, 217, 217); height: 100vh;">
         <nav class="nav my-3" style="background-color: #232E66;">
             <h1 class="text-light ms-2 fw-bold">User Management</h1>
         </nav>
@@ -135,3 +135,4 @@
 
     </div>
 @endsection
+<script src="https://unpkg.com/html5-qrcode"></script>

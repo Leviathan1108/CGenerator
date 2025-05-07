@@ -18,7 +18,7 @@ class CertificateController extends Controller
         return view('templateadmin.index', compact('templates'));        
     }
 
-    public function show()
+    public function show_certificate()
     {
         $certificate = Certificate::all();
         return view('certificates.view', compact('certificate'));
