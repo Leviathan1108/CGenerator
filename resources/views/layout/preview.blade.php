@@ -1,102 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preview Certificate</title>
+  <title>Create Certificate - Stepper</title>
+  <link rel="stylesheet" href="{{ asset('bootstrap/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.1/fabric.min.js"></script>
-  <style>
-    .canvas-container {
-      position: relative;
-      width: 100%;
-      height: 600px;
-      border: 1px solid #000;
-    }
-    .canvas-container canvas {
-      display: block;
-      margin: auto;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
 </head>
-<body>
 
-  <main class="container mt-5">
-    <h2 class="fw-bold mb-4">Preview Certificate</h2>
+<header>
+  <!-- Header from your previous navbar layout -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <h1 class="ms-2 me-5 text-light fw-bold text-[40px]">
+        <span>Certificate</span>
+        <br>
+        <span>Generator</span>
+      </h1>
+    </div>
+    <div class="navbar-center">
+      <div class="search-box">
+        <input type="text" placeholder="Search here ..." />
+      </div>
+    </div>
+    <!-- Tombol profil -->
+    <button
+      class="btn btn-light bg-light border shadow-none rounded-circle p-0 d-flex align-items-center justify-content-center me-2"
+      data-bs-toggle="dropdown" aria-expanded="false" style="height: 60px; width: 60px; overflow: hidden;">
+      @if(Auth::check() && Auth::user()->photo_profile)
+      <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile"
+      class="rounded-circle w-100 h-100 rounded-circle" style="object-fit: cover; display: block;">
+    @else
+      <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+      style="height: 50px; width: 50px;">👤</div>
+    @endif
+    </button>
 
-    <div class="canvas-container" id="canvas-container">
-      <canvas id="canvas"></canvas>
+    <!-- Dropdown Content -->
+    <ul class="dropdown-menu dropdown-menu-end shadow p-3" style="min-width: 250px; background-color: #FBB041;">
+      <!-- Bagian atas: foto profil besar dan username -->
+      <li class="text-center">
+        <div class="d-flex flex-column align-items-center">
+          <!-- unutuk menampilkan foto profile -->
+          @if(Auth::check() && Auth::user()->photo_profile)
+        <img src="{{ asset('storage/' . Auth::user()->photo_profile) }}" alt="Profile" class="rounded-circle"
+        style="height: 50px; width: 50px; object-fit: cover;">
+      @else
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+        style="height: 50px; width: 50px;">👤</div>
+      @endif
+          <strong class="text-light"> {{ Auth::check() ? Auth::user()->username : 'Guest' }} </strong>
+          <a href="#" class="text-decoration-none text-white small">View Profile</a>
+        </div>
+      </li>
+
+      <li>
+        <hr class="dropdown-divider border-white">
+      </li>
+
+      <!-- Bagian bawah: ikon-only menu (dari kamu) -->
+      <li class="text-center">
+        <a class="dropdown-item" href="/home" title="Settings">
+          <i class="bi bi-house-fill text-dark fs-6"> {{ __('Home') }}</i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<body class="bg-gray-100">
+  <input type="hidden" id="currentStep" value="1" />
+
+  <main class="max-w-6xl mx-auto mt-8 bg-white rounded-xl shadow-md p-8">
+    <h2 class="fw-bold mb-2">Create New Certificate</h2>
+    <p class="text-muted">Follow the steps below to create and publish your certificate</p>
+
+    <div class="mb-4">
+      <div class="d-flex justify-content-between text-primary fw-semibold">
+        <div>1 Select Background</div>
+        <div>2 Input Data</div>
+        <div>3 Preview</div>
+        <div>4 Request Approval</div>
+        <div>5 Publish</div>
+      </div>
+      <div class="progress" style="height: 5px;">
+        <div class="progress-bar bg-primary" style="width: 60%;"></div>
+      </div>
+    </div>
+<div class="container">
+    <h3 class="mb-4">Certificate Preview</h3>
+
+    <div class="mb-4">
+        <label for="contactSelect" class="form-label">Select Contact:</label>
+        <select id="contactSelect" class="form-select">
+            @foreach ($contacts as $contact)
+                <option value="{{ $contact->name }}|{{ $contact->email }}">
+                    {{ $contact->name }} ({{ $contact->email }})
+                </option>
+            @endforeach
+        </select>
     </div>
 
-    <div class="mt-4">
-      <label for="font-select">Select Font:</label>
-      <select id="font-select" class="form-control w-auto" onchange="changeFont(this)">
-        <option value="Calibri">Calibri</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Arial">Arial</option>
-      </select>
-    </div>
+    <canvas id="certCanvas" width="1000" height="700" style="border:1px solid #ccc;"></canvas>
+</div>
 
-    <div class="mt-4">
-      <button class="btn btn-secondary" onclick="goBack()">Back</button>
-      <button class="btn btn-primary" onclick="saveCertificate()">Save Certificate</button>
-    </div>
-  </main>
 
-  <script>
-    const canvas = new fabric.Canvas('canvas');
-    const recipients = @json($data); // Data penerima dari controller
+<script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
+<script>
+    const canvas = new fabric.Canvas('certCanvas');
 
-    // Load background from passed data (if available)
-    const backgroundPath = "{{ asset('storage/' . $background) }}"; // Load background image from storage
-    fabric.Image.fromURL(backgroundPath, function(img) {
-      img.set({
-        left: 0,
-        top: 0,
-        selectable: false, // Background cannot be selected or moved
-        hasControls: false,
-        hasBorders: false
-      });
-      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+    // Set background image from Laravel storage
+    const bgImage = "{{ asset( $template->file_path) }}";
+
+    fabric.Image.fromURL(bgImage, function(img) {
+        img.scaleToWidth(canvas.width);
+        img.scaleToHeight(canvas.height);
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        img.set({ selectable: false, evented: false });
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
     });
 
-    // Add recipient data as text on the canvas
-    recipients.forEach((recipient, index) => {
-      const text = new fabric.Text(`${recipient.name} - ${recipient.event}`, {
-        left: 100,
-        top: 100 + (index * 40), // Space out text vertically
-        fontFamily: 'Calibri',
-        fontSize: 20,
-        selectable: true, // Text can be moved around
-        hasControls: true,
-        hasBorders: true
-      });
-
-      canvas.add(text);
+    let nameText = new fabric.Text("{{ $contacts[0]->name }}", {
+      left: 300,
+      top: 300,
+      fontSize: 30,
+      fill: 'black',
+      lockDeletion: true // custom flag
+    });
+  
+    canvas.on('before:selection:cleared', function (e) {
+      if (!e.target) return;
+      // Prevent selection clear if it's one of the name/email texts
+      if (e.target.lockDeletion) {
+      e.preventDefault?.();
+      }
     });
 
-    // Function to change font of text
-    function changeFont(select) {
-      const font = select.value;
-      canvas.getObjects('text').forEach(obj => {
-        obj.set({ fontFamily: font });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+      const active = canvas.getActiveObject();
+      if (active && active.lockDeletion) {
+      e.preventDefault();
+        }
+      }
+    });
+
+
+    canvas.add(nameText);
+   
+
+    document.getElementById('contactSelect').addEventListener('change', function() {
+        const [name, email] = this.value.split('|');
+        nameText.text = name;
+        emailText.text = email;
         canvas.renderAll();
-      });
-    }
-
-    // Function to go back to the previous page
-    function goBack() {
-      window.history.back();
-    }
-
-    // Function to save the certificate (you can implement saving layout to the database)
-    function saveCertificate() {
-      const jsonData = canvas.toJSON();
-      console.log(jsonData); // Log the canvas data for debugging
-      // Send jsonData to the server to save the layout (AJAX, etc.)
-    }
-  </script>
-
+    });
+</script>
+</main>
 </body>
 </html>

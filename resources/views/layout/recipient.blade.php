@@ -89,8 +89,8 @@
 
       <!-- Tombol Back dan Next -->
       <div class="d-flex justify-content-between mt-4">
-      <a href="{{ route('templateadmin.contacts') }}" class="btn btn-secondary">Back</a>
-        <a href="{{ route('templateadmin.preview') }}" class="btn btn-primary">Next</a>
+        <a href="{{ route('templateadmin.contacts') }}" class="btn btn-secondary">Back</a>
+        <a href="{{ route('certificate.preview') }}" class="btn btn-primary">Next</a>
       </div>
 
     </div>
