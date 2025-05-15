@@ -1,4 +1,4 @@
-@extends('v_layout.php')
+@extends('layout.v_layout')
 
 @section('content')
 <div class="container">

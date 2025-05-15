@@ -11,7 +11,8 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = Contact::all(); // Ambil semua data kontak
-    return view('layout.recipient', compact('contacts')); // Kirim data ke tampilan Blade 'contacts.index'
+        $templateId = session('templateId');
+    return view('layout.recipient', compact('contacts', 'templateId')); // Kirim data ke tampilan Blade 'contacts.index'
 
     }
     // Store contact baru
@@ -63,5 +64,9 @@ class ContactController extends Controller
         $contact->delete();
     return response()->json(null, 204); // Successfully deleted
     }
-
+    public function selectTemplate($id)
+{
+    session(['templateId' => $id]);
+    return redirect()->route('templateadmin.contacts');
+}
 }

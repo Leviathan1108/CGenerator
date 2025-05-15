@@ -18,6 +18,7 @@ use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\PreviewController;
 
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -64,7 +65,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
     ]);
 
-    Route::get('/templateadmin/preview', [CertificateController::class, 'preview'])->name('templateadmin.preview');
+    Route::get('/templateadmin/preview', [PreviewController::class, 'index'])->name('certificate.preview');
+
+
+
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
@@ -95,7 +99,7 @@ Route::middleware(['guest'])->group(function () {
         return view('auth.passwords.success_reset');
     })->name('password.success');    
 
-    Route::post('/background/store', [CertificateBackgroundController::class, 'store'])->name('background.store');
+    
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
 });
 

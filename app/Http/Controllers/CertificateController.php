@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB; // ✅ Tambahkan baris ini
+use App\Models\Contact;
 use App\Models\User;
 use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Storage;
@@ -118,22 +120,13 @@ if ($request->background_choice === 'template') {
 
     public function preview($id)
     {
-        // Retrieve the certificate by id with associated template and user
-    $certificate = Certificate::with('template', 'user')->findOrFail($id);
+        // Cek apakah $id diterima dengan benar
+    dd($id); // Pastikan parameter id diterima
 
-    // Prepare the data to be passed to the view
-    $data = [
-        'name' => $certificate->user->name,
-        'event' => $certificate->event_name,
-    ];
+    $background = 'upload/backgrounds/yellow-gradient.jpg';
+    $contacts = DB::table('contact')->get();
 
-    // Return the view and pass the necessary data
-    return view('templateadmin.preview', [
-        'data' => $data,
-        'logo' => $certificate->template->logo_path ?? null,
-        'background' => $certificate->template->background_choice ?? null, // Default background if available
-        'templateId' => $certificate->template->id, // If you need to pass the template ID to use for the background
-    ]);
+    return view('templateadmin.preview', compact('background', 'contacts'));
     }
 
     public function download($id)
@@ -154,15 +147,36 @@ if ($request->background_choice === 'template') {
         $request->validate([
             'background' => 'required|image|mimes:jpg,jpeg,png,svg|max:5120',
         ]);
-
-        $file = $request->file('background');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('uploads/backgrounds'), $filename);
-
-        // Simpan URL gambar di session untuk digunakan pada halaman berikutnya
-        session(['background' => asset('uploads/backgrounds/' . $filename)]);
-
-        return redirect()->route('templateadmin.dataInput');
+    
+        try {
+            $file = $request->file('background');
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '_' . Str::slug($originalName) . '.' . $extension;
+            $destinationPath = public_path('storage/templates');
+            $file->move($destinationPath, $filename);
+    
+            $relativePath = 'storage/templates/' . $filename;
+    
+            // Simpan ke database
+            $template = new Template();
+            $template->user_id = Auth::id(); // atau default jika belum login
+            $template->name = 'Template ' . now()->format('Y-m-d H:i:s');
+            $template->background_image_url = $relativePath;
+            $template->file_path = $relativePath;
+            $template->save();
+    
+            // Simpan ke session
+            session([
+                'background' => asset($relativePath),
+                'template_id' => $template->id,
+            ]);
+    
+            return redirect()->route('templateadmin.dataInput')
+                             ->with('success', 'Background berhasil diupload.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['upload' => 'Terjadi kesalahan saat mengupload: ' . $e->getMessage()]);
+        }
     }
      // Menampilkan halaman untuk input data setelah upload
      public function dataInput()
@@ -181,13 +195,13 @@ if ($request->background_choice === 'template') {
         ]);
     
         $template = new Template();
-$template->user_id = Auth::id(); // ← WAJIB ditambah
-$template->name = $request->input('name');
-$template->recipient = $request->input('recipient');
-$template->date = $request->input('date');
-$template->background_image_url = session('background');
-$template->layout_storage = $request->input('layout_storage');
-$template->save();
+        $template->user_id = Auth::id(); // ← WAJIB ditambah
+        $template->name = $request->input('name');
+        $template->recipient = $request->input('recipient');
+        $template->date = $request->input('date');
+        $template->background_image_url = session('background');
+        $template->layout_storage = $request->input('layout_storage');
+        $template->save();
 
        // $path = $file->store('backgrounds', 'public');
        // session(['background' => Storage::url($path)]);
@@ -212,11 +226,26 @@ $template->save();
 
         return redirect()->route('templateadmin.upload')->with('success', 'Background deleted successfully.');
     }
+    public function selectTemplate($id)
+{
+    session(['templateId' => $id]);
+    return redirect()->route('templateadmin.contacts');
+}
 
     public function template()
     {
         $templates = Template::all();
         return view('layout.template', compact('templates'));
-    }              
+    }
+    public function showRecipientPage($id)
+    {
+        // Ambil data template dari database (opsional kalau butuh datanya, bukan cuma ID)
+        $template = Template::findOrFail($id);
+        $templateId = 1;
+
+        // Kirim ke view, cukup ID-nya saja
+        return view('layout.recipient', ['templateId' => $template->id]);
+    }     
+
 }
 ?>
