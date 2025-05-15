@@ -37,7 +37,7 @@ class LoginController extends Controller
         return redirect()->route('home')->with('success', 'Login berhasil!');
     }
 
-    return back()->with('error', 'Email/Username atau password salah!');
+    return back()->with('error', 'Email/Username atau password salah. Silahkan masukkan lagi!');
     }
 
 }

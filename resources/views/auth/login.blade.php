@@ -23,13 +23,13 @@
         <div class="login-right">
             <!-- Menambahkan Allert-Danger -->
             @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center justify-content-between" role="alert" style="animation: fadeIn 0.5s ease-in-out;">
-        <div class="d-flex align-items-center">
-            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+            <div class="alert alert-danger alert-dismissible fade show align-items-center justify-content-center" role="alert" style="animation: fadeIn 0.5s ease-in-out; text-align: center;">
+                <div class="d-flex align-items-center justify-content-center w-100">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-6"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             @endif
 
             <h3 class="mb-3 login-subtitle">Log in</h3>

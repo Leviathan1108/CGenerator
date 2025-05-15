@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
@@ -50,11 +51,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
     Route::resource('templateadmin', CertificateController::class)->except(['show']);
 
+    // Rute untuk fitur upload dan download file
+    Route::get('/file-upload', [FileController::class, 'showUploadForm'])->name('file.upload.form');
+    Route::post('/file-upload', [FileController::class, 'uploadFile'])->name('file.upload');
+    Route::get('/file-download/{filename}', [FileController::class, 'downloadFile'])->name('file.download');
+
     Route::resource('templateadmin/contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy'])->names([
         'index' => 'templateadmin.contacts',
         'store' => 'templateadmin.contacts.store',
         'update' => 'templateadmin.contacts.update',
         'destroy' => 'templateadmin.contacts.destroy',
+        
     ]);
 
     Route::get('/templateadmin/preview', [CertificateController::class, 'preview'])->name('templateadmin.preview');

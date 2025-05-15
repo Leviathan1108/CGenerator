@@ -22,7 +22,7 @@
     <div class="reset-right">
     @if (session('status'))
       <div class="alert alert-success fade-in alert-dismissible fade show text-start rounded-pill shadow-lg" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i> {{ session('status') }}
+        <i class="bi bi-check-circle-fill"></i> {{ session('status') }}
         <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     @endif
