@@ -12,7 +12,7 @@ class Certificate extends Model
 
     protected $fillable = [
         'selected_template_id',
-        'user_id',
+        'contact_id',
         'uid',
         'verification_code',
         'issued_date',
@@ -43,15 +43,23 @@ class Certificate extends Model
             }
         });
     }
+public function template()
+{
+    return $this->belongsTo(Template::class, 'selected_template_id');
+}
+public function templates()
+{
+    return $this->belongsTo(Template::class);
+}
 
-    public function template()
-    {
-        return $this->belongsTo(Template::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
     }
 
     public function recipient()

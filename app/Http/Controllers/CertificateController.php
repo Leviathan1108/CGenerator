@@ -31,63 +31,86 @@ class CertificateController extends Controller
         $templates = Template::all();
         return view('templateadmin.create', compact('templates'));
     }
-    
 
-    public function store(Request $request)
+    public function template()
     {
-        $request->validate([
-    'event_name' => 'required|string|max:255',
-    'background_choice' => 'required|in:custom,template',
-    'status' => 'required|in:draft,published,revoked',
-    'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
-    'participant_name' => 'required|string|max:255',
-]);
+        $templates = Template::all();
+        $contacts = Contact::all(); // Ambil semua kontak
+        return view('layout.template', compact('templates', 'contacts'));
+    }
+    
+// Controller
 
-if ($request->background_choice === 'template') {
-    $request->validate([
-        'selected_template_id' => 'required|exists:templates,id',
-    ]);
+public function dataInputs($id)
+{
+    $certificate = Certificate::with('template', 'contact')->findOrFail($id);
+    $contacts = Contact::all(); // Ambil semua kontak
+
+    return view('layout.previewtemplate', compact('certificate', 'contacts'));
 }
 
-        $uid = Str::uuid();
-        $verificationCode = strtoupper(Str::random(10));
+public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'role' => 'required|string|max:255',
+        'certificate_type' => 'nullable|string|max:100',        'date' => 'required|date',
+        'description' => 'nullable|string|max:1000',
+        'signatureImage' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'signature_name' => 'required|string|max:255',
+        'event_name' => 'required|string|max:255',
+        'status' => 'required|in:draft,published,revoked',
+        'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+        'recipient' => 'required|string|max:255',
+        'selected_template_id' => 'required|exists:templates,id',
+    ]);
+     
+    // Generate UID and verification code
+    $uid = Str::uuid();
+    $verificationCode = strtoupper(Str::random(10));
 
-        // Cek dan buat user kalau belum ada
-        $user = User::where('name', $request->participant_name)->first();
-        if (!$user) {
-            $user = User::create([
-                'name' => $request->participant_name,
-                'email' => Str::slug($request->participant_name) . '-' . Str::random(5) . '@example.com',
-                'password' => bcrypt(Str::random(10)),
-            ]);
-        }
+    // Simpan ke tabel contacts
+    $contact = new Contact();
+    $contact->name = $request->recipient;
+    $contact->email = Str::slug($request->recipient) . '-' . Str::random(5) . '@example.com';
+    $contact->save();
 
-        // Upload logo jika ada
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('logos', 'public');
-        }
-
-        $certificate = Certificate::create([
-            'selected_template_id' => $request->selected_template_id ?? 0,
-            'user_id' => $user->id,
-            'uid' => $uid,
-            'verification_code' => $verificationCode,
-            'background_choice' => $request->background_choice,
-            'event_name' => $request->event_name,
-            'logo_path' => $logoPath,
-            'status' => $request->status,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Sertifikat dan peserta berhasil disimpan',
-            'data' => [
-                'certificate_id' => $certificate->id,
-                'participant_id' => $user->id,
-            ]
-        ]);
+    // Upload logo jika ada
+    $logoPath = null;
+    if ($request->hasFile('logo')) {
+        $logoPath = $request->file('logo')->store('logos', 'public');
     }
+
+    // Upload tanda tangan jika ada
+    $signaturePath = null;
+    if ($request->hasFile('signatureImage')) {
+        $signaturePath = $request->file('signatureImage')->store('signatures', 'public');
+    }
+
+    // Simpan ke tabel certificates
+    $certificate = new Certificate();
+    $certificate->selected_template_id = $request->selected_template_id;
+    $certificate->contact_id = $contact->id;
+    $certificate->uid = $uid;
+    $certificate->verification_code = $verificationCode;
+    $certificate->event_name = $request->event_name;
+    $certificate->logo_path = $logoPath;
+    $certificate->signature_path = $signaturePath;
+    $certificate->signature_name = $request->signature_name;
+    $certificate->title = $request->title;
+    $certificate->role = $request->role;
+    $certificate->certificate_type = $request->certificate_type;
+    $certificate->date = $request->date;
+    $certificate->description = $request->description;
+    $certificate->status = $request->status;
+    $certificate->save();
+
+    return redirect()->route('templateadmin.previews', ['id' => $certificate->id])
+        ->with('success', 'Sertifikat berhasil disimpan!');
+}
+
+    
+
 
     public function edit($id)
     {
@@ -178,12 +201,14 @@ if ($request->background_choice === 'template') {
             return back()->withErrors(['upload' => 'Terjadi kesalahan saat mengupload: ' . $e->getMessage()]);
         }
     }
+
      // Menampilkan halaman untuk input data setelah upload
      public function dataInput()
      {
         $template = new Template(); // Atau null jika kamu ingin kosong
         return view('layout.data_input', compact('template'));
      }
+
      // Menyimpan data input ke database
     public function storeData(Request $request)
     {
@@ -202,15 +227,10 @@ if ($request->background_choice === 'template') {
         $template->background_image_url = session('background');
         $template->layout_storage = $request->input('layout_storage');
         $template->save();
-
        // $path = $file->store('backgrounds', 'public');
        // session(['background' => Storage::url($path)]);
-    
         session()->forget('background');
-    
         return redirect()->route('templateadmin.dataInput')->with('success', 'Template saved successfully!');
-
-    
     }
 
     // Menghapus background sementara dari penyimpanan dan database
@@ -232,11 +252,6 @@ if ($request->background_choice === 'template') {
     return redirect()->route('templateadmin.contacts');
 }
 
-    public function template()
-    {
-        $templates = Template::all();
-        return view('layout.template', compact('templates'));
-    }
     public function showRecipientPage($id)
     {
         // Ambil data template dari database (opsional kalau butuh datanya, bukan cuma ID)
@@ -245,7 +260,12 @@ if ($request->background_choice === 'template') {
 
         // Kirim ke view, cukup ID-nya saja
         return view('layout.recipient', ['templateId' => $template->id]);
-    }     
+    }
+    public function showRecipient()
+{
+    $contacts = Contact::all(); // Ambil semua kontak dari database
+    return view('layout.recipienttemplate', compact('contacts'));
+}     
 
 }
 ?>

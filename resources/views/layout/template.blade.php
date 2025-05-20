@@ -132,22 +132,20 @@
   <main class="max-w-6xl mx-auto mt-8 bg-white rounded-xl shadow-md p-8">
     <h1 class="text-3xl font-bold mb-1">Create New Certificate</h1>
     <p class="text-sm text-gray-600 mb-6">Follow the steps below to create and publish your certificate</p>
-
   <!-- Step Progress Label -->
-  <div class="d-flex justify-content-between small fw-medium mb-2">
-    <span style="width: 12.5%;">1 Pilih Template</span>
-    <span style="width: 12.5%;">2 Preview</span>
-    <span style="width: 12.5%;">3 Input Data</span>
-    <span style="width: 12.5%;">4 Input Data Massal</span>
-    <!-- Tambah step lagi? Tambah span di sini -->
-  </div>
-
-  <!-- Progress Bar -->
-  <div class="progress mb-4" style="height: 8px; border-radius: 10px;">
-    <div id="progressBar" class="progress-bar bg-primary" role="progressbar"
-         style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+  <div class="mb-4">
+    <div class="d-flex justify-content-between text-primary fw-semibold">
+      <div>1 Select Template</div>
+      <div>2 Information</div>
+      <div>3 Input Data</div>
+      <div>4 Request Approval</div>
+      <div>5 Publish</div>
     </div>
-  </div>
+    <div class="progress mb-4" style="height: 8px; border-radius: 10px;">
+      <div id="progressBar" class="progress-bar bg-primary" role="progressbar"
+           style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
 
   <!-- STEP 1 -->
   <section id="step-1">
@@ -163,6 +161,8 @@
             data-name="{{ $template->name }}"
             data-creator="{{ $template->user->name ?? 'Tidak Diketahui' }}"
             data-date="{{ $template->created_at->format('d-m-Y') }}"
+            data-description="{{ $template->description ?? 'Tidak ada deskripsi' }}"
+            data-type="{{ $template->type ?? 'Umum' }}"        
             data-img="{{ asset('storage/' . $template->file_path) }}"
             onclick="selectTemplateFromData(this)">
            <img src="{{ asset('storage/' . $template->file_path) }}"
@@ -189,110 +189,238 @@
       <h3>Template Info</h3>
       <p><strong>Nama Template:</strong> <span id="template-name">-</span></p>
       <p><strong>Created By:</strong> <span id="template-creator">-</span></p>
-      <p><strong>Tanggal Pembuatan:</strong> <span id="template-date">-</span></p>          </div>
+      <p><strong>Tanggal Pembuatan:</strong> <span id="template-date">-</span></p> 
+      <p><strong>Deskripsi:</strong> <span id="template-description">-</span></p>
+      <p><strong>Tipe Template:</strong> <span id="template-type">-</span></p>
+    </div>
   </div>
 </section>
 
 <!-- STEP 3: Input Data Sertifikat -->
-<section id="step-3" class="hidden mt-4">
+<section id="step-4" class="hidden mt-4">
   <h2 class="h5 fw-bold mb-4">Isi Data Sertifikat</h2>
   <div class="row align-items-start">
     
     <!-- KIRI: PREVIEW -->
-    <div class="col-md-7 mb-3">
+    <div class="col-md-8 mb-3">
       <div class="position-relative border p-4 bg-light rounded text-center">
         <h5 class="text-muted mb-3">Preview Sertifikat</h5>
-        <div class="position-relative" style="width: 100%; max-height: 400px; overflow: hidden;">
-          <img id="cert-preview-image" src="#" class="img-fluid border rounded shadow-sm w-100" style="object-fit: contain;">
-          
+        <div class="position-relative" style="width: 100%; height: auto; max-height: 600px;">  
+          <img id="cert-preview-image" src="#" class="border rounded shadow-sm" 
+     style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
           <!-- Logo Preview -->
           <img id="preview-logo" src="#" 
      style="position: absolute; top: 10px; left: 10px; max-height: 70px; max-width: 70px; display: none; cursor: move;" 
      onmousedown="dragElement(event)">
 
-<div id="preview-participant-name" class="draggable-text resizable-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 24px; text-shadow: 1px 1px 2px #fff;">
+<div id="preview-participant-name" class="draggable-text resizable-text" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 24px; text-shadow: 1px 1px 2px #fff;">
   <span class="text-content">Nama Peserta</span>
   <div class="resize-handle"></div>
 </div>
 
-<div id="preview-event-name" class="draggable-text resizable-text" style="position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); color: black; font-size: 30px; text-shadow: 1px 1px 2px #fff;">
-  <span class="text-content">Nama Acara</span>
+<div id="preview-event-name" class="draggable-text resizable-text" style="position: absolute; bottom: 40%; left: 50%; transform: translateX(-50%); color: black; font-size: 15px; text-shadow: 1px 1px 2px #fff;">
+  <span class="text-content">Breaking Barriers in Achieving Targeted Yield: Driving Success Through Oil Palm Replanting & GAP Adoption</span>
   <div class="resize-handle"></div>
 </div>
+
+<!-- Judul Sertifikat -->
+<div id="preview-title" class="draggable-text resizable-text"
+     style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold;">
+  <span class="text-content">Certificate Of Appreciation</span>
+  <div class="resize-handle"></div>
+</div>
+
+<!-- Peran Peserta -->
+<div id="preview-role" class="draggable-text resizable-text"
+     style="position: absolute; top: 33%; left: 50%; transform: translateX(-50%); font-size: 16px;">
+  <span class="text-content">For Recognition and appreciation for Contribution as Participants</span>
+  <div class="resize-handle"></div>
+</div>
+
+<!-- Deskripsi -->
+<div id="preview-description" class="draggable-text resizable-text"
+     style="position: absolute; top: 23%; left: 50%; transform: translateX(-50%); font-size: 13px; width: 70%; text-align: center;">
+  <span class="text-content">This certificate is proudly presented to:</span>
+  <div class="resize-handle"></div>
+</div>
+<!-- Preview Tanda Tangan -->
+<img id="preview-signature-img" class="draggable resizable"
+     src="" alt="Signature Preview"
+     style="position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%); width: 150px; display: none;">
+
+<!-- Nama Penandatangan -->
+<div id="preview-signature-name" class="draggable-text resizable-text"
+     style="position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
+  <span class="text-content">Stefen Laksana</span>
+  <div class="resize-handle"></div>
+</div>     
+
+<!-- Tanggal -->
+<div id="preview-date" class="draggable-text resizable-text"
+     style="position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
+  <span class="text-content">Jakarta, 19 Mei 2025</span>
+  <div class="resize-handle"></div>
+</div>
+
+
         </div>
       </div>
     </div>
 
-    <!-- KANAN: FORM -->
-    <div class="col-md-5">
-      <div class="mb-3">
-        <label class="form-label">Nama Acara</label>
-        <input type="text" class="form-control" name="event_name" oninput="updatePreview()">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Nama Peserta</label>
-        <input type="text" class="form-control" name="participant_name" oninput="updatePreview()">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-control" name="status">
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-          <option value="revoked">Revoked</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Upload Logo</label>
-        <input type="file" class="form-control" onchange="previewLogo(event)">
-      </div>
+    
+<!-- KANAN: FORM -->
+<div class="col-md-3">
+  <form id="certificateForm" method="POST" action="{{ route('certificate.store') }}" enctype="multipart/form-data">
+    @csrf
+    <!-- Template ID disimpan sebagai hidden -->
+    <input type="hidden" name="selected_template_id" id="selected_template_id">
+{{-- Event Name --}}
+<div class="form-group mb-3">
+  <label for="event_name">Nama Acara</label>
+  <input type="text" name="event_name" class="form-control" required>
+</div>
 
-      <button type="button" onclick="saveCertificateData()" class="btn btn-primary w-100">Simpan Sertifikat</button>
-    </div>
-  </div>
+{{-- Status --}}
+<div class="form-group mb-3">
+  <label for="status">Status</label>
+  <select name="status" class="form-control" required>
+      <option value="draft">Draft</option>
+      <option value="published">Published</option>
+      <option value="revoked">Revoked</option>
+  </select>
+</div>
+
+{{-- Logo (Optional) --}}
+<div class="form-group mb-3">
+  <label for="logo">Upload Logo (opsional)</label>
+  <input type="file" name="logo" class="form-control" accept=".jpg,.jpeg,.png,.svg">
+</div>
+
+{{-- Recipient --}}
+<div class="form-group mb-3">
+  <label for="recipient">Nama Penerima</label>
+  <input type="text" name="recipient" class="form-control" required>
+</div>
+
+{{-- Selected Template --}}
+<div class="form-group mb-3">
+  <label for="selected_template_id">Template</label>
+  <select name="selected_template_id" class="form-control" required>
+      @foreach($templates as $template)
+          <option value="{{ $template->id }}">{{ $template->name }}</option>
+      @endforeach
+  </select>
+</div> 
+
+<!-- Title -->
+<div class="form-group mb-3">
+  <label for="title">Judul Sertifikat</label>
+  <input type="text" name="title" class="form-control" required>
+</div>
+
+<!-- Peran Peserta -->
+<div class="form-group mb-3">
+  <label for="role">Peran Peserta</label>
+  <input type="text" name="role" class="form-control" required>
+</div>
+
+{{-- Certificate Type --}}
+<div class="form-group mb-3">
+  <label for="type" class="form-label">Tipe Sertifikat</label>
+  <input list="certificate-types" name="certificate_type" class="form-control" placeholder="Pilih atau ketik tipe sertifikat">
+  <datalist id="certificate-types">
+    <option value="Attendance Certificate">
+    <option value="Completion Certificate">
+    <option value="Award Certificate">
+    <option value="Competency Certificate">
+    <option value="Participation Certificate">
+    <option value="Academic Degree Certificate">
+    <option value="Training Certificate">
+    <option value="Membership Certificate">
+    <option value="Recognition Certificate">
+    <option value="Certificate of Authenticity">
+    <option value="Expertise Certificate">
+    <option value="Inspection Certificate">
+    <option value="Validation Certificate">
+    <option value="Registration Certificate">
+    <option value="Compliance Certificate">
+  </datalist>
+</div>
+
+<!-- Date -->
+<div class="form-group mb-3">
+  <label for="date">Tanggal</label>
+  <input type="date" name="date" class="form-control" required>
+</div>
+
+<!-- Description -->
+<div class="form-group mb-3">
+  <label for="description">Deskripsi</label>
+  <textarea name="description" class="form-control" rows="3"></textarea>
+</div>
+
+<div class="mb-3">
+  <label for="signatureImage" class="form-label">Upload Tanda Tangan</label>
+  <input type="file" class="form-control" name="signatureImage" id="signatureImage" accept="image/*">
+</div>
+
+<!-- Nama Tanda Tangan -->
+<div class="form-group mb-3">
+  <label for="signature_name">Nama yang Tanda Tangan</label>
+  <input type="text" name="signature_name" class="form-control" required>
+</div>
+
+
+{{-- Submit --}}
+<button type="submit" class="btn btn-primary">Simpan Sertifikat</button>
+  </form>
+</div>
 </section>
 
-<section id="step-4" class="hidden mt-4">
+<section id="step-3" class="hidden mt-4">
   <h2 class="h5 fw-bold mb-4">Input Data Sertifikat Massal</h2>
-  <p>Upload file Excel (.xlsx) atau tambahkan data peserta secara manual.</p>
+  <div class="row g-4">
+    <div class="col-12">
+      <h5 class="fw-bold">Add Recipients</h5>
 
-  <!-- Upload Excel -->
-  <div class="mb-3">
-    <label for="excelUpload" class="form-label">Upload Excel File</label>
-    <input type="file" class="form-control" id="excelUpload" accept=".xlsx,.xls,.csv">
-  </div>
+      <!-- Input nama & email penerima -->
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Enter recipient name..." id="recipient-name">
+        <input type="email" class="form-control" placeholder="Enter recipient email..." id="recipient-email">
+        <button class="btn btn-primary" type="button" onclick="addRecipient()">Add</button>
+      </div>
 
-  <div class="text-center">
-    <p>ATAU</p>
-  </div>
+      <!-- Upload CSV -->
+      <div class="mb-3">
+        <label for="upload-csv" class="form-label">Upload CSV (Name,Email)</label>
+        <input class="form-control" type="file" id="upload-csv">
+      </div>
 
-  <!-- Manual Table -->
-  <table class="table table-bordered">
+      <!-- List penerima -->
+      <table class="table table-bordered">
     <thead>
-      <tr>
-        <th>Nama Peserta</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Acara</th>
-        <th>Aksi</th>
-      </tr>
+        <tr>
+            <th>Recipient Name</th>
+            <th>Recipient Email</th>
+            <th>Action</th>
+        </tr>
     </thead>
-    <tbody id="participantTable">
-      <tr>
-        <td><input type="text" class="form-control" name="nama[]"></td>
-        <td><input type="email" class="form-control" name="email[]"></td>
-        <td>
-          <select class="form-control" name="status[]">
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-          </select>
-        </td>
-        <td><input type="text" class="form-control" name="acara[]"></td>
-        <td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑️</button></td>
-      </tr>
+    <tbody>
+        @foreach($contacts as $contact)
+        <tr id="contact-{{ $contact->id }}">
+            <td class="contact-name">{{ $contact->name }}</td>
+            <td class="contact-email">{{ $contact->email }}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient({{ $contact->id }})">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient({{ $contact->id }})">Remove</button>
+            </td>
+        </tr>
+        @endforeach
     </tbody>
-  </table>
-  <button class="btn btn-outline-primary" onclick="addRow()">+ Tambah Baris</button>
-</section>
+</table>
+</div>
+ </section>
+ 
 
   <!-- Tombol Navigasi -->
   <div class="step-buttons d-flex justify-content-center mt-4">
@@ -302,6 +430,43 @@
 </main>
 
 <script>
+
+  // Binding input ke preview text
+  document.querySelector('input[name="title"]').addEventListener('input', function () {
+    document.querySelector('#preview-title .text-content').textContent = this.value;
+  });
+
+  document.querySelector('input[name="role"]').addEventListener('input', function () {
+    document.querySelector('#preview-role .text-content').textContent = this.value;
+  });
+
+  document.querySelector('input[name="date"]').addEventListener('input', function () {
+    document.querySelector('#preview-date .text-content').textContent = this.value;
+  });
+
+  document.querySelector('textarea[name="description"]').addEventListener('input', function () {
+    document.querySelector('#preview-description .text-content').textContent = this.value;
+  });
+
+  document.querySelector('input[name="signature_name"]').addEventListener('input', function () {
+    document.querySelector('#preview-signature-name .text-content').textContent = this.value;
+  });
+  document.getElementById('signatureImage').addEventListener('change', function (event) {
+    const signatureImg = document.getElementById('preview-signature-img');
+    const file = event.target.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        signatureImg.src = e.target.result;
+        signatureImg.style.display = 'block'; // Tampilkan gambar setelah upload
+      };
+      reader.readAsDataURL(file);
+    } else {
+      signatureImg.style.display = 'none';
+    }
+  });
+  
   let currentStep = 1;
   const totalSteps = document.querySelectorAll("section[id^='step-']").length;
 
@@ -337,7 +502,6 @@ function changeStep(direction) {
   }
 
   const nextStep = step + direction;
-
   if (nextStep >= 1 && nextStep <= totalSteps) {
     current.value = nextStep;
     showStep(nextStep);
@@ -348,6 +512,8 @@ function changeStep(direction) {
   let selectedTemplateImage = null;
 
   function selectTemplateFromData(card) {
+    const description = card.dataset.description;
+    const type = card.dataset.type;
     // Hapus selected dari semua template
     document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-template'));
 
@@ -363,7 +529,10 @@ function changeStep(direction) {
     document.getElementById("template-creator").textContent = card.dataset.creator;
     document.getElementById("template-date").textContent = card.dataset.date;
     document.getElementById("preview-image").src = selectedTemplateImage;
-  }
+  document.getElementById('template-description').textContent = description;
+  document.getElementById('template-type').textContent = type;
+  document.getElementById('selected-template-id').value = selectedTemplateId;
+}
 
   function previewLogo(event) {
     const preview = document.getElementById("logo-preview-container");
@@ -376,6 +545,44 @@ function changeStep(direction) {
       reader.readAsDataURL(file);
     }
   }
+  document.addEventListener('DOMContentLoaded', function () {
+  // Ganti preview nama peserta
+  const recipientInput = document.querySelector('input[name="recipient"]');
+  const previewName = document.getElementById('preview-participant-name').querySelector('.text-content');
+  recipientInput.addEventListener('input', function () {
+    previewName.textContent = this.value || 'Nama Peserta';
+  });
+
+  // Ganti preview nama acara
+  const eventNameInput = document.querySelector('input[name="event_name"]');
+  const previewEvent = document.getElementById('preview-event-name').querySelector('.text-content');
+  eventNameInput.addEventListener('input', function () {
+    previewEvent.textContent = this.value || 'Nama Acara';
+  });
+
+  // Preview Logo
+  const logoInput = document.querySelector('input[name="logo"]');
+  const previewLogo = document.getElementById('preview-logo');
+  logoInput.addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewLogo.src = e.target.result;
+        previewLogo.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Menampilkan template preview yang dipilih
+  const selectedTemplateId = document.getElementById('selected_template_id').value;
+  const selectedTemplateCard = document.querySelector(`[data-id="${selectedTemplateId}"]`);
+  if (selectedTemplateCard) {
+    const imgSrc = selectedTemplateCard.getAttribute('data-img');
+    document.getElementById('cert-preview-image').src = imgSrc;
+  }
+});
 
   document.addEventListener("DOMContentLoaded", () => showStep(currentStep));
 
@@ -543,49 +750,206 @@ function addRow() {
     table.appendChild(row);
   }
 
-  function removeRow(button) {
-    button.closest('tr').remove();
-  }
- 
   function saveCertificateData() {
-    const eventName = document.querySelector('[name="event_name"]').value;
-    const participantName = document.querySelector('[name="participant_name"]').value;
-    const status = document.querySelector('[name="status"]').value;
-    const logoFile = document.querySelector('[type="file"]').files[0];
-    const templateId = document.querySelector('.selected-template')?.dataset.id;
+  const event_name = document.querySelector('input[name="event_name"]').value;
+  const participant_name = document.querySelector('input[name="participant_name"]').value;
+  const status = document.querySelector('select[name="status"]').value;
+  const logoInput = document.querySelector('input[type="file"]');
+  const logo = logoInput.files[0];
+  const selected_template_id = document.querySelector('select[name="selected_template_id"]').value;
 
-    if (!templateId) {
-      alert("Pilih template terlebih dahulu.");
-      return;
-    }
+  const formData = new FormData();
+  formData.append('event_name', event_name);
+  formData.append('participant_name', participant_name);
+  formData.append('status', status);
+  formData.append('selected_template_id', selected_template_id);
 
-    const formData = new FormData();
-    formData.append('event_name', eventName);
-    formData.append('participant_name', participantName);
-    formData.append('status', status);
-    formData.append('template_id', templateId);
-    if (logoFile) {
-      formData.append('logo', logoFile);
-    }
-
-    fetch('/certificates/store', {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      alert('Sertifikat berhasil disimpan!');
-      console.log(data);
-      // redirect atau reset form jika perlu
-    })
-    .catch(error => {
-      alert('Terjadi kesalahan saat menyimpan.');
-      console.error(error);
-    });
+  if (logo) {
+    formData.append('logo', logo);
   }
+
+  fetch('/certificate', {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Sertifikat berhasil disimpan!');
+      window.location.href = '/dashboard'; // Atau arahkan ke preview
+    } else {
+      alert('Terjadi kesalahan saat menyimpan sertifikat.');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Gagal mengirim data.');
+  });
+}
+let recipients = [];
+function addRecipient() {
+    const nameInput = document.getElementById('recipient-name');
+    const emailInput = document.getElementById('recipient-email');
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+
+    if (name && email) {
+        // Send the data to the server using AJAX
+        fetch("{{ route('templateadmin.contacts.store') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Dynamically add the new contact to the table
+            const tableBody = document.querySelector('table tbody');
+            tableBody.innerHTML += `
+                <tr id="contact-${data.id}">
+                    <td class="contact-name">${data.name}</td>
+                    <td class="contact-email">${data.email}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient(${data.id})">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient(${data.id})">Remove</button>
+                    </td>
+                </tr>
+            `;
+
+            // Clear the input fields
+            nameInput.value = '';
+            emailInput.value = '';
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+function editRecipient(contactId) {
+    const row = document.getElementById(`contact-${contactId}`);
+    const nameCell = row.querySelector('.contact-name');
+    const emailCell = row.querySelector('.contact-email');
+
+    const newName = prompt('Edit recipient name:', nameCell.textContent);
+    const newEmail = prompt('Edit recipient email:', emailCell.textContent);
+
+    if (newName && newEmail) {
+        fetch(`/templateadmin/contacts/${contactId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                name: newName,
+                email: newEmail
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            nameCell.textContent = data.name;
+            emailCell.textContent = data.email;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+
+
+function removeRecipient(contactId) {
+    fetch(`/templateadmin/contacts/${contactId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Remove the contact from the table if successful
+            const row = document.getElementById(`contact-${contactId}`);
+            row.remove();
+        } else {
+            alert('Error removing contact');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+function renderRecipients() {
+  const list = document.querySelector('table tbody');
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  list.innerHTML = ''; // Clear the table
+
+  // Make sure the recipients array has the latest data from the database or AJAX
+  recipients
+    .filter(r => 
+      r.name.toLowerCase().includes(searchTerm) || 
+      r.email.toLowerCase().includes(searchTerm)
+    )
+    .forEach((recipient, index) => {
+      list.innerHTML += `
+        <tr id="contact-${recipient.id}">
+          <td>${recipient.name}</td>
+          <td>${recipient.email}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient(${recipient.id})">Edit</button>
+            <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient(${recipient.id})">Remove</button>
+          </td>
+        </tr>
+      `;
+    });
+}
+
+
+// Upload CSV
+document.getElementById('upload-csv').addEventListener('change', function(e) {
+  console.log('File selected:', e.target.files[0]); // DEBUG
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    console.log('File content loaded'); // DEBUG
+    const lines = e.target.result.split('\n');
+    lines.forEach(line => {
+      const [name, email] = line.split(',');
+      if (name && email) {
+        const trimmedName = name.trim();
+        const trimmedEmail = email.trim();
+
+        fetch("{{ route('templateadmin.contacts.store') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            name: trimmedName,
+            email: trimmedEmail
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          recipients.push({ id: data.id, name: data.name, email: data.email });
+          renderRecipients();
+        })
+        .catch(error => console.error('Upload CSV error:', error));
+      }
+    });
+  };
+  reader.readAsText(file);
+});
+
 </script>
 </body>
 </html>
