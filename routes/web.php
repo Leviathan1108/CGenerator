@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
-    Route::get('/user', [UserController::class, 'show'])->name('users.show');
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');

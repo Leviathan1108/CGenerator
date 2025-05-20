@@ -44,11 +44,11 @@
         <div class="row text-start my-4 px-2 fw-bold" style="color: #1E3265;">
             <div class="col-md-4 mb-3">
                 <div class="card-custom py-4 rounded-4 ps-2" style="background-color: #57B2FB;;">Total Users<br><span
-                        class="fs-1">217</span></div>
+                        class="fs-1">{{ $totaluser }}</span></div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="card-custom py-4 rounded-4 ps-2" style="background-color: #9CEFAB;">Active Users<br><span
-                        class="fs-1">194</span></div>
+                        class="fs-1">{{  $totalActiveUser }}</span></div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="card-custom py-4 rounded-4 ps-2" style="background-color: #EFE2BA;">Admins<br><span
@@ -79,50 +79,24 @@
             </nav>
             <table class="table">
                 <tbody>
-                    <tr>
-                        <td>USR-2025-157</td>
-                        <td>John Doe</td>
-                        <td>Administrator</td>
-                        <td><span class="status-active bg-success text-light"
-                                style="border-radius: 15px; padding: 2px 10px;">Active</span></td>
-                        <td>
-                            <button type="button" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>USR-2025-156</td>
-                        <td>Jane Smith</td>
-                        <td>Manager</td>
-                        <td><span class="status-active bg-success text-light"
-                                style="border-radius: 15px; padding: 2px 10px;">Active</span></td>
-                        <td>
-                            <button type="button" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>USR-2025-155</td>
-                        <td>Robert Johnson</td>
-                        <td>Staff</td>
-                        <td><span class="status-inactive bg-danger text-light"
-                                style="border-radius: 15px; padding: 2px 10px;">Inactive</span></td>
-                        <td>
-                            <button type="button" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>USR-2025-154</td>
-                        <td>Maria Garcia</td>
-                        <td>Manager</td>
-                        <td><span class="status-active bg-success text-light"
-                                style="border-radius: 15px; padding: 2px 10px;">Active</span></td>
-                        <td>
-                            <button type="button" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    @foreach ($user as $users)
+                        <tr>
+                            <td>{{ $users->id }}</td>
+                            <td>{{ $users->name }}</td>
+                            <td>{{ $users->role }}</td>
+                            <td>
+                                @if ($users->status == 'active')
+                                    <span class="badge bg-success">Active</span>
+                                @else
+                                    <span class="badge bg-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary">Edit</button>
+                                <button type="button" class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

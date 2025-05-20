@@ -8,12 +8,34 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    // Tampilkan profile user
-    public function show()
+    // total user dan menampilkan user
+    public function index()
     {
         $user = User::all();
-        return view('user.index', compact('user'));
+        $totaluser = User::count(); //menghitung semua user
+        $totalActiveUser = User::where('status', 'active')->count(); //menghitung user yang aktiv
+        return view('user.index', compact('totaluser', 'user', 'totalActiveUser'));
     }
+
+    // function untuk active and inactive
+    public function activate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 'active';
+        $user->save();
+
+        return redirect()->back()->with('success', 'User activated successfully.');
+    }
+
+    public function deactivate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 'inactive';
+        $user->save();
+
+        return redirect()->back()->with('success', 'User deactivated successfully.');
+    }
+    //end
 
     // Form edit profile
     public function edit($id)
