@@ -13,8 +13,9 @@ class UserController extends Controller
     {
         $user = User::all();
         $totaluser = User::count(); //menghitung semua user
+        $totalAdmin = User::where('role', 'admin')->count();
         $totalActiveUser = User::where('status', 'active')->count(); //menghitung user yang aktiv
-        return view('user.index', compact('totaluser', 'user', 'totalActiveUser'));
+        return view('user.index', compact('totaluser', 'user', 'totalActiveUser', 'totalAdmin'));
     }
 
     // function untuk active and inactive

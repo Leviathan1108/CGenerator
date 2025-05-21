@@ -15,7 +15,7 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
             $table->string('name'); // Nama template
             // $table->string('recipient'); // Tambahkan kolom recipient di sini
             $table->string('file_path')->nullable(); // hanya path, misalnya: "profiles/123.jpg"

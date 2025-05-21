@@ -16,7 +16,6 @@ class CreateEmailsTable extends Migration
         Schema::create('emails', function (Blueprint $table) {
             $table->id(); // int(11) auto increment
             $table->unsignedBigInteger('certificate_id');
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->enum('status', ['pending', 'sent', 'failed'])->default('pending');
             $table->text('error_message')->nullable();
             $table->integer('retry_count')->default(0);
@@ -24,7 +23,7 @@ class CreateEmailsTable extends Migration
 
             // Foreign key 
             $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreignUuid('user_id')->nullable()->constrained('users')->onDelete('set null');
         });
     }
 

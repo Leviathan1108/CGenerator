@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="card-custom py-4 rounded-4 ps-2" style="background-color: #EFE2BA;">Admins<br><span
-                        class="fs-1">23</span></div>
+                        class="fs-1">{{ $totalAdmin }}</span></div>
             </div>
         </div>
 
@@ -81,7 +81,7 @@
                 <tbody>
                     @foreach ($user as $users)
                         <tr>
-                            <td>{{ $users->id }}</td>
+                            <td>{{ $users->custom_id }}</td>
                             <td>{{ $users->name }}</td>
                             <td>{{ $users->role }}</td>
                             <td>
