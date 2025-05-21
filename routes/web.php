@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('/certificates', CertificateController::class);
-    Route::get('/certificate', [CertificateController::class, 'show_certificate'])->name('show_certificate');
+    Route::get('/history', [CertificateController::class, 'show_certificate'])->name('show_certificate');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::resource('templates', TemplateController::class);
     Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
