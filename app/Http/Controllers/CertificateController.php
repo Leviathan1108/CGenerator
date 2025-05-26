@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Certificate;
 use App\Models\Template;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB; // ✅ Tambahkan baris ini
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Contact;
 use App\Models\User;
 use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CertificateMail;
+
 class CertificateController extends Controller
 {
     public function index()
@@ -109,6 +112,27 @@ public function store(Request $request)
         ->with('success', 'Sertifikat berhasil disimpan!');
 }
 
+public function sendEmail(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'image' => 'required|string', // base64
+    ]);
+
+    // Simpan image ke file sementara
+    $image = $request->image;
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $imageName = 'certificate_' . Str::slug($request->name) . '.png';
+    $imagePath = storage_path("app/public/{$imageName}");
+    file_put_contents($imagePath, base64_decode($image));
+
+    // Kirim email
+    Mail::to($request->email)->send(new CertificateMail($request->name, $imageName));
+
+    return response()->json(['message' => 'Certificate sent to ' . $request->email]);
+}
     
 
 

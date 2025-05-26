@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
@@ -33,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('/certificates', CertificateController::class);
-    Route::get('/history', [CertificateController::class, 'show_certificate'])->name('show_certificate');
+    Route::get('/certificate', [CertificateController::class, 'show_certificate'])->name('show_certificate');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::resource('templates', TemplateController::class);
     Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
@@ -51,11 +52,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
     Route::resource('templateadmin', CertificateController::class)->except(['show']);
 
+    // Rute untuk fitur upload dan download file
+    Route::get('/file-upload', [FileController::class, 'showUploadForm'])->name('file.upload.form');
+    Route::post('/file-upload', [FileController::class, 'uploadFile'])->name('file.upload');
+    Route::get('/file-download/{filename}', [FileController::class, 'downloadFile'])->name('file.download');
+
     Route::resource('templateadmin/contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy'])->names([
         'index' => 'templateadmin.contacts',
         'store' => 'templateadmin.contacts.store',
         'update' => 'templateadmin.contacts.update',
         'destroy' => 'templateadmin.contacts.destroy',
+        
     ]);
 
     Route::get('/templateadmin/preview', [PreviewController::class, 'index'])->name('certificate.preview');
@@ -66,12 +73,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/certificate/previews/{id}', [CertificateController::class, 'previews'])->name('certificate.previews');
     Route::get('/templateadmin/preview/{id}', [CertificateController::class, 'dataInputs'])->name('templateadmin.previews');
     Route::get('/certificate/preview', [CertificateController::class, 'preview'])->name('certificate.preview');
-    
+    Route::post('/send-certificate-email', [CertificateController::class, 'sendEmail']);
+
 
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user', [UserController::class, 'show'])->name('users.show');
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');

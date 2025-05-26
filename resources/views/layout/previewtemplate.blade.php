@@ -116,6 +116,10 @@
 
     <button id="downloadAllZip" class="btn btn-success">
       <i class="bi bi-archive"></i> Download All as ZIP
+    </button>  
+    
+    <button id="sendEmail" class="btn btn-warning">
+      <i class="bi bi-envelope-fill"></i> Send to Email
     </button>    
 
     <a href="http://127.0.0.1:8000/templateadmin/template" class="btn btn-outline-secondary mb-3">
@@ -309,6 +313,34 @@ fabric.Image.fromURL('{{ asset("storage/" . $certificate->signature_path) }}', f
       });
   });
 
+  document.getElementById('sendEmail')?.addEventListener('click', async function () {
+    const contactValue = document.getElementById('contactSelect').value;
+    const [name, email] = contactValue.split('|');
+
+    // Render canvas to image
+    const canvasElement = document.getElementById('myCanvas');
+    const canvasImage = await html2canvas(canvasElement);
+    const imageData = canvasImage.toDataURL("image/png");
+
+    // Kirim ke backend
+    fetch("/send-certificate-email", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        body: JSON.stringify({ name, email, image: imageData })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || "Email sent!");
+    })
+    .catch(error => {
+        console.error("Error sending email:", error);
+        alert("Failed to send email.");
+    });
+});
+  
   
   </script>
   
