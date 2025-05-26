@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Generator Dashboard</title>
-        
-<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"/>
-<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-<link rel="manifest" href="{{ asset('site.webmanifest') }}">
-<meta name="apple-mobile-web-app-title" content="MyWebSite" />
-    
+
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+
     <link href={{ asset('bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <link href={{ asset('css/app.css') }} rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,6 @@
             background-color: #FBB041;
             border-radius: 10px;
         }
-
         .checkbox-container {
             background-color: #FBB041;
             border-radius: 20px;
@@ -86,25 +85,26 @@
         }
     </style>
 </head>
+
 <body style="background-color: #f8f9fa;">
     <!-- Menambahkan Allert-Success -->
     @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow rounded-3 px-4 py-2 text-center"
-        role="alert" style="z-index: 9999; max-width: 400px;">
-        <strong><i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}</strong>
-    </div>
-    <script>
-    setTimeout(() => {
-        const alert = document.querySelector('.alert');
-        if (alert) {
-            // Bootstrap fade out
-            alert.classList.remove('show');
-            alert.classList.add('hide');
-            setTimeout(() => alert.remove(), 500); // remove after fade
-        }
-    }, 3000); // auto-close after 3s
-</script>
-@endif
+        <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow rounded-3 px-4 py-2 text-center"
+            role="alert" style="z-index: 9999; max-width: 400px;">
+            <strong><i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}</strong>
+        </div>
+        <script>
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    // Bootstrap fade out
+                    alert.classList.remove('show');
+                    alert.classList.add('hide');
+                    setTimeout(() => alert.remove(), 500); // remove after fade
+                }
+            }, 3000); // auto-close after 3s
+        </script>
+    @endif
     <div class="row" style="display: flex; margin: 0;">
         @include('partials.navbar')
 
@@ -119,4 +119,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>
+
 </html>

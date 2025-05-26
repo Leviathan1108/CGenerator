@@ -9,13 +9,30 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     // total user dan menampilkan user
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::all();
-        $totaluser = User::count(); //menghitung semua user
+        // query builder untuk user
+        $query = User::query();
+
+        // Filter berdasarkan role user
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Ambil data user berdasarkan filter
+        $users = $query->get();
+
+        // Statistik
+        $totalUser = User::count();
         $totalAdmin = User::where('role', 'admin')->count();
-        $totalActiveUser = User::where('status', 'active')->count(); //menghitung user yang aktiv
-        return view('user.index', compact('totaluser', 'user', 'totalActiveUser', 'totalAdmin'));
+        $totalActiveUser = User::where('status', 'active')->count();
+
+        return view('user.index', compact('users', 'totalUser', 'totalAdmin', 'totalActiveUser'));
     }
 
     // function untuk active and inactive
