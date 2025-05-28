@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
@@ -14,10 +15,14 @@ class RoleMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle($request, Closure $next, ...$roles)
     {
-        if (!in_array(auth()->user()->role, $roles)) {
-            return redirect('/home');  // Atau halaman lain sesuai kebutuhan
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+
+        if (!in_array(Auth::user()->role, $roles)) {
+            abort(403, 'Akses ditolak.');
         }
 
         return $next($request);

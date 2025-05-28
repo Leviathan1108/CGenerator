@@ -71,14 +71,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
     Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
-    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
 
+    Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+    // middleware untuk admin
+    Route::middleware(['auth', 'role:admin'])->group( function () {
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/create', [UserController::class, 'UserCreate'])->name('user.create');
+    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
+    });
+    // end
+    
 // Rute Guest -> Log in / Register
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', function () {

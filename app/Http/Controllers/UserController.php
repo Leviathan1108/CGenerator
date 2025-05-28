@@ -29,7 +29,7 @@ class UserController extends Controller
 
         // Statistik
         $totalUser = User::count();
-        $totalAdmin = User::where('role', 'admin')->count();
+        $totalAdmin = User::where('role', ['superadmin', 'admin', 'recipient', 'guest'])->count();
         $totalActiveUser = User::where('status', 'active')->count();
 
         return view('user.index', compact('users', 'totalUser', 'totalAdmin', 'totalActiveUser'));
@@ -55,15 +55,42 @@ class UserController extends Controller
     }
     //end
 
+    // user create untuk admin
+    public function UserCreate()
+    {
+        $roles = ['superadmin', 'admin', 'recipient', 'guest'];
+        return view('user.create', compact('roles'));
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,',
+            'email' => 'required|email|unique:users,email',
+            'role' => 'required|in:superadmin,admin,recipient,user,',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('user.create')->with('success', 'User berhasil ditambahkan!');
+    }
+
+    // end
+
     // Form edit profile
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('settings', compact('user'));
     }
-
     // Simpan perubahan profile
-
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);

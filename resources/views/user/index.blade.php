@@ -17,6 +17,8 @@
                         <select name="role" class="form-select">
                             <option value="">All Roles</option>
                             <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="superadmin" {{ request('role') == 'superadmin' ? 'selected' : '' }}>Super Admin</option>
+                            <option value="recipient" {{ request('role') == 'recipient' ? 'selected' : '' }}>Recipient</option>
                             <option value="guest" {{ request('role') == 'guest' ? 'selected' : '' }}>Guest</option>
                         </select>
                     </div>
@@ -41,7 +43,7 @@
         <!-- button luar -->
         <div class="d-flex gap-4 mt-3 ms-3">
             <div class="col-auto">
-                <button class="btn btn-success">Add User</button>
+                <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
             </div>
 
             <div class="col-auto">
