@@ -101,9 +101,13 @@
         <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/subscriptions">Subscriptions</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link fs-6 text-light" href="/user">User Management</a>
-        </li>
+
+        @if (Auth::check() && Auth::user()->role == 'admin')
+            <li class="nav-item">
+                <a class="nav-link fs-6 text-light" href="/user">User Management</a>
+            </li>
+        @endif
+        
         <li class="nav-item">
             <a class="nav-link fs-6 text-light" href="/history">View History</a>
         </li>

@@ -21,24 +21,40 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-    $request->validate([
-        'email' => 'required|string',
-        'password' => 'required|string',
-    ]);
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-    $loginType = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $loginType = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-    $credentials = [
-        $loginType => $request->input('email'),
-        'password' => $request->input('password'),
-    ];
+        $credentials = [
+            $loginType => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
 
-    if (Auth::attempt($credentials, $request->filled('remember'))) {
-        return redirect()->route('home')->with('success', 'Login berhasil!');
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            return redirect()->route('home')->with('success', 'Login berhasil!');
+        }
+
+        return back()->with('error', 'Email/Username atau password salah. Silahkan masukkan lagi!');
     }
 
-    return back()->with('error', 'Email/Username atau password salah. Silahkan masukkan lagi!');
+    // protected untuk role
+    protected function authenticated($request, $user)
+    {
+        switch ($user->role) {
+            case 'superadmin':
+                return redirect('/dashboard/superadmin');
+            case 'admin':
+                return redirect('/dashboard/admin');
+            case 'recipient':
+                return redirect('/dashboard/recipient');
+            default:
+                return redirect('/home');
+        }
     }
+
 
 }
 
