@@ -20,11 +20,12 @@ class CertificateMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Certificate')
-            ->markdown('emails.certificate')
-            ->attach(storage_path("app/public/{$this->imageName}"), [
-                'as' => $this->imageName,
-                'mime' => 'image/png',
-            ]);
+        return $this->subject('Sertifikat untuk ' . $this->name)
+        ->markdown('emails.certificate')
+        ->attach(storage_path("app/public/{$this->imageName}"), [
+            'as' => 'sertifikat_' . $this->name . '.png',
+            'mime' => 'image/png',
+        ]);
     }
+
 }

@@ -120,7 +120,16 @@
     
     <button id="sendEmail" class="btn btn-warning">
       <i class="bi bi-envelope-fill"></i> Send to Email
-    </button>    
+    </button>
+
+    <button id="sendEmailAll" class="btn btn-primary">Kirim Semua Sekarang</button>
+        
+    {{-- <form action="{{ route('certificates.send.bulk') }}" method="POST" onsubmit="return confirm('Yakin kirim semua sertifikat sekarang?')">
+      @csrf
+      <button type="submit" class="btn btn-success">
+          <i class="bi bi-send"></i> Kirim Semua Sertifikat Sekarang
+      </button>
+  </form> --}}
 
     <a href="http://127.0.0.1:8000/templateadmin/template" class="btn btn-outline-secondary mb-3">
       <i class="bi bi-arrow-left"></i> Back
@@ -133,42 +142,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
 <script>
-  document.getElementById('downloadAllZip')?.addEventListener('click', async function () {
-    const zip = new JSZip();
-
-    for (let i = 0; i < document.getElementById('contactSelect').options.length; i++) {
-        const option = document.getElementById('contactSelect').options[i];
-        const [name, email] = option.value.split('|');
-
-        // Update canvas dynamically
-        participantNameText.set({ text: name });
-        canvas.renderAll();
-
-        // Wait for rendering & export image
-        await new Promise(resolve => setTimeout(resolve, 300)); // allow re-render
-
-        const canvasElement = document.getElementById('myCanvas');
-        const canvasImage = await html2canvas(canvasElement);
-        const imageData = canvasImage.toDataURL("image/png");
-
-        // Convert base64 to binary
-        const binary = atob(imageData.split(',')[1]);
-        const array = [];
-        for (let j = 0; j < binary.length; j++) {
-            array.push(binary.charCodeAt(j));
-        }
-
-        // Add to ZIP
-        const fileName = name.trim().replace(/\s+/g, '_') + "_certificate.png";
-        zip.file(fileName, new Uint8Array(array));
-    }
-
-    // Generate and Save ZIP
-    zip.generateAsync({ type: "blob" }).then(function (content) {
-        saveAs(content, "all_certificates.zip");
-    });
-});
-
   const canvas = new fabric.Canvas('myCanvas');
   
   // Set Background
@@ -251,7 +224,7 @@
   canvas.add(eventNameText);
   
   // Tanggal
-  const dateText = new fabric.Text('Jakarta, {{ \Carbon\Carbon::parse($certificate->date)->translatedFormat("d F Y") }}', {
+  const dateText = new fabric.Text('Bangkinang, {{ \Carbon\Carbon::parse($certificate->date)->translatedFormat("d F Y") }}', {
       left: canvas.width / 2,
       top: canvas.height - 180,
       fontSize: 14,
@@ -295,7 +268,43 @@ fabric.Image.fromURL('{{ asset("storage/" . $certificate->signature_path) }}', f
       participantNameText.set({ text: name });
       canvas.renderAll();
   });
-  
+
+  document.getElementById('downloadAllZip')?.addEventListener('click', async function () {
+    const zip = new JSZip();
+
+    for (let i = 0; i < document.getElementById('contactSelect').options.length; i++) {
+        const option = document.getElementById('contactSelect').options[i];
+        const [name, email] = option.value.split('|');
+
+        // Update canvas dynamically
+        participantNameText.set({ text: name });
+        canvas.renderAll();
+
+        // Wait for rendering & export image
+        await new Promise(resolve => setTimeout(resolve, 300)); // allow re-render
+
+        const canvasElement = document.getElementById('myCanvas');
+        const canvasImage = await html2canvas(canvasElement);
+        const imageData = canvasImage.toDataURL("image/png");
+
+        // Convert base64 to binary
+        const binary = atob(imageData.split(',')[1]);
+        const array = [];
+        for (let j = 0; j < binary.length; j++) {
+            array.push(binary.charCodeAt(j));
+        }
+
+        // Add to ZIP
+        const fileName = name.trim().replace(/\s+/g, '_') + "_certificate.png";
+        zip.file(fileName, new Uint8Array(array));
+    }
+
+    // Generate and Save ZIP
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "all_certificates.zip");
+    });
+});
+
   // Export to PDF
   document.getElementById('downloadPdf').addEventListener('click', function () {
       const canvasElement = document.getElementById('myCanvas');
@@ -317,9 +326,16 @@ fabric.Image.fromURL('{{ asset("storage/" . $certificate->signature_path) }}', f
     const contactValue = document.getElementById('contactSelect').value;
     const [name, email] = contactValue.split('|');
 
+    // Update nama di canvas
+    participantNameText.set({ text: name });
+    canvas.renderAll();
+
+    // Tunggu render selesai (agar html2canvas tidak menangkap state lama)
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     // Render canvas to image
     const canvasElement = document.getElementById('myCanvas');
-    const canvasImage = await html2canvas(canvasElement);
+    const canvasImage = await html2canvas(canvasElement, { scale: 1 }); // scale 1 agar lebih cepat
     const imageData = canvasImage.toDataURL("image/png");
 
     // Kirim ke backend
@@ -340,8 +356,48 @@ fabric.Image.fromURL('{{ asset("storage/" . $certificate->signature_path) }}', f
         alert("Failed to send email.");
     });
 });
-  
-  
+
+document.getElementById('sendEmailAll')?.addEventListener('click', async function () {
+    const options = document.getElementById('contactSelect').options;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const participants = [];
+
+    for (let i = 0; i < options.length; i++) {
+        const [name, email] = options[i].value.split('|');
+
+        // Update nama di canvas
+        participantNameText.set({ text: name });
+        canvas.renderAll();
+
+        // Tunggu render
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Ambil gambar base64 dari canvas
+        const canvasElement = document.getElementById('myCanvas');
+        const canvasImage = await html2canvas(canvasElement);
+        const imageData = canvasImage.toDataURL("image/png");
+
+        // Push ke daftar peserta
+        participants.push({ name, email, image: imageData });
+    }
+
+    // Kirim ke Laravel controller
+    fetch('/certificates/send-bulk', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token
+        },
+        body: JSON.stringify({ participants })
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message || 'Sukses mengirim semua email!'))
+    .catch(err => {
+        console.error(err);
+        alert('Gagal mengirim email.');
+    });
+});
+
   </script>
   
 </main>

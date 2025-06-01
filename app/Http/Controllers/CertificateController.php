@@ -13,6 +13,8 @@ use App\Models\User;
 use App\Models\CertificateBackground;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\CertificateMail;
+use Illuminate\Support\Facades\Artisan;
+use App\Jobs\SendCertificateEmailJob;
 
 class CertificateController extends Controller
 {
@@ -49,7 +51,8 @@ public function dataInputs($id)
     $certificate = Certificate::with('template', 'contact')->findOrFail($id);
     $contacts = Contact::all(); // Ambil semua kontak
 
-    return view('layout.previewtemplate', compact('certificate', 'contacts'));
+    $recipients = Contact::whereNotNull('email')->get(['name', 'email']);
+    return view('layout.previewtemplate', compact('certificate', 'contacts', 'recipients'));
 }
 
 public function store(Request $request)
@@ -73,11 +76,11 @@ public function store(Request $request)
     $verificationCode = strtoupper(Str::random(10));
 
     // Simpan ke tabel contacts
-    $contact = new Contact();
-    $contact->name = $request->recipient;
-    $contact->email = Str::slug($request->recipient) . '-' . Str::random(5) . '@example.com';
-    $contact->save();
-
+    $contact = Contact::firstOrCreate(
+        ['name' => $request->recipient],
+        ['email' => Str::slug($request->recipient) . '-' . Str::random(5) . '@example.com']
+    );
+    
     // Upload logo jika ada
     $logoPath = null;
     if ($request->hasFile('logo')) {
@@ -133,8 +136,69 @@ public function sendEmail(Request $request)
 
     return response()->json(['message' => 'Certificate sent to ' . $request->email]);
 }
-    
 
+// CertificateController.php
+public function sendBulkEmail()
+{
+    // panggil command artisan yang sudah kamu buat untuk kirim email bulk
+    Artisan::call('certificates:send-bulk');
+    $participants = Certificate::whereNotNull('email')->get();
+
+    foreach ($participants as $participant) {
+        $name = $participant->name;
+        $email = $participant->email;
+        $imageName = "certificates/{$participant->certificate_filename}"; // contoh path
+    
+        SendCertificateEmailJob::dispatch($name, $email, $imageName);
+    }
+    
+    return response()->json(['message' => 'Bulk emails are being sent']);
+}
+
+public function sendBulk(Request $request)
+{
+    $request->validate([
+        'participants' => 'required|array',
+        'participants.*.name' => 'required|string',
+        'participants.*.email' => 'required|email',
+        'participants.*.image' => 'required|string', // base64
+    ]);
+
+    foreach ($request->participants as $participant) {
+        $base64Image = str_replace('data:image/png;base64,', '', $participant['image']);
+        $base64Image = str_replace(' ', '+', $base64Image);
+
+        $imageName = 'certificate_' . Str::slug($participant['name']) . '_' . uniqid() . '.png';
+        $imagePath = storage_path("app/public/{$imageName}");
+        file_put_contents($imagePath, base64_decode($base64Image));
+
+        // Kirim ke queue
+        SendCertificateEmailJob::dispatch(
+            $participant['name'],
+            $participant['email'],
+            $imageName
+        );
+    }
+
+    return response()->json(['message' => 'Semua sertifikat sedang dikirim melalui email.']);
+}
+
+public function sendBulk_old(Request $request)
+{
+    $data = $request->validate([
+        'recipients' => 'required|array',
+        'recipients.*.email' => 'required|email',
+        'recipients.*.name' => 'required|string',
+        'image' => 'required|string', // base64 image
+    ]);
+
+    foreach ($data['recipients'] as $recipient) {
+        // Dispatch job untuk tiap penerima
+        SendCertificateEmailJob::dispatch($recipient['name'], $recipient['email'], $data['image']);
+    }
+
+    return response()->json(['message' => 'Emails are being sent.']);
+}
 
     public function edit($id)
     {

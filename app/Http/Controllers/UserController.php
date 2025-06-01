@@ -111,5 +111,4 @@ class UserController extends Controller
 
         return redirect()->route('settings', $user->id)->with('success', 'Profil berhasil diperbarui.');
     }
-
 }

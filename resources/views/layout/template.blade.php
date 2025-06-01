@@ -196,7 +196,7 @@
   </div>
 </section>
 
-<!-- STEP 3: Input Data Sertifikat -->
+<!-- STEP 4: Input Data Sertifikat -->
 <section id="step-4" class="hidden mt-4">
   <h2 class="h5 fw-bold mb-4">Isi Data Sertifikat</h2>
   <div class="row align-items-start">
@@ -299,17 +299,15 @@
 {{-- Recipient --}}
 <div class="form-group mb-3">
   <label for="recipient">Nama Penerima</label>
-  <input type="text" name="recipient" class="form-control" required>
-</div>
-
-{{-- Selected Template --}}
-<div class="form-group mb-3">
-  <label for="selected_template_id">Template</label>
-  <select name="selected_template_id" class="form-control" required>
-      @foreach($templates as $template)
-          <option value="{{ $template->id }}">{{ $template->name }}</option>
+  <select class="form-control" id="recipient-select" onchange="fillRecipientInput(this)">
+      <option value="">-- Pilih dari Kontak yang Ada --</option>
+      @foreach($contacts as $contact)
+          <option value="{{ $contact->name }}">{{ $contact->name }}</option>
       @endforeach
   </select>
+
+  <small class="form-text text-muted">Atau ketik nama baru di bawah:</small>
+  <input type="text" name="recipient" id="recipient-input" class="form-control mt-2" required>
 </div> 
 
 <!-- Title -->
@@ -383,43 +381,33 @@
     <div class="col-12">
       <h5 class="fw-bold">Add Recipients</h5>
 
-      <!-- Input nama & email penerima -->
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Enter recipient name..." id="recipient-name">
         <input type="email" class="form-control" placeholder="Enter recipient email..." id="recipient-email">
-        <button class="btn btn-primary" type="button" onclick="addRecipient()">Add</button>
+        <button class="btn btn-primary" type="button" id="btn-add-recipient">Add</button>
       </div>
 
-      <!-- Upload CSV -->
       <div class="mb-3">
         <label for="upload-csv" class="form-label">Upload CSV (Name,Email)</label>
-        <input class="form-control" type="file" id="upload-csv">
+        <input class="form-control" type="file" id="upload-csv" accept=".csv,text/csv">
       </div>
 
-      <!-- List penerima -->
       <table class="table table-bordered">
-    <thead>
-        <tr>
+        <thead>
+          <tr>
             <th>Recipient Name</th>
             <th>Recipient Email</th>
             <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($contacts as $contact)
-        <tr id="contact-{{ $contact->id }}">
-            <td class="contact-name">{{ $contact->name }}</td>
-            <td class="contact-email">{{ $contact->email }}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient({{ $contact->id }})">Edit</button>
-                <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient({{ $contact->id }})">Remove</button>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-</div>
- </section>
+          </tr>
+        </thead>
+        <tbody id="recipients-table-body">
+          <!-- Rows rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
  
 
   <!-- Tombol Navigasi -->
@@ -430,6 +418,11 @@
 </main>
 
 <script>
+  function fillRecipientInput(select) {
+    document.getElementById('recipient-input').value = select.value;
+    // Optionally update preview
+    document.querySelector("#preview-participant-name .text-content").textContent = select.value;
+  }
 
   // Binding input ke preview text
   document.querySelector('input[name="title"]').addEventListener('input', function () {
@@ -508,30 +501,42 @@ function changeStep(direction) {
   }
 }
 
-  let selectedTemplateId = null;
-  let selectedTemplateImage = null;
+let selectedTemplateId = null;
+let selectedTemplateImage = null;
 
-  function selectTemplateFromData(card) {
-    const description = card.dataset.description;
-    const type = card.dataset.type;
-    // Hapus selected dari semua template
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-template'));
+function selectTemplateFromData(card) {
+  const description = card.dataset.description;
+  const type = card.dataset.type;
 
-    // Tambah efek ke template yang dipilih
-    card.classList.add('selected-template');
+  // Hapus selected dari semua template
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected-template'));
 
-    // Ambil data
-    selectedTemplateId = card.dataset.id;
-    selectedTemplateImage = card.dataset.img;
+  // Tambah efek ke template yang dipilih
+  card.classList.add('selected-template');
 
-    // Tampilkan info template di step 2
-    document.getElementById("template-name").textContent = card.dataset.name;
-    document.getElementById("template-creator").textContent = card.dataset.creator;
-    document.getElementById("template-date").textContent = card.dataset.date;
-    document.getElementById("preview-image").src = selectedTemplateImage;
-  document.getElementById('template-description').textContent = description;
-  document.getElementById('template-type').textContent = type;
-  document.getElementById('selected-template-id').value = selectedTemplateId;
+  // Ambil data
+  selectedTemplateId = card.dataset.id;
+  selectedTemplateImage = card.dataset.img;
+
+  // Tampilkan info template di Step 2
+  document.getElementById("template-name").textContent = card.dataset.name;
+  document.getElementById("template-creator").textContent = card.dataset.creator;
+  document.getElementById("template-date").textContent = card.dataset.date;
+  document.getElementById("preview-image").src = selectedTemplateImage;
+  document.getElementById("template-description").textContent = description;
+  document.getElementById("template-type").textContent = type;
+
+  // Set ke input hidden di Step 4
+  document.getElementById('selected_template_id').value = selectedTemplateId;
+
+  // Opsional: langsung tampilkan preview-nya di Step 4 (jika perlu)
+  document.getElementById("cert-preview-image").src = selectedTemplateImage;
+
+  // Juga bisa auto-select value dropdown template (opsional, jika dropdown masih ada)
+  const templateDropdown = document.querySelector('select[name="selected_template_id"]');
+  if (templateDropdown) {
+    templateDropdown.value = selectedTemplateId;
+  }
 }
 
   function previewLogo(event) {
@@ -788,82 +793,90 @@ function addRow() {
     console.error('Error:', error);
     alert('Gagal mengirim data.');
   });
-}
-let recipients = [];
-function addRecipient() {
-    const nameInput = document.getElementById('recipient-name');
-    const emailInput = document.getElementById('recipient-email');
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
+} 
 
-    if (name && email) {
-        // Send the data to the server using AJAX
-        fetch("{{ route('templateadmin.contacts.store') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                name: name,
-                email: email
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Dynamically add the new contact to the table
-            const tableBody = document.querySelector('table tbody');
-            tableBody.innerHTML += `
-                <tr id="contact-${data.id}">
-                    <td class="contact-name">${data.name}</td>
-                    <td class="contact-email">${data.email}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient(${data.id})">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient(${data.id})">Remove</button>
-                    </td>
-                </tr>
-            `;
+// --- Data awal dari server (Blade) ---
+  let recipients = @json($contacts);
 
-            // Clear the input fields
-            nameInput.value = '';
-            emailInput.value = '';
-        })
-        .catch(error => console.error('Error:', error));
-    }
-}
+  // --- Cache elemen DOM ---
+  const recipientNameInput = document.getElementById('recipient-name');
+  const recipientEmailInput = document.getElementById('recipient-email');
+  const recipientsTableBody = document.getElementById('recipients-table-body');
+  const uploadCsvInput = document.getElementById('upload-csv');
+  const addRecipientBtn = document.getElementById('btn-add-recipient');
 
-function editRecipient(contactId) {
-    const row = document.getElementById(`contact-${contactId}`);
-    const nameCell = row.querySelector('.contact-name');
-    const emailCell = row.querySelector('.contact-email');
+  // --- Fungsi render seluruh daftar recipients ke tabel ---
+  function renderRecipients() {
+    recipientsTableBody.innerHTML = ''; // Kosongkan tabel
+    recipients.forEach(recipient => {
+      recipientsTableBody.innerHTML += `
+        <tr id="contact-${recipient.id}">
+          <td class="contact-name">${recipient.name}</td>
+          <td class="contact-email">${recipient.email}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient(${recipient.id})">Edit</button>
+            <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient(${recipient.id})">Remove</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
 
-    const newName = prompt('Edit recipient name:', nameCell.textContent);
-    const newEmail = prompt('Edit recipient email:', emailCell.textContent);
+  // --- Fungsi tambah recipient via AJAX ---
+  function addRecipient() {
+    const name = recipientNameInput.value.trim();
+    const email = recipientEmailInput.value.trim();
+    if (!name || !email) return alert('Please enter both name and email.');
 
-    if (newName && newEmail) {
-        fetch(`/templateadmin/contacts/${contactId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                name: newName,
-                email: newEmail
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            nameCell.textContent = data.name;
-            emailCell.textContent = data.email;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-}
+    fetch("{{ route('templateadmin.contacts.store') }}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({ name, email })
+    })
+    .then(res => res.json())
+    .then(data => {
+      recipients.push(data);
+      renderRecipients();
+      recipientNameInput.value = '';
+      recipientEmailInput.value = '';
+    })
+    .catch(err => console.error('Add recipient error:', err));
+  }
 
+  // --- Fungsi edit recipient via AJAX ---
+  function editRecipient(id) {
+    const recipient = recipients.find(r => r.id === id);
+    if (!recipient) return alert('Recipient not found!');
 
+    const newName = prompt('Edit recipient name:', recipient.name);
+    const newEmail = prompt('Edit recipient email:', recipient.email);
+    if (!newName || !newEmail) return;
 
-function removeRecipient(contactId) {
+    fetch(`/templateadmin/contacts/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({ name: newName.trim(), email: newEmail.trim() })
+    })
+    .then(res => res.json())
+    .then(data => {
+      // Update local array
+      const index = recipients.findIndex(r => r.id === id);
+      if (index > -1) {
+        recipients[index] = data;
+        renderRecipients();
+      }
+    })
+    .catch(err => console.error('Edit recipient error:', err));
+  }
+
+  // --- Fungsi hapus recipient via AJAX ---
+  function removeRecipient(contactId) {
     fetch(`/templateadmin/contacts/${contactId}`, {
         method: 'DELETE',
         headers: {
@@ -883,72 +896,50 @@ function removeRecipient(contactId) {
     .catch(error => console.error('Error:', error));
 }
 
+  // --- Fungsi handle upload CSV ---
+  function handleCsvUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const lines = e.target.result.split('\n').filter(line => line.trim() !== '');
+      // Jika CSV ada header, skip baris pertama (optional)
+      // const lines = e.target.result.split('\n').slice(1).filter(line => line.trim() !== '');
 
-function renderRecipients() {
-  const list = document.querySelector('table tbody');
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  list.innerHTML = ''; // Clear the table
-
-  // Make sure the recipients array has the latest data from the database or AJAX
-  recipients
-    .filter(r => 
-      r.name.toLowerCase().includes(searchTerm) || 
-      r.email.toLowerCase().includes(searchTerm)
-    )
-    .forEach((recipient, index) => {
-      list.innerHTML += `
-        <tr id="contact-${recipient.id}">
-          <td>${recipient.name}</td>
-          <td>${recipient.email}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-primary me-1" onclick="editRecipient(${recipient.id})">Edit</button>
-            <button class="btn btn-sm btn-outline-danger" onclick="removeRecipient(${recipient.id})">Remove</button>
-          </td>
-        </tr>
-      `;
-    });
-}
-
-
-// Upload CSV
-document.getElementById('upload-csv').addEventListener('change', function(e) {
-  console.log('File selected:', e.target.files[0]); // DEBUG
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    console.log('File content loaded'); // DEBUG
-    const lines = e.target.result.split('\n');
-    lines.forEach(line => {
-      const [name, email] = line.split(',');
-      if (name && email) {
-        const trimmedName = name.trim();
-        const trimmedEmail = email.trim();
-
-        fetch("{{ route('templateadmin.contacts.store') }}", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-          },
-          body: JSON.stringify({
-            name: trimmedName,
-            email: trimmedEmail
+      lines.forEach(line => {
+        const [name, email] = line.split(',').map(s => s.trim());
+        if (name && email) {
+          fetch("{{ route('templateadmin.contacts.store') }}", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ name, email })
           })
-        })
-        .then(response => response.json())
-        .then(data => {
-          recipients.push({ id: data.id, name: data.name, email: data.email });
-          renderRecipients();
-        })
-        .catch(error => console.error('Upload CSV error:', error));
-      }
-    });
-  };
-  reader.readAsText(file);
-});
+          .then(res => res.json())
+          .then(data => {
+            recipients.push(data);
+            renderRecipients();
+          })
+          .catch(err => console.error('CSV upload error:', err));
+        }
+      });
+    };
+    reader.readAsText(file);
+  }
+
+  // --- Event listeners ---
+  addRecipientBtn.addEventListener('click', addRecipient);
+  uploadCsvInput.addEventListener('change', handleCsvUpload);
+
+  // --- Initial render ---
+  renderRecipients();
+
+  // Make functions globally accessible (needed if using inline onclick)
+  window.editRecipient = editRecipient;
+  window.removeRecipient = removeRecipient;
 
 </script>
 </body>
