@@ -17,8 +17,10 @@
                         <select name="role" class="form-select">
                             <option value="">All Roles</option>
                             <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="superadmin" {{ request('role') == 'superadmin' ? 'selected' : '' }}>Super Admin</option>
-                            <option value="recipient" {{ request('role') == 'recipient' ? 'selected' : '' }}>Recipient</option>
+                            <option value="superadmin" {{ request('role') == 'superadmin' ? 'selected' : '' }}>Super Admin
+                            </option>
+                            <option value="recipient" {{ request('role') == 'recipient' ? 'selected' : '' }}>Recipient
+                            </option>
                             <option value="guest" {{ request('role') == 'guest' ? 'selected' : '' }}>Guest</option>
                         </select>
                     </div>
@@ -41,15 +43,17 @@
         </div>
 
         <!-- button luar -->
-        <div class="d-flex gap-4 mt-3 ms-3">
-            <div class="col-auto">
-                <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
-            </div>
+        @if (Auth::user()->role === 'admin')
+            <div class="d-flex gap-4 mt-3 ms-3">
+                <div class="col-auto">
+                    <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
+                </div>
 
-            <div class="col-auto">
-                <button class="btn text-white" style="background-color: #FBB041;">Bulk Adress</button>
+                <div class="col-auto">
+                    <button class="btn text-white" style="background-color: #FBB041;">Bulk Adress</button>
+                </div>
             </div>
-        </div>
+        @endif
 
         <!-- Statistik Ringkas -->
         <div class="row text-start my-4 px-2 fw-bold" style="color: #1E3265;">
@@ -95,10 +99,15 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="#" class="text-primary me-3 text-decoration-none">Edit</a>
-                                <a href="#" class="text-danger text-decoration-none">Delete</a>
+                                @if (Auth::user()->role === 'admin')
+                                    <a href="#" class="text-primary me-3 text-decoration-none">Edit</a>
+                                    <a href="#" class="text-danger text-decoration-none">Delete</a>
+                                @else
+                                    <span class="text-muted">View Only</span>
+                                @endif
                             </td>
                         </tr>
+
                     @endforeach
                 </tbody>
             </table>

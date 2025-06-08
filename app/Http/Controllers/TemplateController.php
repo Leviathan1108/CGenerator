@@ -55,48 +55,40 @@ class TemplateController extends Controller
     }
 
     // Update template
-    public function update(Request $request, Template $templatesuperadmin)
+    public function update(Request $request, $id, Template $templateSuperadmin)
     {
+        $templateSuperadmin = Template::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'type' => 'nullable|string|max:255',
             'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:2048',
         ]);
-    
+
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('templates', 'public');
-            $templatesuperadmin->file_path = $filePath;
+            $templateSuperadmin->file_path = $filePath;
         }
-    
-        $templatesuperadmin->name = $request->name;
-        $templatesuperadmin->description = $request->description;
-        $templatesuperadmin->type = $request->type;
-    
-        if (is_null($templatesuperadmin->user_id)) {
-            $templatesuperadmin->user_id = Auth::id();
+
+        $templateSuperadmin->name = $request->name;
+        $templateSuperadmin->description = $request->description;
+        $templateSuperadmin->type = $request->type;
+
+        if (is_null($templateSuperadmin->user_id)) {
+            $templateSuperadmin->user_id = Auth::id();
         }
-    
-        $templatesuperadmin->save();        
-    
+
+        $templateSuperadmin->save();
+
         return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil diperbarui!');
     }
-    
 
-    // Hapus template
-    public function destroy(Template $templatesuperadmin)
+    public function destroy($id, Template $templateSuperadmin)
     {
-        $templatesuperadmin->delete();
+        $templateSuperadmin = Template::findOrFail($id);
+        $templateSuperadmin->delete();
         return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil dihapus!');
-    }
-    
-    
-
-    // Tampilkan UI pilih template seperti di desain
-        public function select()
-    {
-        $templates = Template::all();
-        return view('templatesuperadmin.select', compact('templates'));
     }
 
 }

@@ -57,7 +57,7 @@
                 <div class="card" style="background-color: #FBB041;">
                     <div class="card-body">
                         <h5 class="card-title">Total Certificates</h5>
-                        <h1>84</h1>
+                        <h1>{{ $totalCertificate }}</h1>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="card" style="background-color: #FBB041;">
                     <div class="card-body">
                         <h5 class="card-title">Certificates Sent</h5>
-                        <h1>65</h1>
+                        <h1>{{ $totalSent }}</h1>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="card" style="background-color: #FBB041;">
                     <div class="card-body">
                         <h5 class="card-title">Templates</h5>
-                        <h1>12</h1>
+                        <h1>{{ $totalTemplate }}</h1>
                     </div>
                 </div>
             </div>

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Certificate;
+use App\Models\Template;
 
 class HomeController extends Controller
 {
-    public function index()
+   public function index()
     {
-        return view('home');
+        $totalSent = Certificate::count();
+        $totalTemplate = Template::count();
+        $totalCertificate = $totalSent + $totalTemplate;
+        return view('home', compact('totalTemplate', 'totalSent', 'totalCertificate'));
     }
     public function dashboard()
 {

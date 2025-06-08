@@ -74,4 +74,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Certificate::class, 'certificate_id');
     }
 
+    // untuk role user
+    public function hasRole(array $roles)
+    {
+        return in_array($this->role, $roles);
+    }
+
+
 }
