@@ -91,5 +91,12 @@ class TemplateController extends Controller
         return redirect()->route('templatesuperadmin.index')->with('success', 'Template berhasil dihapus!');
     }
 
+    // Tampilkan UI pilih template seperti di desain
+        public function select()
+    {
+        $templates = Template::all();
+        return view('templatesuperadmin.select', compact('templates'));
+    }
+
 }
 ?>
