@@ -76,24 +76,75 @@ Route::middleware(['auth', 'verified.custom'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// middleware untuk admin dan superadmin
-Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
+// middleware untuk superadmin
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    // route untuk user management
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'UserCreate'])->name('user.create');
     Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::resource('templatesuperadmin', TemplateController::class);
+    //route untuk history certificate
+    Route::get('/history', [CertificateController::class, 'show_certificate'])->name('show_certificate');
+    // route untuk settings dan logout
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 // end
 
-//middleware khusus untuk superadmin
-Route::middleware(['auth', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
+    // route untuk create certificate
+    Route::get('templateadmin/upload', [CertificateController::class, 'upload'])->name('templateadmin.upload');
+    Route::post('templateadmin/upload', [CertificateController::class, 'storeUpload'])->name('templateadmin.upload.store');
+    Route::delete('templateadmin/upload/{id}', [CertificateController::class, 'deleteTemporaryBackground'])->name('templateadmin.upload.delete');
+    Route::get('templateadmin/data-input', [CertificateController::class, 'dataInput'])->name('templateadmin.dataInput');
+    Route::post('templateadmin/store-data', [CertificateController::class, 'storeData'])->name('templateadmin.storeData');
+    Route::get('templateadmin/template', [CertificateController::class, 'template'])->name('templateadmin.template');
+    Route::resource('templateadmin', CertificateController::class)->except(['show']);
+
+    Route::resource('templateadmin/contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy'])->names([
+        'index' => 'templateadmin.contacts',
+        'store' => 'templateadmin.contacts.store',
+        'update' => 'templateadmin.contacts.update',
+        'destroy' => 'templateadmin.contacts.destroy',
+    ]);
+
+    Route::get('/templateadmin/preview', [PreviewController::class, 'index'])->name('certificate.preview');
+    Route::post('/certificate', [CertificateController::class, 'store'])->name('certificate.store');
+    Route::get('/certificate', [CertificateController::class, 'index']);
+    Route::get('/certificate/{id}/download', [CertificateController::class, 'download']);
+    Route::get('templateadmin/preview', [CertificateController::class, 'dataInputs'])->name('templateadmin.dataInputs');
+    Route::get('/certificate/previews/{id}', [CertificateController::class, 'previews'])->name('certificate.previews');
+    Route::get('/templateadmin/preview/{id}', [CertificateController::class, 'dataInputs'])->name('templateadmin.previews');
+    Route::get('/certificate/preview', [CertificateController::class, 'preview'])->name('certificate.preview');
+
+    Route::post('/send-certificate-email', [CertificateController::class, 'sendEmail']);
+    Route::post('/send-bulk-email', [CertificateController::class, 'sendBulkEmail']);
+    Route::post('/certificates/send-bulk', [CertificateController::class, 'sendBulk'])->name('certificates.sendBulk');
+    Route::resource('/certificates', CertificateController::class);
+
+    // route untuk verifikasi
+    Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
+    Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
+    Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
+    Route::get('/verifications/{code}', [VerificationController::class, 'show']);
+    Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
+
+    // route untuk create template
     Route::put('templatesuperadmin/{id}', [TemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templatesuperadmin/{id}', [TemplateController::class, 'destroy'])->name('templates.destroy');
     Route::resource('templates', TemplateController::class);
+    Route::resource('templatesuperadmin', TemplateController::class);
+
+    // route untuk stting dan logout
+    Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
-//end
+
 
 // Rute Guest -> Log in / Register
 Route::middleware(['guest'])->group(function () {

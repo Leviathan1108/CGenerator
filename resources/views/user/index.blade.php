@@ -43,7 +43,6 @@
         </div>
 
         <!-- button luar -->
-        @if (Auth::user()->role === 'admin')
             <div class="d-flex gap-4 mt-3 ms-3">
                 <div class="col-auto">
                     <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
@@ -53,7 +52,6 @@
                     <button class="btn text-white" style="background-color: #FBB041;">Bulk Adress</button>
                 </div>
             </div>
-        @endif
 
         <!-- Statistik Ringkas -->
         <div class="row text-start my-4 px-2 fw-bold" style="color: #1E3265;">
@@ -99,12 +97,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if (Auth::user()->role === 'admin')
                                     <a href="#" class="text-primary me-3 text-decoration-none">Edit</a>
                                     <a href="#" class="text-danger text-decoration-none">Delete</a>
-                                @else
-                                    <span class="text-muted">View Only</span>
-                                @endif
                             </td>
                         </tr>
 

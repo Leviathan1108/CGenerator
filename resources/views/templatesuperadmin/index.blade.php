@@ -7,13 +7,11 @@
         </nav>
         <div class="container">
             <!-- button modal add tempalet -->
-            @if (Auth::user()->role === 'superadmin')
             <button style="background-color: #FBB041; border-radius: 10px; border: none;" type="button"
                 class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalAdd">
                 <!-- <a href="{{ route('templates.create') }}" class="text-decoration-none text-light">Tambah Template</a> -->
                 Add Template
             </button>
-            @endif
 
             @if ($errors->any())
                 <div style="color: red;">
@@ -26,7 +24,6 @@
             @endif
 
             <!-- Modal create template superadmin-->
-            @if (Auth::user()->role === 'superadmin')
             <div class="modal fade" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -84,7 +81,6 @@
                     </div>
                 </div>
             </div>
-            @endif
 
             @if(session('success'))
                 <p style="color: green;">{{ session('success') }}</p>
@@ -118,7 +114,6 @@
                         <td>{{ $template->type ?? '-' }}</td>
                         <td>
                             <!-- button moadal edit -->
-                            @if (Auth::user()->role === 'superadmin')
                             <button style="background-color: #FBB041; border-radius: 10px; border: none;" type="button"
                                 class="btn text-light" data-id="{{ $template->id }}" data-action="{{ route('templates.update', $template->id) }}" data-bs-toggle="modal" data-bs-target="#modalEditTemplate{{ $template->id }}">
                                 Edit
@@ -180,10 +175,8 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
 
                             <!-- button hapus template -->
-                            @if (Auth::user()->role === 'superadmin')
                             <button style="background-color: #F13C20; border-radius: 10px; border: none;" type="button"
                                 class="btn text-light" data-bs-toggle="modal" data-bs-target="#modalHapusTemplate{{ $template->id }}">
                                 Delete
@@ -213,9 +206,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @else
-                                <span class="text-muted">View Only</span>
-                            @endif
                         </td>
                     </tr>
                 @endforeach
