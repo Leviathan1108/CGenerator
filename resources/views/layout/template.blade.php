@@ -198,181 +198,166 @@
 
 <!-- STEP 4: Input Data Sertifikat -->
 <section id="step-4" class="hidden mt-4">
-  <h2 class="h5 fw-bold mb-4">Isi Data Sertifikat</h2>
-  <div class="row align-items-start">
-    
-    <!-- KIRI: PREVIEW -->
-    <div class="col-md-8 mb-3">
-      <div class="position-relative border p-4 bg-light rounded text-center">
-        <h5 class="text-muted mb-3">Preview Sertifikat</h5>
-        <div class="position-relative" style="width: 100%; height: auto; max-height: 600px;">  
-          <img id="cert-preview-image" src="#" class="border rounded shadow-sm" 
-     style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-          <!-- Logo Preview -->
-          <img id="preview-logo" src="#" 
-     style="position: absolute; top: 10px; left: 10px; max-height: 70px; max-width: 70px; display: none; cursor: move;" 
-     onmousedown="dragElement(event)">
+  <h2 class="h5 fw-bold mb-4 text-center">Isi Data Sertifikat</h2>
 
-<div id="preview-participant-name" class="draggable-text resizable-text" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 24px; text-shadow: 1px 1px 2px #fff;">
-  <span class="text-content">Nama Peserta</span>
-  <div class="resize-handle"></div>
-</div>
+  <!-- PREVIEW FULL WIDTH -->
+  <div class="w-100 mb-4">
+    <div class="position-relative border p-4 bg-light rounded text-center mx-auto" style="max-width: 1000px;">
+      <div class="position-relative w-100" style="height: auto; max-height: 700px;">
+        <img id="cert-preview-image" src="#" class="border rounded shadow-sm w-100 h-100 object-fit-cover">
 
-<div id="preview-event-name" class="draggable-text resizable-text" style="position: absolute; bottom: 40%; left: 50%; transform: translateX(-50%); color: black; font-size: 15px; text-shadow: 1px 1px 2px #fff;">
-  <span class="text-content">Breaking Barriers in Achieving Targeted Yield: Driving Success Through Oil Palm Replanting & GAP Adoption</span>
-  <div class="resize-handle"></div>
-</div>
+        <!-- Logo Preview -->
+        <img id="preview-logo" src="#" 
+          style="position: absolute; top: 10px; left: 10px; max-height: 70px; max-width: 70px; display: none; cursor: move;" 
+          onmousedown="dragElement(event)">
 
-<!-- Judul Sertifikat -->
-<div id="preview-title" class="draggable-text resizable-text"
-     style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold;">
-  <span class="text-content">Certificate Of Appreciation</span>
-  <div class="resize-handle"></div>
-</div>
+        <!-- Nama Peserta -->   
+        <div id="preview-participant-name" class="draggable-text resizable-text"
+          style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 24px; text-shadow: 1px 1px 2px #fff;">
+          <span class="text-content">Nama Peserta</span>
+          <div class="resize-handle"></div>
+        </div>
 
-<!-- Peran Peserta -->
-<div id="preview-role" class="draggable-text resizable-text"
-     style="position: absolute; top: 33%; left: 50%; transform: translateX(-50%); font-size: 16px;">
-  <span class="text-content">For Recognition and appreciation for Contribution as Participants</span>
-  <div class="resize-handle"></div>
-</div>
+        <!-- Event Name -->
+        <div id="preview-event-name" class="draggable-text resizable-text"
+          style="position: absolute; bottom: 40%; left: 50%; transform: translateX(-50%); color: black; font-size: 15px; text-shadow: 1px 1px 2px #fff;">
+          <span class="text-content">Judul Event Panjang</span>
+          <div class="resize-handle"></div>
+        </div>
 
-<!-- Deskripsi -->
-<div id="preview-description" class="draggable-text resizable-text"
-     style="position: absolute; top: 23%; left: 50%; transform: translateX(-50%); font-size: 13px; width: 70%; text-align: center;">
-  <span class="text-content">This certificate is proudly presented to:</span>
-  <div class="resize-handle"></div>
-</div>
-<!-- Preview Tanda Tangan -->
-<img id="preview-signature-img" class="draggable resizable"
-     src="" alt="Signature Preview"
-     style="position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%); width: 150px; display: none;">
+        <!-- Judul -->
+        <div id="preview-title" class="draggable-text resizable-text"
+          style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: bold;">
+          <span class="text-content">Certificate of Appreciation</span>
+          <div class="resize-handle"></div>
+        </div>
 
-<!-- Nama Penandatangan -->
-<div id="preview-signature-name" class="draggable-text resizable-text"
-     style="position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
-  <span class="text-content">Stefen Laksana</span>
-  <div class="resize-handle"></div>
-</div>     
+        <!-- Role -->
+        <div id="preview-role" class="draggable-text resizable-text"
+          style="position: absolute; top: 33%; left: 50%; transform: translateX(-50%); font-size: 16px;">
+          <span class="text-content">Sebagai Peserta</span>
+          <div class="resize-handle"></div>
+        </div>
 
-<!-- Tanggal -->
-<div id="preview-date" class="draggable-text resizable-text"
-     style="position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
-  <span class="text-content">Jakarta, 19 Mei 2025</span>
-  <div class="resize-handle"></div>
-</div>
+        <!-- Deskripsi -->
+        <div id="preview-description" class="draggable-text resizable-text"
+          style="position: absolute; top: 23%; left: 50%; transform: translateX(-50%); font-size: 13px; width: 70%; text-align: center;">
+          <span class="text-content">This certificate is proudly presented to:</span>
+          <div class="resize-handle"></div>
+        </div>
 
+        <!-- Tanda Tangan -->
+        <img id="preview-signature-img" class="draggable resizable"
+          src="" alt="Signature Preview"
+          style="position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%); width: 150px; display: none;">
 
+        <!-- Nama Penandatangan -->
+        <div id="preview-signature-name" class="draggable-text resizable-text"
+          style="position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
+          <span class="text-content">Nama Penandatangan</span>
+          <div class="resize-handle"></div>
+        </div>
+
+        <!-- Tanggal -->
+        <div id="preview-date" class="draggable-text resizable-text"
+          style="position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px;">
+          <span class="text-content">Jakarta, 19 Mei 2025</span>
+          <div class="resize-handle"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    
-<!-- KANAN: FORM -->
-<div class="col-md-3">
-  <form id="certificateForm" method="POST" action="{{ route('certificate.store') }}" enctype="multipart/form-data">
+  <!-- FORM INPUT DI BAWAH -->
+  <form id="certificateForm" method="POST" action="{{ route('certificate.store') }}" enctype="multipart/form-data" class="mx-auto" style="max-width: 700px;">
     @csrf
-    <!-- Template ID disimpan sebagai hidden -->
     <input type="hidden" name="selected_template_id" id="selected_template_id">
-{{-- Event Name --}}
-<div class="form-group mb-3">
-  <label for="event_name">Nama Acara</label>
-  <input type="text" name="event_name" class="form-control" required>
-</div>
 
-{{-- Status --}}
-<div class="form-group mb-3">
-  <label for="status">Status</label>
-  <select name="status" class="form-control" required>
-      <option value="draft">Draft</option>
-      <option value="published">Published</option>
-      <option value="revoked">Revoked</option>
-  </select>
-</div>
+    <div class="form-group mb-3">
+      <label for="event_name">Nama Acara</label>
+      <input type="text" name="event_name" class="form-control" required>
+    </div>
 
-{{-- Logo (Optional) --}}
-<div class="form-group mb-3">
-  <label for="logo">Upload Logo (opsional)</label>
-  <input type="file" name="logo" class="form-control" accept=".jpg,.jpeg,.png,.svg">
-</div>
+    <div class="form-group mb-3">
+      <label for="status">Status</label>
+      <select name="status" class="form-control" required>
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+          <option value="revoked">Revoked</option>
+      </select>
+    </div>
 
-{{-- Recipient --}}
-<div class="form-group mb-3">
-  <label for="recipient">Nama Penerima</label>
-  <select class="form-control" id="recipient-select" onchange="fillRecipientInput(this)">
-      <option value="">-- Pilih dari Kontak yang Ada --</option>
-      @foreach($contacts as $contact)
+    <div class="form-group mb-3">
+      <label for="logo">Upload Logo (opsional)</label>
+      <input type="file" name="logo" class="form-control" accept=".jpg,.jpeg,.png,.svg">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="recipient">Nama Penerima</label>
+      <select class="form-control" id="recipient-select" onchange="fillRecipientInput(this)">
+        <option value="">-- Pilih dari Kontak yang Ada --</option>
+        @foreach($contacts as $contact)
           <option value="{{ $contact->name }}">{{ $contact->name }}</option>
-      @endforeach
-  </select>
+        @endforeach
+      </select>
+      <small class="form-text text-muted">Atau ketik nama baru di bawah:</small>
+      <input type="text" name="recipient" id="recipient-input" class="form-control mt-2" required>
+    </div>
 
-  <small class="form-text text-muted">Atau ketik nama baru di bawah:</small>
-  <input type="text" name="recipient" id="recipient-input" class="form-control mt-2" required>
-</div> 
+    <div class="form-group mb-3">
+      <label for="title">Judul Sertifikat</label>
+      <input type="text" name="title" class="form-control" required>
+    </div>
 
-<!-- Title -->
-<div class="form-group mb-3">
-  <label for="title">Judul Sertifikat</label>
-  <input type="text" name="title" class="form-control" required>
-</div>
+    <div class="form-group mb-3">
+      <label for="role">Peran Peserta</label>
+      <input type="text" name="role" class="form-control" required>
+    </div>
 
-<!-- Peran Peserta -->
-<div class="form-group mb-3">
-  <label for="role">Peran Peserta</label>
-  <input type="text" name="role" class="form-control" required>
-</div>
+    <div class="form-group mb-3">
+      <label for="certificate_type">Tipe Sertifikat</label>
+      <input list="certificate-types" name="certificate_type" class="form-control" placeholder="Pilih atau ketik tipe sertifikat">
+      <datalist id="certificate-types">
+        <option value="Attendance Certificate">
+        <option value="Completion Certificate">
+        <option value="Award Certificate">
+        <option value="Competency Certificate">
+        <option value="Participation Certificate">
+        <option value="Academic Degree Certificate">
+        <option value="Training Certificate">
+        <option value="Membership Certificate">
+        <option value="Recognition Certificate">
+        <option value="Certificate of Authenticity">
+        <option value="Expertise Certificate">
+        <option value="Inspection Certificate">
+        <option value="Validation Certificate">
+        <option value="Registration Certificate">
+        <option value="Compliance Certificate">
+      </datalist>
+    </div>
 
-{{-- Certificate Type --}}
-<div class="form-group mb-3">
-  <label for="type" class="form-label">Tipe Sertifikat</label>
-  <input list="certificate-types" name="certificate_type" class="form-control" placeholder="Pilih atau ketik tipe sertifikat">
-  <datalist id="certificate-types">
-    <option value="Attendance Certificate">
-    <option value="Completion Certificate">
-    <option value="Award Certificate">
-    <option value="Competency Certificate">
-    <option value="Participation Certificate">
-    <option value="Academic Degree Certificate">
-    <option value="Training Certificate">
-    <option value="Membership Certificate">
-    <option value="Recognition Certificate">
-    <option value="Certificate of Authenticity">
-    <option value="Expertise Certificate">
-    <option value="Inspection Certificate">
-    <option value="Validation Certificate">
-    <option value="Registration Certificate">
-    <option value="Compliance Certificate">
-  </datalist>
-</div>
+    <div class="form-group mb-3">
+      <label for="date">Tanggal</label>
+      <input type="date" name="date" class="form-control" required>
+    </div>
 
-<!-- Date -->
-<div class="form-group mb-3">
-  <label for="date">Tanggal</label>
-  <input type="date" name="date" class="form-control" required>
-</div>
+    <div class="form-group mb-3">
+      <label for="description">Deskripsi</label>
+      <textarea name="description" class="form-control" rows="3"></textarea>
+    </div>
 
-<!-- Description -->
-<div class="form-group mb-3">
-  <label for="description">Deskripsi</label>
-  <textarea name="description" class="form-control" rows="3"></textarea>
-</div>
+    <div class="form-group mb-3">
+      <label for="signatureImage">Upload Tanda Tangan</label>
+      <input type="file" class="form-control" name="signatureImage" id="signatureImage" accept="image/*">
+    </div>
 
-<div class="mb-3">
-  <label for="signatureImage" class="form-label">Upload Tanda Tangan</label>
-  <input type="file" class="form-control" name="signatureImage" id="signatureImage" accept="image/*">
-</div>
+    <div class="form-group mb-3">
+      <label for="signature_name">Nama yang Tanda Tangan</label>
+      <input type="text" name="signature_name" class="form-control" required>
+    </div>
 
-<!-- Nama Tanda Tangan -->
-<div class="form-group mb-3">
-  <label for="signature_name">Nama yang Tanda Tangan</label>
-  <input type="text" name="signature_name" class="form-control" required>
-</div>
-
-
-{{-- Submit --}}
-<button type="submit" class="btn btn-primary">Simpan Sertifikat</button>
+    <button type="submit" class="btn btn-primary w-100">Simpan Sertifikat</button>
   </form>
-</div>
 </section>
 
 <section id="step-3" class="hidden mt-4">
@@ -407,14 +392,27 @@
     </div>
   </div>
 </section>
+<!-- Tombol Navigasi -->
+<div class="flex justify-center mt-4">
+  <button
+    id="back-btn"
+    onclick="changeStep(-1)"
+    class="mx-2 border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2 rounded shadow transition"
+  >
+    Back
+  </button>
+  <button
+    id="next-btn"
+    onclick="changeStep(1)"
+    class="mx-2 bg-blue-600 text-white hover:bg-blue-700 font-semibold px-6 py-2 rounded shadow transition"
+  >
+    Next
+  </button>
+</div>
 
- 
 
-  <!-- Tombol Navigasi -->
-  <div class="step-buttons d-flex justify-content-center mt-4">
-    <button id="back-btn" class="btn btn-secondary mx-3" onclick="changeStep(-1)">Back</button>
-    <button id="next-btn" class="btn btn-primary mx-3" onclick="changeStep(1)">Next</button>
-  </div>    
+
+
 </main>
 
 <script>
@@ -934,6 +932,13 @@ function addRow() {
   addRecipientBtn.addEventListener('click', addRecipient);
   uploadCsvInput.addEventListener('change', handleCsvUpload);
 
+  // --- Event listener untuk tekan ENTER di input email ---
+recipientEmailInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // mencegah form submit jika ada form
+    addRecipient();
+  }
+});
   // --- Initial render ---
   renderRecipients();
 

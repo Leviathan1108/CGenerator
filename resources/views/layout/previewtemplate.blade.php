@@ -96,7 +96,6 @@
     
 <div class="container">
     <h3 class="mb-4">Certificate Preview</h3>
-
     <div class="mb-4">
         <label for="contactSelect" class="form-label">Select Contact:</label>
         <select id="contactSelect" class="form-select">
@@ -107,37 +106,78 @@
             @endforeach
         </select>
     </div>
-    <canvas id="myCanvas" width="1000" height="700" style="border: 1px solid #ccc;"></canvas>
+    <canvas id="myCanvas" width="1060" height="710" style="border: 1px solid #ccc;"></canvas>
+</div><div class="row g-2 mb-3">
+  <div class="col">
+    <button id="downloadPdf" class="btn btn-maxy-primary w-100">
+      <i class="bi bi-download"></i> PDF
+    </button>
+  </div>
+  <div class="col">
+    <button id="downloadAllZip" class="btn btn-maxy-success w-100">
+      <i class="bi bi-archive"></i> ZIP
+    </button>
+  </div>
+  <div class="col">
+    <button id="sendEmail" class="btn btn-maxy-warning w-100">
+      <i class="bi bi-envelope-fill"></i> Email
+    </button>
+  </div>
+  <div class="col">
+    <button id="sendEmailAll" class="btn btn-maxy-primary w-100">
+      <i class="bi bi-send-fill"></i> Kirim Semua
+    </button>
+  </div>
 </div>
-<div class="mt-3">
-    <button id="downloadPdf" class="btn btn-primary">
-      <i class="bi bi-download"></i> Download PDF
-    </button>
-
-    <button id="downloadAllZip" class="btn btn-success">
-      <i class="bi bi-archive"></i> Download All as ZIP
-    </button>  
-    
-    <button id="sendEmail" class="btn btn-warning">
-      <i class="bi bi-envelope-fill"></i> Send to Email
-    </button>
-
-    <button id="sendEmailAll" class="btn btn-primary">Kirim Semua Sekarang</button>
-        
-    {{-- <form action="{{ route('certificates.send.bulk') }}" method="POST" onsubmit="return confirm('Yakin kirim semua sertifikat sekarang?')">
-      @csrf
-      <button type="submit" class="btn btn-success">
-          <i class="bi bi-send"></i> Kirim Semua Sertifikat Sekarang
-      </button>
-  </form> --}}
-
-    <a href="http://127.0.0.1:8000/templateadmin/template" class="btn btn-outline-secondary mb-3">
+<div class="row mt-4">
+  <div class="col-12">
+    <a href="http://127.0.0.1:8000/templateadmin/template" class="btn btn-maxy-blue w-100">
       <i class="bi bi-arrow-left"></i> Back
     </a>
   </div>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>  
+</div>
+
+
+
+<style>
+  .btn-maxy-primary {
+    background-color: #232E66;
+    color: white;
+    border: none;
+  }
+  .btn-maxy-success {
+    background-color: #00B894;
+    color: white;
+    border: none;
+  }
+  .btn-maxy-warning {
+    background-color: #FBB041;
+    color: #333;
+    border: none;
+  }
+  .btn-maxy-primary:hover {
+    background-color: #093b66;
+  }
+  .btn-maxy-success:hover {
+    background-color: #009e7d;
+  }
+  .btn-maxy-warning:hover {
+    background-color: #FBB041;
+  }
+  .btn-maxy-blue {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px; /* pill shape */
+  }
+  .btn-maxy-blue:hover {
+    background-color: #0069d9;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
@@ -147,9 +187,26 @@
   // Set Background
   const bgImage = "{{ asset('storage/' . $certificate->template->file_path) }}";
   fabric.Image.fromURL(bgImage, function(img) {
-      img.scaleToWidth(canvas.width);
-      img.scaleToHeight(canvas.height);
-      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+    const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
+
+// Hitung rasio skala terbaik untuk mempertahankan proporsi gambar
+const scaleX = canvasWidth / img.width;
+const scaleY = canvasHeight / img.height;
+const scale = Math.min(scaleX, scaleY); // pilih skala terkecil agar tidak keluar canvas
+
+// Atur skala dan posisi gambar agar center dan tidak terpotong
+img.set({
+    scaleX: scale,
+    scaleY: scale,
+    left: (canvasWidth - img.width * scale) / 2,
+    top: (canvasHeight - img.height * scale) / 2,
+    selectable: false,
+    evented: false
+});
+
+// Atur background image dan render canvas
+canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
       img.set({ selectable: false, evented: false });
   });
   
