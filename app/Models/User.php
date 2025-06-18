@@ -36,17 +36,25 @@ class User extends Authenticatable implements MustVerifyEmail
     // untuk membuat uuid custom
     protected static function boot()
     {
-        parent::boot();
+         parent::boot();
 
         static::creating(function ($user) {
             // UUID untuk kolom id
             $user->id = (string) Str::uuid();
 
-            // Custom ID format: USR-2025-001
-            $year = now()->format('Y'); //tahunnya
-            $count = User::whereYear('created_at', $year)->count() + 1; //increment 001
-            $user->custom_id = 'USR-' . $year . '-' . str_pad($count, 3, '0', STR_PAD_LEFT); //menyatukan
+            // Buat custom_id berdasarkan user terakhir
+            $year = now()->format('Y');
+
+            $last = User::whereYear('created_at', $year)
+                        ->orderByDesc('custom_id')
+                        ->first();
+
+            $lastNumber = $last ? intval(substr($last->custom_id, -3)) : 0;
+            $newNumber = $lastNumber + 1;
+
+            $user->custom_id = 'USR-' . $year . '-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
         });
+
     }
     //end
 

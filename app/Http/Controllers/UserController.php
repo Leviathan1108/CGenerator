@@ -55,6 +55,7 @@ class UserController extends Controller
     }
     //end
 
+
     // user create untuk admin
     public function UserCreate()
     {
@@ -82,6 +83,47 @@ class UserController extends Controller
         return redirect()->route('user.create')->with('success', 'User berhasil ditambahkan!');
     }
 
+    // end
+
+    // edit untuk user admin
+    public function AdminEdit($id)
+    {
+        $user = User::findOrFail($id);
+        // Pastikan daftar role sesuai dengan role yang tersedia di sistem kamu
+        $roles = ['guest', 'admin', 'superadmin'];
+
+        return view('user.edit', compact('user', 'roles'));
+    }
+
+    public function Adminupdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validasi inputan
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'role' => 'required|in:guest,admin,superadmin',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        // Update data user
+        $user->username = $request->input('username');
+        $user->role = $request->input('role');
+        $user->status = $request->input('status');
+        $user->save();
+
+        return redirect()->route('admin.user.edit', $user->id)->with('success', 'User berhasil diperbarui.');
+    }
+    // end
+
+    // delete untuk admin
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
+    }
     // end
 
     // Form edit profile

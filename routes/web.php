@@ -90,6 +90,9 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/admin/user/{id}/edit', [UserController::class, 'AdminEdit'])->name('admin.user.edit');
+    Route::put('/admin/user/{id}', [UserController::class, 'Adminupdate'])->name('admin.user.update');
+    Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.user.destroy');
 });
 // end
 

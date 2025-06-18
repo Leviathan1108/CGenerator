@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah user</title>
+    <title>Tambah User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -27,14 +28,15 @@
 
         <form action="{{ route('user.store') }}" method="POST">
             @csrf
+
             <div class="mb-3">
                 <label for="name" class="form-label">Nama</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Username</label>
-                <input type="text" class="form-control" id="name" name="username" value="{{ old('username') }}" required>
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" required>
             </div>
 
             <div class="mb-3">
@@ -53,14 +55,22 @@
             </div>
 
             <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="">Pilih Status</option>
+                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
 
             <div class="mb-3">
                 <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                    required>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Tambah User</button>

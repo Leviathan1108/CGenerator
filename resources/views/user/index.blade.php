@@ -43,15 +43,15 @@
         </div>
 
         <!-- button luar -->
-            <div class="d-flex gap-4 mt-3 ms-3">
-                <div class="col-auto">
-                    <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
-                </div>
-
-                <div class="col-auto">
-                    <button class="btn text-white" style="background-color: #FBB041;">Bulk Adress</button>
-                </div>
+        <div class="d-flex gap-4 mt-3 ms-3">
+            <div class="col-auto">
+                <a href="{{ route('user.create') }}" class="btn btn-success">Add User</a>
             </div>
+
+            <div class="col-auto">
+                <button class="btn text-white" style="background-color: #FBB041;">Bulk Adress</button>
+            </div>
+        </div>
 
         <!-- Statistik Ringkas -->
         <div class="row text-start my-4 px-2 fw-bold" style="color: #1E3265;">
@@ -97,8 +97,15 @@
                                 @endif
                             </td>
                             <td>
-                                    <a href="#" class="text-primary me-3 text-decoration-none">Edit</a>
-                                    <a href="#" class="text-danger text-decoration-none">Delete</a>
+                                <a href="{{ route('admin.user.edit', $user->id) }}"
+                                    class="text-primary me-3 text-decoration-none">Edit</a>
+
+                                <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus user ini?')" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn text-danger text-decoration-none">Delete</button>
+                                </form>
                             </td>
                         </tr>
 
