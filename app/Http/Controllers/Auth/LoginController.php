@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
@@ -34,6 +35,15 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $user = Auth::user();
+            //Cek status user jika tidak login selama 6 bulan
+            if ($user->status !== 'active') {
+                Auth::logout(); // logout langsung
+                return back()->with('error', 'Akun Anda telah dinonaktifkan. Silakan hubungi superadmin.');
+            }
+            $user->last_login_at = now();
+            $user->save();
+
             return redirect()->route('home')->with('success', 'Login berhasil!');
         }
 
@@ -54,4 +64,5 @@ class LoginController extends Controller
                 return redirect('/home');
         }
     }
+
 }

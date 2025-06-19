@@ -21,7 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public $incrementing = false; //biar tidak increment
     protected $keyType = 'string'; //typenya string
-
+    protected $dates = ['last_login_at']; //active user
 
     protected $fillable = [
         'name',
@@ -36,7 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // untuk membuat uuid custom
     protected static function boot()
     {
-         parent::boot();
+        parent::boot();
 
         static::creating(function ($user) {
             // UUID untuk kolom id
@@ -46,8 +46,8 @@ class User extends Authenticatable implements MustVerifyEmail
             $year = now()->format('Y');
 
             $last = User::whereYear('created_at', $year)
-                        ->orderByDesc('custom_id')
-                        ->first();
+                ->orderByDesc('custom_id')
+                ->first();
 
             $lastNumber = $last ? intval(substr($last->custom_id, -3)) : 0;
             $newNumber = $lastNumber + 1;
