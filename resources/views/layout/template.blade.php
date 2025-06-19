@@ -198,18 +198,18 @@
 
 <!-- STEP 4: Input Data Sertifikat -->
 <section id="step-4" class="hidden mt-4">
+  
   <h2 class="h5 fw-bold mb-4 text-center">Isi Data Sertifikat</h2>
 
   <!-- PREVIEW FULL WIDTH -->
   <div class="w-100 mb-4">
+    <input type="hidden" id="selected_template_img" name="selected_template_img" value="{{ $template->file_path }}">
     <div class="position-relative border p-4 bg-light rounded text-center mx-auto" style="max-width: 1000px;">
       <div class="position-relative w-100" style="height: auto; max-height: 700px;">
-        <img id="cert-preview-image" src="#" class="border rounded shadow-sm w-100 h-100 object-fit-cover">
-
+        <canvas id="certificate-canvas" width="1122" height="793" class="border rounded shadow-sm w-100 h-100"></canvas>
+      
         <!-- Logo Preview -->
-        <img id="preview-logo" src="#" 
-          style="position: absolute; top: 10px; left: 10px; max-height: 70px; max-width: 70px; display: none; cursor: move;" 
-          onmousedown="dragElement(event)">
+        
 
         <!-- Nama Peserta -->   
         <div id="preview-participant-name" class="draggable-text resizable-text"
@@ -247,9 +247,7 @@
         </div>
 
         <!-- Tanda Tangan -->
-        <img id="preview-signature-img" class="draggable resizable"
-          src="" alt="Signature Preview"
-          style="position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%); width: 150px; display: none;">
+        
 
         <!-- Nama Penandatangan -->
         <div id="preview-signature-name" class="draggable-text resizable-text"
@@ -355,8 +353,10 @@
       <label for="signature_name">Nama yang Tanda Tangan</label>
       <input type="text" name="signature_name" class="form-control" required>
     </div>
-
-    <button type="submit" class="btn btn-primary w-100">Simpan Sertifikat</button>
+    <div>
+    <button id="reset-canvas-btn" class="btn btn-warning">Reset Canvas</button>
+    <button type="submit" class="btn btn-success">Finish</button>
+  </div>
   </form>
 </section>
 
@@ -414,7 +414,8 @@
 
 
 </main>
-
+<script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
+<script src="{{ asset('bootstrap/fabric/step-4.js') }}"></script>
 <script>
   function fillRecipientInput(select) {
     document.getElementById('recipient-input').value = select.value;
