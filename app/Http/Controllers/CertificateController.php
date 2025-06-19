@@ -16,6 +16,7 @@ use App\Mail\CertificateMail;
 use Illuminate\Support\Facades\Artisan;
 use App\Jobs\SendCertificateEmailJob;
 
+
 class CertificateController extends Controller
 {
     public function index()
@@ -354,6 +355,24 @@ public function sendBulk_old(Request $request)
     $contacts = Contact::all(); // Ambil semua kontak dari database
     return view('layout.recipienttemplate', compact('contacts'));
 }     
+//Handle Layout Canvas
+public function handleLayout(Request $request)
+{
+    if ($request->isMethod('post')) {
+        $filename = 'canvas/layout-' . $request->input('template_id', 'default') . '.json';
+        Storage::put($filename, json_encode($request->input('layout')));
+        return response()->json(['status' => 'saved', 'file' => $filename]);
+    }
 
+    if ($request->isMethod('get')) {
+        $filename = 'canvas/layout-' . $request->input('template_id', 'default') . '.json';
+        if (!Storage::exists($filename)) {
+            return response()->json(['error' => 'Layout not found'], 404);
+        }
+        return response()->json(json_decode(Storage::get($filename), true));
+    }
+
+    return response()->json(['error' => 'Unsupported method'], 405);
+}
 }
 ?>
