@@ -27,6 +27,7 @@
                 <div class="d-flex align-items-center justify-content-center w-100">
                     <i class="bi bi-exclamation-triangle-fill me-2 fs-6"></i>
                     <span>{{ session('error') }}</span>
+                    <a href="https://wa.me/081275724972" target="_blank">WhatsApp SuperAdmin</a>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

@@ -11,10 +11,9 @@ class UserController extends Controller
     // total user dan menampilkan user
     public function index(Request $request)
     {
-        // query builder untuk user
         $query = User::query();
 
-        // Filter berdasarkan role user
+        // Filter berdasarkan role
         if ($request->filled('role')) {
             $query->where('role', $request->role);
         }
@@ -23,17 +22,18 @@ class UserController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-
         // Ambil data user berdasarkan filter
         $users = $query->get();
 
         // Statistik
+        $roles = ['superadmin', 'admin', 'recipient', 'guest'];
         $totalUser = User::count();
-        $totalAdmin = User::where('role', ['superadmin', 'admin', 'recipient', 'guest'])->count();
+        $totalAdmin = User::whereIn('role', ['superadmin', 'admin'])->count(); // lebih tepat pakai whereIn
         $totalActiveUser = User::where('status', 'active')->count();
 
-        return view('user.index', compact('users', 'totalUser', 'totalAdmin', 'totalActiveUser'));
+        return view('user.index', compact('users', 'totalUser', 'totalAdmin', 'totalActiveUser', 'roles'));
     }
+
 
     // function untuk active and inactive
     public function activate($id)
@@ -53,13 +53,14 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'User deactivated successfully.');
     }
+
     //end
 
     // user create untuk admin
     public function UserCreate()
     {
         $roles = ['superadmin', 'admin', 'recipient', 'guest'];
-        return view('user.create', compact('roles'));
+        return view('user.index', compact('roles'));
     }
     public function store(Request $request)
     {
@@ -67,7 +68,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:superadmin,admin,recipient,user,',
+            'role' => 'required|in:superadmin,admin,recipient,guest,',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -79,9 +80,53 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('user.create')->with('success', 'User berhasil ditambahkan!');
+        return redirect()->route('user.index');
     }
 
+    // end
+
+    // edit untuk user admin
+    public function AdminEdit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = ['guest', 'admin', 'superadmin'];
+        $users = User::all();
+        $totalUser = $users->count();
+        $totalActiveUser = User::where('status', 'active')->count();
+        $totalAdmin = User::where('role', ['superadmin', 'admin', 'recipient', 'guest'])->count();
+
+        return view('user.index', compact('user', 'roles', 'users', 'totalUser', 'totalActiveUser', 'totalAdmin'));
+    }
+
+    public function Adminupdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validasi inputan
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'role' => 'required|in:guest,admin,superadmin',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        // Update data user
+        $user->username = $request->input('username');
+        $user->role = $request->input('role');
+        $user->status = $request->input('status');
+        $user->save();
+
+        return redirect()->route('admin.user.edit', $user->id);
+    }
+    // end
+
+    // delete untuk admin
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index');
+    }
     // end
 
     // Form edit profile
