@@ -11,16 +11,18 @@ class CertificateMail extends Mailable
 
     public $name;
     public $imageName;
+    public $verification_code;
 
-    public function __construct($name, $imageName)
+    public function __construct($name, $imageName, $verification_code)
     {
         $this->name = $name;
         $this->imageName = $imageName;
+        $this->verification_code = $verification_code;
     }
 
     public function build()
     {
-        return $this->subject('Sertifikat untuk ' . $this->name)
+        return $this->subject('Your Certificate from Maxy Academy ' . $this->name)
         ->markdown('emails.certificate')
         ->attach(storage_path("app/public/{$this->imageName}"), [
             'as' => 'sertifikat_' . $this->name . '.png',

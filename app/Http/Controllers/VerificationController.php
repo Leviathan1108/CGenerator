@@ -15,10 +15,16 @@ class VerificationController extends Controller
     public function check(Request $request)
     {
         $request->validate([
-            'verification_code' => 'required|string'
+            'verification_code' => 'required|string',
         ]);
 
-        return redirect()->route('verifications.show', ['code' => $request->verification_code]);
+        $certificate = Certificate::where('verification_code', $request->verification_code)->first();
+
+        if (!$certificate) {
+            return back()->with('error', 'Verification code not found.');
+        }
+
+        return view('certificates.result', compact('certificate'));
     }
 
     public function show($code)

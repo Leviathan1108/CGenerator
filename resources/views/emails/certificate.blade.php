@@ -43,6 +43,12 @@
                                 <strong>Don't forget to join us every Thursday</strong> for more inspiring Maxy Talks sessions! Stay connected with us for future events.
                             </p>
 
+                            <p style="font-size: 16px;">
+                                <strong>Verification Code:</strong> <code>{{ $verification_code }}</code><br>
+                                You can verify your certificate here:
+                                <a href="{{ url('/verifications') }}">{{ url('/verifications') }}</a>
+                            </p>                            
+
                             <p style="font-size: 16px;">Best regards,<br>
                             <strong>Maxy Academy Team</strong></p>
                         </td>

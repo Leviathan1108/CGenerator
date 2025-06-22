@@ -69,8 +69,8 @@ Route::middleware(['auth', 'verified.custom'])->group(function () {
     Route::post('/certificates/send-bulk', [CertificateController::class, 'sendBulk'])->name('certificates.sendBulk');
 
     Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
-    Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
     Route::get('/verifications/{code}', [VerificationController::class, 'show']);
+    Route::post('/verify', [VerificationController::class, 'check'])->name('verifications.check');
 
     Route::get('/settings/{id}', [UserController::class, 'show'])->name('show');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -170,6 +170,10 @@ Route::middleware(['guest'])->group(function () {
 
 
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');
+    Route::get('/verifications', [VerificationController::class, 'index'])->name('verifications.index');
+    Route::post('/verifications/check', [VerificationController::class, 'check'])->name('verifications.check');
+    Route::get('/verifications/{code}', [VerificationController::class, 'show']);
+    Route::get('/check/{code}', [VerificationController::class, 'check'])->name('verifications.check');
 });
 
 // Aktifkan fitur email verification Laravel

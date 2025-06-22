@@ -15,15 +15,17 @@ class SendCertificateEmailJob implements ShouldQueue
     public $name;
     public $email;
     public $imageFileName;
+    public $verification_code;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($name, $email, $imageFileName)
+    public function __construct($name, $email, $imageFileName, $verification_code)
     {
         $this->name = $name;
         $this->email = $email;
         $this->imageFileName = $imageFileName;
+        $this->verification_code = $verification_code;
     }
 
     /**
@@ -33,7 +35,7 @@ class SendCertificateEmailJob implements ShouldQueue
 public function handle(): void
 {
     Mail::to($this->email)
-        ->send(new \App\Mail\CertificateMail($this->name, $this->imageFileName));
+        ->send(new \App\Mail\CertificateMail($this->name, $this->imageFileName, $this->verification_code));
 }
 
 }

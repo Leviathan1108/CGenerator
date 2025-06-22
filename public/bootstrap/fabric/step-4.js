@@ -44,14 +44,49 @@ function initCanvas(certBgUrl) {
   canvas.clear();
   loadBackground(certBgUrl);
 
-  addText('title', 'Certificate of Appreciation', { top: 100, left: 100, fontSize: 28, fontWeight: 'bold' });
-  addText('description', 'This certificate is proudly presented to:', { top: 150, left: 100, fontSize: 14 });
-  addText('recipient', 'Nama Peserta', { top: 200, left: 100, fontSize: 26, fontWeight: 'bold' });
-  addText('role', 'Sebagai Peserta', { top: 250, left: 100, fontSize: 16 });
-  addText('event', 'Judul Event Panjang', { top: 300, left: 100, fontSize: 16 });
-  addText('date', 'Jakarta, 19 Mei 2025', { top: 350, left: 100, fontSize: 14 });
-  addText('signature_name', 'Nama Penandatangan', { top: 600, left: 100, fontSize: 14 });
+  addText('title', 'Certificate of Appreciation', {
+    top: percentY(12), left: percentX(50),
+    fontSize: 24, fontWeight: 'bold', originX: 'center', textAlign: 'center'
+  });
+  
+  addText('description', 'This certificate is proudly presented to:', {
+    top: percentY(20), left: percentX(50),
+    fontSize: 14, originX: 'center', textAlign: 'center'
+  });
+  
+  addText('recipient', 'Nama Peserta', {
+    top: percentY(28), left: percentX(50),
+    fontSize: 28, fontWeight: 'bold', originX: 'center'
+  });
+  
+  addText('role', 'Sebagai Peserta', {
+    top: percentY(33), left: percentX(50),
+    fontSize: 16, originX: 'center'
+  });
+  
+  addText('event', 'Judul Event Panjang', {
+    top: percentY(52), left: percentX(50),
+    fontSize: 16, originX: 'center'
+  });
+  
+  addText('date', 'Jakarta, 19 Mei 2025', {
+    top: percentY(58), left: percentX(50),
+    fontSize: 14, originX: 'center'
+  });
+  
+  addText('signature_name', 'Nama Penandatangan', {
+    top: percentY(90), left: percentX(50),
+    fontSize: 14, originX: 'center'
+  });
 
+  function percentX(p) {
+    return (canvas.width * p) / 100;
+  }
+  
+  function percentY(p) {
+    return (canvas.height * p) / 100;
+  }
+  
   // UID Placeholder (tidak bisa digeser)
   const uidPlaceholder = new fabric.Textbox('UID_PLACEHOLDER', {
     left: 800,
@@ -96,6 +131,7 @@ function addText(id, text, options = {}) {
     textAlign: 'left',
     originX: 'left',
     originY: 'top',
+    width: options.width || 400,
     ...options,
     customId: id
   });
@@ -111,17 +147,22 @@ function addImage(id, url, options = {}) {
       console.error("Gagal memuat gambar:", url);
       return;
     }
+
+    const maxSize = 70;
+    const scale = Math.min(maxSize / img.width, maxSize / img.height);
+
     img.set({
-      left: options.left || 50,
-      top: options.top || 50,
-      scaleX: options.scaleX || 0.2,
-      scaleY: options.scaleY || 0.2,
+      left: options.left ?? 10,
+      top: options.top ?? 10,
+      scaleX: scale,
+      scaleY: scale,
       hasControls: true,
       hasBorders: true,
       originX: 'left',
       originY: 'top',
       customId: id
     });
+
     canvas.add(img);
 
     if (id === 'logo') logoImage = img;
