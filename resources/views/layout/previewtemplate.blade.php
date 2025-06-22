@@ -182,276 +182,205 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="{{ asset('bootstrap/fabric/fabric.min.js') }}"></script>
 <script>
-  const canvas = new fabric.Canvas('myCanvas');
-  
-  // Set Background
-  const bgImage = "{{ asset('storage/' . $certificate->template->file_path) }}";
-  fabric.Image.fromURL(bgImage, function(img) {
-    const canvasWidth = canvas.width;
-const canvasHeight = canvas.height;
-
-// Hitung rasio skala terbaik untuk mempertahankan proporsi gambar
-const scaleX = canvasWidth / img.width;
-const scaleY = canvasHeight / img.height;
-const scale = Math.min(scaleX, scaleY); // pilih skala terkecil agar tidak keluar canvas
-
-// Atur skala dan posisi gambar agar center dan tidak terpotong
-img.set({
-    scaleX: scale,
-    scaleY: scale,
-    left: (canvasWidth - img.width * scale) / 2,
-    top: (canvasHeight - img.height * scale) / 2,
-    selectable: false,
-    evented: false
+// step-5.js - Final Preview Sertifikat dengan UID Dinamis
+const canvas = new fabric.Canvas('myCanvas', {
+  width: 950,
+  height: 700,
+  selection: false,
+  preserveObjectStacking: true
 });
 
-// Atur background image dan render canvas
-canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-      img.set({ selectable: false, evented: false });
-  });
-  
-  // Logo
-  @if($certificate->logo_path)
-  fabric.Image.fromURL('{{ asset("storage/" . $certificate->logo_path) }}', function(img) {
-      img.set({
-          left: 30,
-          top: 30,
-          scaleX: 0.12,
-          scaleY: 0.12,
-          originX: 'left',
-          originY: 'top',
-      });
-      img.scaleToWidth(100);
-      canvas.add(img);
-  });
-  @endif
-  
-  // Title
-  const titleText = new fabric.Text('{{ $certificate->title }}', {
-      left: canvas.width / 2,
-      top: 80,
-      fontSize: 20,
-      fontWeight: 'bold',
-      fill: 'black',
-      originX: 'center'
-  });
-  canvas.add(titleText);
-  
-  // Description
-  const descriptionText = new fabric.Textbox('{{ $certificate->description }}', {
-      left: canvas.width / 2,
-      top: 150,
-      fontSize: 14,
-      fill: 'black',
-      originX: 'center',
-      width: canvas.width * 0.7,
-      textAlign: 'center'
-  });
-  canvas.add(descriptionText);
-  
-  // Participant Name
-  const participantNameText = new fabric.Text('{{ $certificate->contact->name }}', {
-      left: canvas.width / 2,
-      top: 250,
-      fontSize: 30,
-      fontWeight: 'bold',
-      fill: 'black',
-      originX: 'center'
-  });
-  canvas.add(participantNameText);
-  
-  // Role
-  const roleText = new fabric.Text('{{ $certificate->role }}', {
-      left: canvas.width / 2,
-      top: 300,
-      fontSize: 16,
-      fill: 'black',
-      originX: 'center'
-  });
-  canvas.add(roleText);
-  
-  // Event Name
-  const eventNameText = new fabric.Text('{{ $certificate->event_name }}', {
-      left: canvas.width / 2,
-      top: 350,
-      fontSize: 16,
-      fill: 'black',
-      originX: 'center'
-  });
-  canvas.add(eventNameText);
-  
-  // Tanggal
-  const dateText = new fabric.Text('Bangkinang, {{ \Carbon\Carbon::parse($certificate->date)->translatedFormat("d F Y") }}', {
-      left: canvas.width / 2,
-      top: canvas.height - 180,
-      fontSize: 14,
-      fill: 'black',
-      originX: 'center'
-  });
-  
-  canvas.add(dateText);
-  @if ($certificate->signature_path)
-fabric.Image.fromURL('{{ asset("storage/" . $certificate->signature_path) }}', function(img) {
-    img.set({
-        left: canvas.width / 2 - 75,
-        top: canvas.height - 170,
-        scaleX: 0.4,
-        scaleY: 0.4,
-        originX: 'left',
-        originY: 'top',
-        selectable: true,          // ✅ Bisa dipilih
-    hasControls: true,         // ✅ Muncul titik kontrol resize
-    hasBorders: true,        
-    });
-    img.scaleToWidth(150);
-    canvas.add(img);
-});
-@endif
-  
-  
-  // Signature Name {{ asset("storage/" . $certificate->logo_path) }}
-  const signatureNameText = new fabric.Text('{{ $certificate->signature_name }}', {
-      left: canvas.width / 2,
-      top: canvas.height - 60,
-      fontSize: 14,
-      fill: 'black',
-      originX: 'center'
-  });
-  canvas.add(signatureNameText);
-  
-  // Handle Contact Selection Change (Dynamic Update)
-  document.getElementById('contactSelect')?.addEventListener('change', function() {
-      const [name] = this.value.split('|');
-      participantNameText.set({ text: name });
-      canvas.renderAll();
-  });
+const templateId = "{{ $certificate->selected_template_id }}";
+const bgUrl = "{{ asset('storage/' . $certificate->template->file_path) }}";
 
-  document.getElementById('downloadAllZip')?.addEventListener('click', async function () {
-    const zip = new JSZip();
+loadLayoutFromServer(templateId, bgUrl);
 
-    for (let i = 0; i < document.getElementById('contactSelect').options.length; i++) {
-        const option = document.getElementById('contactSelect').options[i];
-        const [name, email] = option.value.split('|');
+function getObjectById(id) {
+  return canvas.getObjects().find(obj => obj.customId === id);
+}
 
-        // Update canvas dynamically
-        participantNameText.set({ text: name });
-        canvas.renderAll();
-
-        // Wait for rendering & export image
-        await new Promise(resolve => setTimeout(resolve, 300)); // allow re-render
-
-        const canvasElement = document.getElementById('myCanvas');
-        const canvasImage = await html2canvas(canvasElement);
-        const imageData = canvasImage.toDataURL("image/png");
-
-        // Convert base64 to binary
-        const binary = atob(imageData.split(',')[1]);
-        const array = [];
-        for (let j = 0; j < binary.length; j++) {
-            array.push(binary.charCodeAt(j));
-        }
-
-        // Add to ZIP
-        const fileName = name.trim().replace(/\s+/g, '_') + "_certificate.png";
-        zip.file(fileName, new Uint8Array(array));
-    }
-
-    // Generate and Save ZIP
-    zip.generateAsync({ type: "blob" }).then(function (content) {
-        saveAs(content, "all_certificates.zip");
-    });
-});
-
-  // Export to PDF
-  document.getElementById('downloadPdf').addEventListener('click', function () {
-      const canvasElement = document.getElementById('myCanvas');
-      html2canvas(canvasElement).then(function (canvasEl) {
-          const imgData = canvasEl.toDataURL('image/png');
-          const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF({
-              orientation: 'landscape',
-              unit: 'mm',
-              format: 'a4'
+function loadLayoutFromServer(templateId, bgUrl) {
+  fetch(`/certificate/layout?template_id=${templateId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && !data.error) {
+        canvas.clear();
+        loadBackground(bgUrl, () => {
+          canvas.loadFromJSON(data.layout, () => {
+            canvas.renderAll();
+            console.log("✅ Layout berhasil dimuat.");
           });
-          pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
-          const filename = participantNameText.text.trim().replace(/\s+/g, '_') + '_certificate.pdf';
-          pdf.save(filename);
-      });
+        });
+      } else {
+        console.warn("⚠️ Layout tidak ditemukan.");
+      }
+    })
+    .catch(err => console.error("❌ Gagal memuat layout:", err));
+}
+
+function loadBackground(url, callback) {
+  fabric.Image.fromURL(url, function (img) {
+    img.set({
+      scaleX: canvas.width / img.width,
+      scaleY: canvas.height / img.height,
+      left: 0,
+      top: 0,
+      selectable: false,
+      evented: false
+    });
+    canvas.setBackgroundImage(img, () => {
+      canvas.renderAll();
+      if (callback) callback();
+    });
   });
+}
 
-  document.getElementById('sendEmail')?.addEventListener('click', async function () {
-    const contactValue = document.getElementById('contactSelect').value;
-    const [name, email] = contactValue.split('|');
+// Update Nama + UID saat ganti kontak
+const contactSelect = document.getElementById('contactSelect');
+contactSelect?.addEventListener('change', function () {
+  const selected = this.options[this.selectedIndex];
+  const [name, email] = this.value.split('|');
+  const uid = selected.getAttribute('data-uid') || 'UID';
 
-    // Update nama di canvas
-    participantNameText.set({ text: name });
+  const nameText = getObjectById('recipient');
+  const uidText = getObjectById('uid');
+
+  if (nameText) nameText.text = name;
+  if (uidText) uidText.text = uid;
+
+  canvas.renderAll();
+});
+
+// Download semua sertifikat sebagai ZIP
+const zipBtn = document.getElementById('downloadAllZip');
+zipBtn?.addEventListener('click', async function () {
+  const zip = new JSZip();
+  const options = contactSelect.options;
+
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    const [name, email] = option.value.split('|');
+    const uid = option.getAttribute('data-uid') || 'UID';
+
+    const nameText = getObjectById('recipient');
+    const uidText = getObjectById('uid');
+    if (nameText) nameText.text = name;
+    if (uidText) uidText.text = uid;
     canvas.renderAll();
 
-    // Tunggu render selesai (agar html2canvas tidak menangkap state lama)
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-    // Render canvas to image
-    const canvasElement = document.getElementById('myCanvas');
-    const canvasImage = await html2canvas(canvasElement, { scale: 1 }); // scale 1 agar lebih cepat
+    const canvasEl = document.getElementById('myCanvas');
+    const canvasImage = await html2canvas(canvasEl);
     const imageData = canvasImage.toDataURL("image/png");
 
-    // Kirim ke backend
-    fetch("/send-certificate-email", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-        },
-        body: JSON.stringify({ name, email, image: imageData })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message || "Email sent!");
-    })
-    .catch(error => {
-        console.error("Error sending email:", error);
-        alert("Failed to send email.");
+    const binary = atob(imageData.split(',')[1]);
+    const array = [];
+    for (let j = 0; j < binary.length; j++) {
+      array.push(binary.charCodeAt(j));
+    }
+
+    const fileName = `${name.trim().replace(/\s+/g, '_')}_${uid}.png`;
+    zip.file(fileName, new Uint8Array(array));
+  }
+
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    saveAs(content, "all_certificates.zip");
+  });
+});
+
+// Download PDF satuan
+const pdfBtn = document.getElementById('downloadPdf');
+pdfBtn?.addEventListener('click', function () {
+  const canvasElement = document.getElementById('myCanvas');
+  html2canvas(canvasElement).then(function (canvasEl) {
+    const imgData = canvasEl.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+
+    const name = getObjectById('recipient')?.text || 'certificate';
+    const uid = getObjectById('uid')?.text || 'UID';
+    const filename = `${name.trim().replace(/\s+/g, '_')}_${uid}.pdf`;
+    pdf.save(filename);
+  });
+});
+
+// Kirim email satuan
+const emailBtn = document.getElementById('sendEmail');
+emailBtn?.addEventListener('click', async function () {
+  const selected = contactSelect.options[contactSelect.selectedIndex];
+  const [name, email] = selected.value.split('|');
+  const uid = selected.getAttribute('data-uid') || 'UID';
+
+  const nameText = getObjectById('recipient');
+  const uidText = getObjectById('uid');
+  if (nameText) nameText.text = name;
+  if (uidText) uidText.text = uid;
+  canvas.renderAll();
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const canvasEl = document.getElementById('myCanvas');
+  const canvasImage = await html2canvas(canvasEl);
+  const imageData = canvasImage.toDataURL("image/png");
+
+  fetch("/send-certificate-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+    },
+    body: JSON.stringify({ name, email, image: imageData, uid })
+  })
+    .then(res => res.json())
+    .then(data => alert(data.message || "Email terkirim!"))
+    .catch(err => {
+      console.error(err);
+      alert("Gagal mengirim email.");
     });
 });
 
-document.getElementById('sendEmailAll')?.addEventListener('click', async function () {
-    const options = document.getElementById('contactSelect').options;
-    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const participants = [];
+// Kirim semua email massal
+const emailAllBtn = document.getElementById('sendEmailAll');
+emailAllBtn?.addEventListener('click', async function () {
+  const options = contactSelect.options;
+  const token = document.querySelector('meta[name="csrf-token"]').content;
+  const participants = [];
 
-    for (let i = 0; i < options.length; i++) {
-        const [name, email] = options[i].value.split('|');
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    const [name, email] = option.value.split('|');
+    const uid = option.getAttribute('data-uid') || 'UID';
 
-        // Update nama di canvas
-        participantNameText.set({ text: name });
-        canvas.renderAll();
+    const nameText = getObjectById('recipient');
+    const uidText = getObjectById('uid');
+    if (nameText) nameText.text = name;
+    if (uidText) uidText.text = uid;
+    canvas.renderAll();
 
-        // Tunggu render
-        await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-        // Ambil gambar base64 dari canvas
-        const canvasElement = document.getElementById('myCanvas');
-        const canvasImage = await html2canvas(canvasElement);
-        const imageData = canvasImage.toDataURL("image/png");
+    const canvasEl = document.getElementById('myCanvas');
+    const canvasImage = await html2canvas(canvasEl);
+    const imageData = canvasImage.toDataURL("image/png");
 
-        // Push ke daftar peserta
-        participants.push({ name, email, image: imageData });
-    }
+    participants.push({ name, email, image: imageData, uid });
+  }
 
-    // Kirim ke Laravel controller
-    fetch('/certificates/send-bulk', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': token
-        },
-        body: JSON.stringify({ participants })
-    })
+  fetch('/certificates/send-bulk', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': token
+    },
+    body: JSON.stringify({ participants })
+  })
     .then(res => res.json())
     .then(data => alert(data.message || 'Sukses mengirim semua email!'))
     .catch(err => {
-        console.error(err);
-        alert('Gagal mengirim email.');
+      console.error(err);
+      alert('Gagal mengirim email.');
     });
 });
 

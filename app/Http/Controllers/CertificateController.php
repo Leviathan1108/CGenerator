@@ -374,5 +374,36 @@ public function handleLayout(Request $request)
 
     return response()->json(['error' => 'Unsupported method'], 405);
 }
+public function saveLayout(Request $request)
+{
+  try {
+    $data = $request->validate([
+      'template_id' => 'required|exists:templates,id',
+      'layout' => 'required|array',
+    ]);
+
+    DB::table('layouts')->updateOrInsert(
+      ['template_id' => $data['template_id']],
+      ['layout' => json_encode($data['layout']), 'updated_at' => now()]
+    );
+
+    return response()->json(['message' => 'Layout saved']);
+  } catch (\Throwable $e) {
+    Log::error('Save layout failed: ' . $e->getMessage());
+    return response()->json(['error' => 'Failed saving layout'], 500);
+  }
+}
+
+public function getLayout(Request $request)
+{
+  $templateId = $request->get('template_id');
+  $record = DB::table('layouts')->where('template_id', $templateId)->first();
+
+  if (!$record) {
+    return response()->json(['error' => 'Tidak ditemukan'], 404);
+  }
+
+  return response($record->layout, 200)->header('Content-Type', 'application/json');
+}
 }
 ?>

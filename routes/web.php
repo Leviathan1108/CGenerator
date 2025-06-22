@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\PreviewController;
+use App\Http\Controllers\LayoutController;
 
 // Halaman utama
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -126,6 +127,8 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::post('/send-bulk-email', [CertificateController::class, 'sendBulkEmail']);
     Route::post('/certificates/send-bulk', [CertificateController::class, 'sendBulk'])->name('certificates.sendBulk');
     Route::resource('/certificates', CertificateController::class);
+    Route::get('/certificate/layout', [LayoutController::class, 'show']);
+Route::post('/certificate/layout', [LayoutController::class, 'store']);
 
     // route untuk verifikasi
     Route::post('verify-security-code', [SecurityController::class, 'verifyCode'])->name('verify.security.code');

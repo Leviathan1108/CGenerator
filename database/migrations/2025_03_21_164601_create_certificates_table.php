@@ -36,6 +36,9 @@ class CreateCertificatesTable extends Migration
     
         $table->string('signature_path')->nullable();
         $table->string('signature_name')->nullable();
+
+        $table->longText('layout_json')->nullable(); // 🆕 Tambahan untuk menyimpan layout dari step-4
+
     
         $table->timestamps();
     });

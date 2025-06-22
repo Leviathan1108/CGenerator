@@ -203,7 +203,8 @@
 
   <!-- PREVIEW FULL WIDTH -->
   <div class="w-100 mb-4">
-    <input type="hidden" id="selected_template_img" name="selected_template_img" value="{{ $template->file_path }}">
+    <input type="hidden" id="selected_template_img" name="selected_template_img"
+       value="{{ $template->file_path }}" data-template-id="{{ $template->id }}">
     <div class="position-relative border p-4 bg-light rounded text-center mx-auto" style="max-width: 1000px;">
       <div class="position-relative w-100" style="height: auto; max-height: 700px;">
         <canvas id="certificate-canvas" width="1122" height="793" class="border rounded shadow-sm w-100 h-100"></canvas>
@@ -269,7 +270,7 @@
   <!-- FORM INPUT DI BAWAH -->
   <form id="certificateForm" method="POST" action="{{ route('certificate.store') }}" enctype="multipart/form-data" class="mx-auto" style="max-width: 700px;">
     @csrf
-    <input type="hidden" name="selected_template_id" id="selected_template_id">
+    <input type="hidden" name="selected_template_id" id="selected_template_id" value="{{ $template->id }}">
 
     <div class="form-group mb-3">
       <label for="event_name">Nama Acara</label>
@@ -355,7 +356,8 @@
     </div>
     <div>
     <button id="reset-canvas-btn" class="btn btn-warning">Reset Canvas</button>
-    <button type="submit" class="btn btn-success">Finish</button>
+    
+    <button id="save-btn" type="submit" class="btn btn-success">Finish</button>
   </div>
   </form>
 </section>
@@ -467,6 +469,16 @@
   const current = document.getElementById(`step-${step}`);
   if (current) current.classList.remove("hidden");
 
+
+  if (step === 4 && selectedTemplateId && selectedTemplateImage) {
+  // Isi input hidden
+  document.getElementById('selected_template_id').value = selectedTemplateId;
+  document.getElementById('selected_template_img').value = selectedTemplateImage;
+
+  // Reset canvas dan muat layout baru
+  loadLayoutFromServer(selectedTemplateId, selectedTemplateImage);
+}
+
   // Jika step 3, update cert-preview-image
   if (step === 3 && selectedTemplateImage) {
     const certPreview = document.getElementById("cert-preview-image");
@@ -527,7 +539,7 @@ function selectTemplateFromData(card) {
 
   // Set ke input hidden di Step 4
   document.getElementById('selected_template_id').value = selectedTemplateId;
-
+  document.getElementById('selected_template_img').value = selectedTemplateImage; 
   // Opsional: langsung tampilkan preview-nya di Step 4 (jika perlu)
   document.getElementById("cert-preview-image").src = selectedTemplateImage;
 
